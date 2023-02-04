@@ -2,9 +2,16 @@ import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { useState } from 'react';
 import { signup } from '../auth/auth_signup_password';
 
+
+
 function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    function clearFields(){
+        setEmail('');
+        setPassword('');
+    }
 
     return (
         <View style={styles.container}>
@@ -20,13 +27,15 @@ function Signup() {
                 placeholder="Password"
                 onChangeText={text => setPassword(text)}
                 value={password}
+                secureTextEntry={true}
             />
             <Button
                 title="Signup"
                 onPress={() => {
                     console.log(email, password);
-                    signup(email, password)}
-                }
+                    signup(email, password)
+                    clearFields();
+                }}
             />
         </View>
 
