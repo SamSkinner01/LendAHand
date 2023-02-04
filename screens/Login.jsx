@@ -2,8 +2,6 @@ import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
 import { useState } from "react";
 import { signin } from "../auth/auth_signin_password";
 
-// clear the username and password fields after login is successful
-
 function Login({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
