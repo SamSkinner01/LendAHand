@@ -1,42 +1,64 @@
 import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signin } from "../auth/auth_signin_password";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../auth/firebaseConfig";
 
 function Login({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  function isUserLoggedIn() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
+  }
 
   function clearFields() {
     setUsername("");
     setPassword("");
   }
 
+  function navigateToEvents() {
+    setLoggedIn(false);
+    navigation.navigate("Events");
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-        secureTextEntry={true}
-      />
-      <Button
-        title="Login"
-        onPress={() => {
-          signin(username, password);
-          clearFields();
-        }}
-      />
-      <Text>Don't have an account?</Text>
-      <Button title="Sign up" onPress={() => navigation.navigate("Signup")} />
-    </View>
+    loggedIn ? navigateToEvents() : null,
+    (
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          onChangeText={(text) => setUsername(text)}
+          value={username}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          secureTextEntry={true}
+        />
+        <Button
+          title="Login"
+          onPress={() => {
+            signin(username, password);
+            isUserLoggedIn();
+            clearFields();
+          }}
+        />
+        <Text>Don't have an account?</Text>
+        <Button title="Sign up" onPress={() => navigation.navigate("Signup")} />
+      </View>
+    )
   );
 }
 
