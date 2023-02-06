@@ -36,8 +36,7 @@ function Login({ navigation }) {
   }, [loggedIn]);
 
   return (
-    loggedIn ? navigateToEvents() : null,
-    (
+
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
         <TextInput
@@ -64,7 +63,7 @@ function Login({ navigation }) {
         <Text>Don't have an account?</Text>
         <Button title="Sign up" onPress={() => navigation.navigate("Signup")} />
       </View>
-    )
+    
   );
 }
 
