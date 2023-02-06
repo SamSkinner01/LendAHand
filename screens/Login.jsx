@@ -14,7 +14,7 @@ function Login({ navigation }) {
       if (user) {
         setLoggedIn(true);
       } else {
-        console.log("No user is signed in.");
+        setLoggedIn(false);
       }
     });
   }
@@ -25,9 +25,15 @@ function Login({ navigation }) {
   }
 
   function navigateToEvents() {
-    setLoggedIn(false);
+    isUserLoggedIn();
     navigation.navigate("Events");
   }
+
+  useEffect(() => {
+    if(loggedIn){
+      navigateToEvents();
+    }
+  }, [loggedIn]);
 
   return (
     loggedIn ? navigateToEvents() : null,
