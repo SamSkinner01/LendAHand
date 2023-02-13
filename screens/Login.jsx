@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Alert,Pressable,Image } from "react-native";
 import { useState, useEffect } from "react";
 import { signin } from "../auth/auth_signin_password";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../auth/firebaseConfig";
+import logo from "/Users/rundqasem/Desktop/LendAHand/assets/logo.png"
 
 function Login({ navigation }) {
   const [username, setUsername] = useState("");
@@ -38,7 +39,7 @@ function Login({ navigation }) {
   return (
 
       <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
+        <Image source={logo} style={[styles.logo]} resizeMethod="contain"/>
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -52,16 +53,18 @@ function Login({ navigation }) {
           value={password}
           secureTextEntry={true}
         />
-        <Button
-          title="Login"
-          onPress={() => {
+         <Pressable onPress={() => {
             signin(username, password);
             isUserLoggedIn();
             clearFields();
           }}
-        />
-        <Text>Don't have an account?</Text>
-        <Button title="Sign up" onPress={() => navigation.navigate("Signup")} />
+          style={styles.button_prim}>
+            <Text style={styles.text_prim}>Login</Text>
+        </Pressable>
+        <Pressable onPress={() => navigation.navigate("Signup")}
+          style={styles.button_sec}>
+            <Text style={styles.text_sec}>Don't have an account? Sign Up</Text>
+        </Pressable>
       </View>
     
   );
@@ -70,16 +73,48 @@ function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
   },
   input: {
-    height: 40,
-    margin: 12,
+    width: '85%',
+    padding: 15,
+    marginVertical: 3,
+    borderRadius: 5,
+    borderColor: '#070B47',
     borderWidth: 1,
-    padding: 10,
+    borderRadius: 5,
+
   },
+  button_prim:{
+    width: '75%',
+    padding: 15,
+    marginVertical: 5,
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: '#070B47',
+  },
+  text_prim:{
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  button_sec:{
+    width: '75%',
+    padding: 5,
+    marginVertical: 5,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  text_sec:{
+    fontWeight:'bold',
+    color: '#536878',
+  },
+  logo:{
+    width: '70%',
+    maxWidth: 300,
+    maxHeight: 200,
+},
 });
 
 export { Login };
