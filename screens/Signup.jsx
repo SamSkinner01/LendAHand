@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Button, Alert,Pressable,Image } from "react-native";
 import { useState } from "react";
 import { signup } from "../auth/auth_signup_password";
-import logo from "/Users/rundqasem/Desktop/LendAHand/assets/logo.png"
+import logo from "../assets/logo.png"
 
 function Signup() {
   const [email, setEmail] = useState("");

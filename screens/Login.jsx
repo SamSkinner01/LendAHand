@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { signin } from "../auth/auth_signin_password";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../auth/firebaseConfig";
-import logo from "/Users/rundqasem/Desktop/LendAHand/assets/logo.png"
+import logo from "../assets/logo.png"
 
 function Login({ navigation }) {
   const [username, setUsername] = useState("");
