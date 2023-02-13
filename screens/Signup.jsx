@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert,Pressable,Image } from "react-native";
-import { useState } from "react";
+import { StyleSheet, Text, View, TextInput, Button, Alert,Pressable,Image} from "react-native";
+import { useState,useEffect } from "react";
 import { signup } from "../auth/auth_signup_password";
 import logo from "../assets/logo.png"
+import { Login } from "./Login";
 
-function Signup() {
+function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,6 +12,7 @@ function Signup() {
     setEmail("");
     setPassword("");
   }
+
 
   return (
     <View style={styles.container}>
@@ -29,14 +31,19 @@ function Signup() {
         secureTextEntry={true}
       />
 
-<Pressable onPress={() => {
+        <Pressable onPress={() => {
           console.log(email, password);
           signup(email, password);
           clearFields();
         }}
           style={styles.button_sec}>
-            <Text style={styles.text_sec}>Sign Up</Text>
-        </Pressable>
+            <Text style={styles.text_prim}>Sign Up</Text>
+         </Pressable>
+
+        <Pressable onPress={()=> navigation.navigate("Login")}
+          style={styles.button_sec}>
+            <Text style={styles.text_sec}>Already Have an Account? Login</Text>
+         </Pressable>
     </View>
   );
 }
@@ -46,7 +53,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#cbc6c3",
     alignItems: "center",
-    justifyContent: "center",
+    paddingVertical: '45%'
   },
   input: {
     width: '85%',
@@ -59,15 +66,19 @@ const styles = StyleSheet.create({
   },
   button_sec:{
     width: '85%',
-    padding: 5,
-    marginVertical: 5,
+    padding: 3,
     alignItems: 'center',
     borderRadius: 5,
+  },
+  text_prim:{
+    fontWeight:'bold',
+    color: '#536878',
+    fontSize: 17,
   },
   text_sec:{
     fontWeight:'bold',
     color: '#536878',
-    fontSize: 17,
+    fontSize: 15,
   },
   logo:{
     width: '70%',
