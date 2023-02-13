@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#cbc6c3",
     alignItems: "center",
-    justifyContent: "center",
+    paddingVertical: '45%',
   },
   input: {
     width: '85%',
