@@ -1,7 +1,12 @@
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import { NavigationBar } from "../components/navigationBar";
+import {db} from "../auth/firebaseConfig";
+import { useEffect } from "react";
 
 function PostSocialMediaPage() {
+  
+
+
   return (
     <>
       
