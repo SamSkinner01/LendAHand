@@ -24,6 +24,26 @@ const styles = StyleSheet.create({
 });
 
 export { Events };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const username = ref("");
+const first = ref("");
+const last = ref("");
+const title = ref("");
+const description = ref("");
+const event_type = ref("");
+const start_time = ref("");
+const date = ref("");
+const end_time = ref("");
+const event_duration = ref("");
+const number_of_volunteers = ref();
+const all_events = ref([]);
+const social_media_posts = ref([]);
+const forum_posts = ref([]);
+const chat_rooms = ref([]);
+const friends = ref([]);
+const signed_up_for_events = ref([]);
+const signed_up_users = ref([]);
 
 <script setup>
 // Import the functions you need from the SDKs you need
