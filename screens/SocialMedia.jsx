@@ -3,7 +3,7 @@ import { NavigationBar } from "../components/navigationBar";
 import { useNavigation } from "@react-navigation/native";
 import {db} from "../auth/firebaseConfig";
 import { useEffect } from "react";
-import { collection, getDocs,ref } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 function SocialMedia() {
   const navigation = useNavigation();
@@ -12,8 +12,11 @@ function SocialMedia() {
   // can add extra check later for friends
   async function getAllPosts() {
     try{
-      const querySnapshot = await getDocs(collection(db, 'social_media_posts'));
-      querySnapshot.forEach((doc) => {
+      const postsRef = collection(db, 'social_media_posts');
+      const q = query(postsRef, orderBy("time", "desc"));
+      const querySnapshot = await getDocs(q);
+
+     querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${doc.data()}`); 
       });
     } catch (error) {
