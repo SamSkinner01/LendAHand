@@ -1,4 +1,3 @@
-// Testing branch pushing
 import { Button, StyleSheet, Text, View } from "react-native";
 import { NavigationBar } from "../components/navigationBar";
 
