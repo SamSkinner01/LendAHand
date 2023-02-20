@@ -10,7 +10,7 @@ import { Leaderboard } from "./screens/Leaderboard";
 import { Messages } from "./screens/Messages";
 import { MyProfile } from "./screens/MyProfile";
 import { SocialMedia } from "./screens/SocialMedia";
-
+import { PostSocialMediaPage } from "./screens/PostSocialMediaPage";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -29,6 +29,7 @@ export default function App() {
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="Social Media" component={SocialMedia} />
+        <Stack.Screen name="PostSocialMediaPage" component={PostSocialMediaPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

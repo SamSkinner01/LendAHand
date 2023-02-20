@@ -1,12 +1,22 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import { NavigationBar } from "../components/navigationBar";
+import { useNavigation } from "@react-navigation/native";
+
 
 function SocialMedia() {
+  const navigation = useNavigation();
   return (
     <>
-      <View style={styles.container}>
-        <Text>Social Media</Text>
-      </View>
+      
+      {/* Navigate to a PostSocialMediaPage*/}
+      <Pressable onPress={() => {
+            navigation.navigate("PostSocialMediaPage");
+      }}
+        style={styles.container}>
+          <Text>Post</Text>
+        </Pressable>
+    
+      {/* Navigation Bar */}
       <View>
         <NavigationBar />
       </View>
