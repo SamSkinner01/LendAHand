@@ -21,7 +21,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAmONfEkgEg-QGaKiAUB3_fVtdYzmjU7Js",
   authDomain: "sam-dev-febfd.firebaseapp.com",
   projectId: "sam-dev-febfd",
-  storageBucket: "sam-dev-febfd.appspot.com",
+  storageBucket: "gs://sam-dev-febfd.appspot.com",
   messagingSenderId: "918445001947",
   appId: "1:918445001947:web:5fff85960877b2f09b10fe"
 };
