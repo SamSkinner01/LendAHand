@@ -12,7 +12,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-;
 
 function Forum() {
     const navigation = useNavigation();
@@ -58,27 +57,6 @@ function Forum() {
     }
 
 
-    const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
-
-    return new Promise((resolve, reject) => {
-        uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-            const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
-        },
-        (error) => {
-            reject(error);
-        },
-        async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            console.log("File available at", downloadURL);
-            resolve(downloadURL);
-        }
-        );
-    });
-
     useEffect(() => {
     // Gets the current authenticated user and email on page load.
     getAuthUser();
@@ -87,11 +65,21 @@ function Forum() {
   
     return (
         <>
-            <View>
-                <TextInput style={styles.container} placeholder="Title"></TextInput>
-                <TextInput style={styles.container} placeholder="Description"></TextInput>
+            <View style={styles.container}>
+                <TextInput 
+                    style={styles.container} 
+                    placeholder="Title" 
+                    onChangeText={(text) => setTitle(text)}
+                    ></TextInput>
+                <TextInput 
+                    style={styles.container} 
+                    placeholder="Description"
+                    onChangeText={(text) => setDescription(text)}
+                    >
+                    </TextInput>
                 <Pressable onPress={() =>{
-                    EntryPage()
+                    postToDatabase();
+                    //EntryPage()
                 }}>
                     <Text>Post to Forum</Text>
                 </Pressable>  
