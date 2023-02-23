@@ -1,3 +1,4 @@
+
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationBar } from "../components/navigationBar";
 
@@ -24,6 +25,8 @@ const styles = StyleSheet.create({
 });
 
 export { Events };
+
+/*
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const username = ref("");
@@ -51,6 +54,7 @@ import { ref } from "vue";
 import { initializeApp } from "firebase/app";
 import { collection, query, where, doc, setDoc, getDoc, getDocs, addDoc, getFirestore, updateDoc} from "firebase/firestore";
 
+
 async function create_user() {
   try {
     const docRef = await addDoc(collection(db, "users"), {
@@ -73,6 +77,7 @@ async function create_user() {
     console.error("Error adding document: ", e);
   }
 }
+
 async function create_event() {
   try {
     const docRef = await addDoc(collection(db, "Events"), {
@@ -190,3 +195,4 @@ async function updateEventParticipants() {
   }
 }
 </script>
+*/
