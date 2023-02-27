@@ -8,7 +8,7 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 
 const storage = getStorage();
 
-const Post = (props) => {
+const SocialMediaPost = (props) => {
     const storageRef = ref(storage, props.image);
     // deletes a post from the database.
     // When a delete button is pressed, the function is called.
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default Post;
+export default SocialMediaPost;

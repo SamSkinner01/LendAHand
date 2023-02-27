@@ -5,7 +5,7 @@ import {db} from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Image } from "react-native";
-import Post from "../components/Post";
+import SocialMediaPost from "../components/SocialMediaPost";
 
 function SocialMedia() {
   // Every index corresponds with a post
@@ -59,7 +59,7 @@ function SocialMedia() {
       data={image}
       // renders every item at every index in the corresponding state arrays
       renderItem={({item, index}) => (
-        <Post 
+        <SocialMediaPost 
           image={image[index]} 
           user={user[index]} 
           description={description[index]} 
