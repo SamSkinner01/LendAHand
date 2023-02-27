@@ -5,22 +5,27 @@ import {db} from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Image } from "react-native";
+import Post from "../components/Post";
 
 function SocialMedia() {
-  const [image, setImage] = useState([]);
-  const [user, setUser] = useState([]);
-  const [description, setDescription] = useState([]);
-  const [comments, setComments] = useState([[]]);
-  const [likes, setLikes] = useState([]);
-
-
-
+  // Every index corresponds with a post
+  const [image, setImage] = useState([]);             // will contain an array of image URLs
+  const [user, setUser] = useState([]);               // will contain an array of usernames
+  const [description, setDescription] = useState([]); // will contain an array of descriptions
+  const [comments, setComments] = useState([[]]);     // will contain an array of arrays of comments
+  const [likes, setLikes] = useState([]);             // will contain an array of likes
+  const [id, setId] = useState([]);                   // will contain an array of post IDs
 
   const navigation = useNavigation();
   
-  // gets all the posts from the database
-  // can add extra check later for friends
+  // Queries the database for all posts and stores them in the state variables
   async function getAllPosts() {
+    setImage([]);
+    setUser([]);
+    setDescription([]);
+    setComments([]);
+    setLikes([]);
+    setId([]);
     try{
       const postsRef = collection(db, 'social_media_posts');
       const q = query(postsRef, orderBy("time", "desc"));
@@ -34,13 +39,14 @@ function SocialMedia() {
       setDescription(description => [...description, data.description]);
       setComments(comments => [...comments, data.comments]);
       setLikes(likes => [...likes, data.likes]);
+      setId(id => [...id, doc.id]);
     });
     } catch (error) {
       console.log(error);
     }
   }
-
   
+  // Runs the getAllPosts function once when the page is loaded
   useEffect(() => {
     getAllPosts();
   }, []);
@@ -49,35 +55,36 @@ function SocialMedia() {
     <>
     {
     
-    // displays all the posts
     <FlatList
       data={image}
+      // renders every item at every index in the corresponding state arrays
       renderItem={({item, index}) => (
-        <View style={styles.container}>
-          <Text>{user[index]}</Text>
-          <Image source={{url: image[index]}} style={{width: 200, height: 200}}/>
-          <Text>{description[index]}</Text>
-          <Text>{comments[index]}</Text>
-          <Text>{likes[index]}</Text>
-        </View>
+        <Post 
+          image={image[index]} 
+          user={user[index]} 
+          description={description[index]} 
+          comments={comments[index]} 
+          likes={likes[index]} 
+          id={id[index]}
+          getAllPosts={getAllPosts}
+        />
       )}
       keyExtractor={(item, index) => index.toString()}
     />
     }
-
-      
-
-
-
-      <View style={styles.container}>
-        <Text>Social Media</Text>
-    </View>
       {/* Navigate to a PostSocialMediaPage*/}
       <Pressable onPress={() => {
             navigation.navigate("PostSocialMediaPage");
       }}
         style={styles.container}>
           <Text>Post</Text>
+        </Pressable>
+
+        <Pressable onPress={() => {
+            getAllPosts();
+      }}
+        style={styles.container}>
+          <Text>Refresh</Text>
         </Pressable>
     
       {/* Navigation Bar */}
