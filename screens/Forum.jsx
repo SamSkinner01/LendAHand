@@ -40,20 +40,40 @@ function Forum() {
     }
 
     async function postToDatabase(downloadURL) {
-    /*
-    Makes a social media post in the database.
-    */
-    try {
-        await addDoc(collection(db, "forum_posts"), {
-        title: title,
-        description: description,
-        user: username,
-        comments: [],
-        time: new Date(),
-        });
-    } catch (error) {
-        console.log(error);
+        /*
+        Makes a social media post in the database.
+        */
+        try {
+            await addDoc(collection(db, "forum_posts"), {
+            title: title,
+            description: description,
+            user: username,
+            comments: [],
+         time: new Date(),
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    async function deletePost_ID(){
+        /* 
+        Run after pressing the delete button on a post.
+        Will grab ID from database and pass to 
+        deleteFromDatabase
+        */
+    }
+
+    async function deleteFromDatabase(post_ID){
+        /*
+        Each forum post will have a button visible to the poster 
+        that will allow them to delete a post
+        */
+        try {
+            await deleteDoc(doc(db, "forum_posts", post_ID));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
