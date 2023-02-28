@@ -5,7 +5,9 @@ import logo from "../assets/logo.png"
 import { Login } from "./Login";
 import { db } from "../auth/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
-
+import { auth } from "../auth/firebaseConfig";
+import { signUserOut } from "../auth/auth_signout";
+import { onAuthStateChanged } from "firebase/auth";
 function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,23 +20,16 @@ function Signup({ navigation }) {
     setPassword("");
     setFirstName("");
     setLastName("");
+    setUsername("")
   }
 
-  function create_username(){
-    // regex to remove @---.com
-    const regex = /@.*.com/g;
-    const temp_username = email.replace(regex, "");
-    setUsername(temp_username);
-  }
-
-  const create_user = async () => {
-    create_username();
+  const create_user = async () => {   
     try{
     const docRef = await addDoc(collection(db, "users"), {
       email: email,
       first_name: firstname,
       last_name: lastname,
-      username: username,
+      username: email,
       total_hours: 0,
       is_organization: false,
       social_media_posts : [],
@@ -53,6 +48,23 @@ function Signup({ navigation }) {
     }
   }
 
+  const handleSignup = async () => {
+    try{
+      await signup(email, password);
+      
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          create_user();
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -84,10 +96,10 @@ function Signup({ navigation }) {
       />
 
         <Pressable onPress={() => {
-          console.log(email, password);
-          signup(email, password);  // Signs user up with authentication
-          create_user();            // Creates user in firestore
+          handleSignup();           
           clearFields();
+
+          
         }}
           style={styles.button_prim}>
             <Text style={styles.text_prim}>Sign Up</Text>
