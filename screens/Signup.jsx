@@ -6,8 +6,7 @@ import { Login } from "./Login";
 import { db } from "../auth/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { auth } from "../auth/firebaseConfig";
-import { signUserOut } from "../auth/auth_signout";
-import { onAuthStateChanged } from "firebase/auth";
+
 function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +28,7 @@ function Signup({ navigation }) {
       email: email,
       first_name: firstname,
       last_name: lastname,
-      username: email,
+      username: username,
       total_hours: 0,
       is_organization: false,
       social_media_posts : [],
@@ -51,15 +50,11 @@ function Signup({ navigation }) {
   const handleSignup = async () => {
     try{
       await signup(email, password);
-      
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
+
+      if (auth.currentUser && email && password && firstname && lastname && username) {
           create_user();
-        } else {
-          // User is signed out
-          // ...
+          navigation.navigate("Login")
         }
-      });
     }
     catch(error){
       console.log(error);
@@ -69,6 +64,12 @@ function Signup({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={logo} style={[styles.logo]} resizeMethod="contain"/>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        onChangeText={(text) => setUsername(text)}
+        value={username}
+      />
       <TextInput
         style={styles.input}
         placeholder="First Name"
@@ -98,8 +99,6 @@ function Signup({ navigation }) {
         <Pressable onPress={() => {
           handleSignup();           
           clearFields();
-
-          
         }}
           style={styles.button_prim}>
             <Text style={styles.text_prim}>Sign Up</Text>
