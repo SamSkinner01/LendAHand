@@ -18,12 +18,12 @@ import { getFirestore } from "firebase/firestore";
 
 // DEV FIRBASE CONFIG
 const firebaseConfig = {
-  apiKey: "AIzaSyAmONfEkgEg-QGaKiAUB3_fVtdYzmjU7Js",
-  authDomain: "sam-dev-febfd.firebaseapp.com",
-  projectId: "sam-dev-febfd",
-  storageBucket: "gs://sam-dev-febfd.appspot.com",
-  messagingSenderId: "918445001947",
-  appId: "1:918445001947:web:5fff85960877b2f09b10fe"
+  apiKey: "AIzaSyAZ9VKbq_0J7nsacO2MGPjyCgoSilR-0Gw",
+  authDomain: "cfs6-cc409.firebaseapp.com",
+  projectId: "cfs6-cc409",
+  storageBucket: "cfs6-cc409.appspot.com",
+  messagingSenderId: "966695412990",
+  appId: "1:966695412990:web:e0769bdee5ddfbaecab1af",
 };
 
 // Initialize Firebase
