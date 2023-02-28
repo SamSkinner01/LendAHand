@@ -3,22 +3,73 @@ import { useState,useEffect } from "react";
 import { signup } from "../auth/auth_signup_password";
 import logo from "../assets/logo.png"
 import { Login } from "./Login";
+import { db } from "../auth/firebaseConfig";
+import { addDoc, collection } from "firebase/firestore";
+import { auth } from "../auth/firebaseConfig";
 
 function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
+  const [username , setUsername] = useState("");
 
   function clearFields() {
     setEmail("");
     setPassword("");
+    setFirstName("");
+    setLastName("");
+    setUsername("")
   }
 
+  const create_user = async () => {   
+    try{
+    const docRef = await addDoc(collection(db, "users"), {
+      email: email,
+      first_name: firstname,
+      last_name: lastname,
+      username: username,
+      total_hours: 0,
+      is_organization: false,
+      social_media_posts : [],
+      forum_posts : [],
+      events_volunteered : [],
+      signed_up_for_events: [],
+      created_events: [],
+      chat_rooms: [],
+      friends: [],
+      friend_requests: [],
+      friend_requests_sent: [],
+    });
+    console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  const handleSignup = async () => {
+    try{
+      await signup(email, password);
+
+      if (auth.currentUser && email && password && firstname && lastname && username) {
+          create_user();
+          navigation.navigate("Login")
+        }
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Image source={logo} style={[styles.logo]} resizeMethod="contain"/>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        onChangeText={(text) => setUsername(text)}
+        value={username}
+      />
       <TextInput
         style={styles.input}
         placeholder="First Name"
@@ -46,8 +97,7 @@ function Signup({ navigation }) {
       />
 
         <Pressable onPress={() => {
-          console.log(email, password);
-          signup(email, password);
+          handleSignup();           
           clearFields();
         }}
           style={styles.button_prim}>
