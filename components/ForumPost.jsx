@@ -4,25 +4,14 @@ import { StyleSheet } from 'react-native';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../auth/firebaseConfig";
 
-import { getStorage, ref, deleteObject } from "firebase/storage";
-
-const storage = getStorage();
-
 const ForumPost = (props) => {
-    const storageRef = ref(storage, props.image);
     // deletes a post from the database.
     // When a delete button is pressed, the function is called.
     async function deleteFromDB(){
         try{
             const docRef = doc(db, "forum_posts", props.id);
             await deleteDoc(docRef);
-            await deleteObject(storageRef)
-            .then(() => {
-                console.log("deleted from storage")
-            }).catch((error) => {
-                console.log(error)
-            });
-            props.getAllPosts();
+            props.getForumPosts();
         }
         catch(error){
             console.log(error);
@@ -33,6 +22,7 @@ const ForumPost = (props) => {
         // display for any given post.
         <View style={styles.container}>
           <Text>{props.user}</Text>
+            <Text>{props.title}</Text>
           <Text>{props.description}</Text>
           <Text>{props.comments}</Text>
           <Pressable style={styles.delete} onPress={deleteFromDB}>

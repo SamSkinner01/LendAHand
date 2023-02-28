@@ -10,21 +10,26 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import ForumPost from "../components/ForumPost";
 
 function ForumPage(){
     const [user, setUser] = useState([]);
     const [title, setTitle] = useState([]);
     const [description, setDescription] = useState([]);
     const [comments, setComments] = useState([[]]);
-    
+    const [id, setID] = useState([]);
+
     const navigation = useNavigation();
 
     async function getForumPosts() {
+        setUser([]);
+        setTitle([]);
+        setDescription([]);
+        setComments([]);
+        setID([]);
         try {
             const forumRef = collection(db, "forum_posts");
-            const q = query(postRef, orderBy("time", "desc"));
+            const q = query(forumRef, orderBy("time", "desc"));
             const querySnapshot = await getDocs(q);
 
             querySnapshot.forEach((doc) => {
@@ -34,43 +39,49 @@ function ForumPage(){
                 setTitle(title => [...title, data.title]);
                 setDescription(description => [...description, data.description]);
                 setComments(comments => [...comments, data.comments]);
-                setImmediate(id => [...id, doc.id]);
+                setID(id => [...id, doc.id]);
             });
         } catch (error) {
             console.log(error);
-        }
+        } 
     }
 
     useEffect(() => {
-        getAllPosts();
+        getForumPosts();
     }, []);
 
     return (
         <>
-        <View style={styles.container}>
-            <Text>Forum</Text>
-        </View>
-        {
-        
-        <FlatList
-            renderItem={({item, index}) => (
-                <ForumPost  
-                    user={user[index]} 
-                    description={description[index]} 
-                    comments={comments[index]} 
-                    id={id[index]}
-                    getAllPosts={getAllPosts}
-                />
+
+
+        <FlatList 
+        data = {description}
+        renderItem={({item, index}) => (
+            <ForumPost  
+                user={user[index]} 
+                title={title[index]}
+                description={description[index]} 
+                comments={comments[index]} 
+                id={id[index]}
+                getForumPosts={getForumPosts}
+            />
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-          }
           <Pressable onPress={() => {
                 navigation.navigate("Forum");
           }}
-            style={styles.makePost}>
+            style={styles.container}>
               <Text>Post</Text>
             </Pressable>
+
+            <Pressable onPress={() => {
+            getForumPosts();
+      }}
+        style={styles.container}>
+          <Text>Refresh</Text>
+        </Pressable>
+        
         
           
           <View>

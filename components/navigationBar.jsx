@@ -44,7 +44,7 @@ function NavigationBar({}) {
     <Button
         title="Forum"
         onPress={() => {
-          navigation.navigate("Forum");
+          navigation.navigate("Forum Page");
         }}
       />
     </View>

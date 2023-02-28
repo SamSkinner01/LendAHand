@@ -39,7 +39,7 @@ function Forum() {
     setUsername(temp_username);
     }
 
-    async function postToDatabase(downloadURL) {
+    async function postToDatabase() {
         /*
         Makes a social media post in the database.
         */
@@ -58,8 +58,8 @@ function Forum() {
 
 
     useEffect(() => {
-    // Gets the current authenticated user and email on page load.
-    getAuthUser();
+        // Gets the current authenticated user and email on page load.
+        getAuthUser();
     }, []);
   
   
@@ -79,6 +79,7 @@ function Forum() {
                     </TextInput>
                 <Pressable onPress={() =>{
                     postToDatabase();
+                    navigation.navigate("Forum Page");
                     //EntryPage()
                 }}>
                     <Text>Post to Forum</Text>
