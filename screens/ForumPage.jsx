@@ -34,6 +34,7 @@ function ForumPage(){
                 setTitle(title => [...title, data.title]);
                 setDescription(description => [...description, data.description]);
                 setComments(comments => [...comments, data.comments]);
+                setImmediate(id => [...id, doc.id]);
             });
         } catch (error) {
             console.log(error);
@@ -52,13 +53,14 @@ function ForumPage(){
         {
         
         <FlatList
-          renderItem={({item, index}) => (
-            <View style={styles.post}>
-              <Text>{user[index]}</Text>
-              <Text>{title[index]}</Text>
-              <Text>{description[index]}</Text>
-              <Text>{comments[index]}</Text>
-            </View>
+            renderItem={({item, index}) => (
+                <ForumPost  
+                    user={user[index]} 
+                    description={description[index]} 
+                    comments={comments[index]} 
+                    id={id[index]}
+                    getAllPosts={getAllPosts}
+                />
           )}
           keyExtractor={(item, index) => index.toString()}
         />
