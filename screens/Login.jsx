@@ -39,7 +39,7 @@ function Login({ navigation }) {
   return (
 
       <View style={styles.container}>
-        <Image source={logo} style={[styles.logo]} resizeMethod="contain"/>
+        <Image source={logo} style={[styles.logo]}/>
         <TextInput
           style={styles.input}
           placeholder="email"
