@@ -50,9 +50,6 @@ function Signup({ navigation }) {
   const handleSignup = async () => {
     try{
       await signup(email, password);
-      await setTimeout(() => {
-        
-      }, 1000);
       if (auth.currentUser && email && password && firstname && lastname && username) {
           create_user();
           navigation.navigate("Login")
