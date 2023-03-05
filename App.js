@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from "./screens/Login";
 import { Signup } from "./screens/Signup";
-import { Events } from "./screens/Events";
+import { DisplayAllEvents } from "./screens/DisplayAllEvents";
 import { Leaderboard } from "./screens/Leaderboard";
 import { Messages } from "./screens/Messages";
 import { MyProfile } from "./screens/MyProfile";
@@ -24,7 +24,7 @@ export default function App() {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Events" component={Events} />
+        <Stack.Screen name="Events" component={DisplayAllEvents} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
