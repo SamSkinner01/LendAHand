@@ -12,6 +12,7 @@ import { MyProfile } from "./screens/MyProfile";
 import { SocialMedia } from "./screens/SocialMedia";
 import { ForumPage } from "./screens/ForumPage";
 import { PostToForum } from "./screens/PostToForum";
+import { ForumSearch } from "./screens/ForumSearch";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="Social Media" component={SocialMedia} />
         <Stack.Screen name="Forum Page" component={ForumPage} />
         <Stack.Screen name="Post To Forum" component={PostToForum} />
+        <Stack.Screen name="Search Forum" component={ForumSearch} />
       </Stack.Navigator>
     </NavigationContainer>
   );
