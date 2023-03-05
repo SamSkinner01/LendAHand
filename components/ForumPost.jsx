@@ -22,7 +22,7 @@ const ForumPost = (props) => {
         // display for any given post.
         <View style={styles.container}>
           <Text>{props.user}</Text>
-            <Text>{props.title}</Text>
+          <Text>{props.title}</Text>
           <Text>{props.description}</Text>
           <Text>{props.comments}</Text>
           <Pressable style={styles.delete} onPress={deleteFromDB}>

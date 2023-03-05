@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-function Forum() {
+function PostToForum() {
     const navigation = useNavigation();
     const storage = getStorage();
     const [title, setTitle] = useState("");
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export {Forum}
+export {PostToForum}
