@@ -12,9 +12,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import ForumPost from "../components/ForumPost";
+import { ForumPost } from "../components/ForumPost";
 
-function ForumSearch() {
+function ForumSearch(props) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
@@ -89,9 +89,11 @@ function ForumSearch() {
             />
             <Pressable onPress={() => {
                 searchThroughDB(searchQuery)}}>Search</Pressable>
+            
+            
        </View>
        </>
     )
 }
 
-export default ForumSearch;
+export { ForumSearch }

@@ -81,6 +81,13 @@ function ForumPage(){
         style={styles.container}>
           <Text>Refresh</Text>
         </Pressable>
+
+        <Pressable onPress={() => {
+                navigation.navigate("Search Forum");
+          }}
+            style={styles.container}>
+              <Text>Search</Text>
+            </Pressable>
         
         
           
