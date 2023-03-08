@@ -6,9 +6,10 @@ import { Pressable } from "react-native";
 import {db} from "../auth/firebaseConfig";
 import { FlatList } from "react-native";
 
-import { collection, query, where, doc, setDoc, getDoc, getDocs, addDoc, getFirestore, updateDoc} from "firebase/firestore";
+import { collection, getDocs} from "firebase/firestore";
 
 function DisplayAllEvents () {
+
   const [description, setDescription] = useState([]);
   const [end_time, setEndtime] = useState([]);
   const [start_time, setStartTime] = useState([]);
@@ -31,9 +32,9 @@ function DisplayAllEvents () {
 
     try{
       const querySnapshot = await getDocs(collection(db, "Events"));
-
-     querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((doc) => {
       const data = doc.data();
+      console.log(data);
       setDescription(description => [...description, data.description]);
       setEndtime( end_time=> [...end_time, data.end_time]);
       setStartTime(start_time => [...start_time, data.start_time]);
@@ -55,12 +56,17 @@ function DisplayAllEvents () {
 
 
   return (
-    <><Pressable onPress={() => {
+    <>
+    <Pressable onPress={() => {
       navigation.navigate("Post Event");
     } }
+
       style={styles.container}>
       <Text>Create Event</Text>
-    </Pressable><><><View style={styles.container}>
+    </Pressable>
+    <>
+    <>
+    <View style={styles.container}>
       <Pressable onPress={ () => {
         getAllEvents()
         console.log(title)
@@ -72,12 +78,12 @@ function DisplayAllEvents () {
         <FlatList
           renderItem={({ item, index }) => (
             <EventPost
-              title={title[index]}
-              description={description[index]}
-              event_type={event_type[index]}
-              start_time={start_time[index]}
-              end_time={end_time[index]}
-              number_of_volunteers={number_of_volunteers[index]}
+              title       ={item.title[index]}
+              description ={item.description[index]}
+              event_type  ={item.event_type[index]}
+              start_time  ={item.start_time[index]}
+              end_time    ={item.end_time[index]}
+              number_of_volunteers ={item.number_of_volunteers[index]}
               getAllEvents={getAllEvents} />
           )}
           keyExtractor={(item, index) => index.toString()} />
