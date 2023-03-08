@@ -1,54 +1,51 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { Pressable } from "react-native";
 import {db} from "../auth/firebaseConfig";
-import { FlatList } from "react-native";
-
+import { RenderEvents } from "../components/RenderEvents";
 import { collection, getDocs} from "firebase/firestore";
 
 function DisplayAllEvents () {
 
+  const [allEvents, setAllEvents] = useState([]);
   const [description, setDescription] = useState([]);
   const [end_time, setEndtime] = useState([]);
   const [start_time, setStartTime] = useState([]);
   const [event_type, setEventType] = useState([]);
   const [number_of_volunteers, setNumber_of_volunteers] = useState([]);
-  const [signed_up_users, setSigned_up_users] = useState([]);
   const [title, setTitle] = useState([]);
 
   const navigation = useNavigation();
 
   async function getAllEvents() {
-    
+
+    setAllEvents([]);
     setDescription([]);
     setEndtime([]);
     setStartTime([]);
     setEventType([]);
     setNumber_of_volunteers([]);
     setTitle([]);
-    setSigned_up_users([]);
 
     try{
       const querySnapshot = await getDocs(collection(db, "Events"));
+
       querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      console.log(data);
-      setDescription(description => [...description, data.description]);
-      setEndtime( end_time=> [...end_time, data.end_time]);
-      setStartTime(start_time => [...start_time, data.start_time]);
-      setEventType(event_type => [...event_type, data.event_type]);
-      setNumber_of_volunteers(number_of_volunteers => [...number_of_volunteers, data.number_of_volunteers]);
-      setSigned_up_users(signed_up_users => [...signed_up_users, doc.signed_up_users]);
-      setTitle(title => [...title, doc.title]);
+        const data = doc.data();
+        setAllEvents(allEvents => [...allEvents, data]);
+        setTitle(title => [...title, doc.title]);
+        setDescription(description => [...description, data.description]);
+        setEventType(event_type => [...event_type, data.event_type]);
+        setEndtime( end_time=> [...end_time, data.end_time]);
+        setStartTime(start_time => [...start_time, data.start_time]);
+        setNumber_of_volunteers(number_of_volunteers => [...number_of_volunteers, data.number_of_volunteers]);
     });
     } catch (error) {
       console.log(error);
     }
   }
-  
-  // Runs the getEvents function once when the page is loaded
+  // Runs the getallEvents function once when the page is loaded
   useEffect(() => {
     getAllEvents();
   }, []);
@@ -56,50 +53,35 @@ function DisplayAllEvents () {
 
 
   return (
-    <>
-    <Pressable onPress={() => {
-      navigation.navigate("Post Event");
-    } }
-
-      style={styles.container}>
+    <View style = {styles.mainContainer}>
+      <View style = {styles.topContainer}>
+      <Pressable onPress = {() => navigation.navigate("Post Event")}>
       <Text>Create Event</Text>
-    </Pressable>
-    <>
-    <>
-    <View style={styles.container}>
-      <Pressable onPress={ () => {
-        getAllEvents()
-        console.log(title)
-        }}>
-        <Text>Display Events</Text>
       </Pressable>
+      </View>
+      <View style={styles.bottomContainer} >
+        <RenderEvents allEvents={allEvents} />
+      </View>
     </View>
-      <View>
-        <FlatList
-          renderItem={({ item, index }) => (
-            <EventPost
-              title       ={item.title[index]}
-              description ={item.description[index]}
-              event_type  ={item.event_type[index]}
-              start_time  ={item.start_time[index]}
-              end_time    ={item.end_time[index]}
-              number_of_volunteers ={item.number_of_volunteers[index]}
-              getAllEvents={getAllEvents} />
-          )}
-          keyExtractor={(item, index) => index.toString()} />
-      </View></><View>
-          <NavigationBar />
-        </View></></>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
+    flex: 1,
+  },
+  topContainer: {
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: 'center',
+    alignItems: 'left',
+  },
+  bottomContainer: {
+    flex: 5,
+    backgroundColor: "#fff",
+    justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 })
 
 export { DisplayAllEvents };

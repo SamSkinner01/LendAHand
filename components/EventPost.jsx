@@ -10,7 +10,7 @@ const EventPost = (props) => {
     // When a delete button is pressed, the function is called.
     async function deleteFromDB(){
         try{
-            const docRef = doc(db, "social_media_posts", props.id);
+            const docRef = doc(db, "Events", props.id);
             await deleteDoc(docRef);
             await deleteObject(storageRef)
             .then(() => {
@@ -28,14 +28,6 @@ const EventPost = (props) => {
     return(
         // display for any given post.
         <View style={styles.container}>
-          <Text>{props.user}</Text>
-          <Image source={{url: props.image}} style={{width: 200, height: 200}}/>
-          <Text>{props.description}</Text>
-          <Text>{props.comments}</Text>
-          <Text>{props.likes}</Text>
-          <Pressable style={styles.delete} onPress={deleteFromDB}>
-            <Text>Delete</Text>
-            </Pressable>
         </View>
     )
 }
