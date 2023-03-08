@@ -11,6 +11,7 @@ import { Messages } from "./screens/Messages";
 import { MyProfile } from "./screens/MyProfile";
 import { SocialMedia } from "./screens/SocialMedia";
 import { PostSocialMediaPage } from "./screens/PostSocialMediaPage";
+import { PostEvent } from "./screens/PostEvent";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="Post Event" component={PostEvent} />
         <Stack.Screen name="Events" component={DisplayAllEvents} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
         <Stack.Screen name="Messages" component={Messages} />
