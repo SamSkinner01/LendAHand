@@ -1,5 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {messageicon} from '../assets/messageicon.png'
 
 function NavigationBar({}) {
   const navigation = useNavigation();

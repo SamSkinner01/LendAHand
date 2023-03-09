@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, Text, Image, Pressable } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, Pressable,TouchableOpacity,Dimensions } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../auth/firebaseConfig";
-
+import likes from "../assets/likes.png"
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import messageicon from '../assets/messageicon.png';
 
 const storage = getStorage();
+const dimensions = Dimensions.get('window');
+const imageHeight = Math.round(dimensions.width * 9/9);
+const imageWidth = dimensions.width;
 
 const SocialMediaPost = (props) => {
     const storageRef = ref(storage, props.image);
@@ -32,14 +36,24 @@ const SocialMediaPost = (props) => {
     return(
         // display for any given post.
         <View style={styles.container}>
-          <Text>{props.user}</Text>
-          <Image source={{url: props.image}} style={{width: 200, height: 200}}/>
-          <Text>{props.description}</Text>
+          <Text style={styles.text_prim}>{props.user}</Text>
+       
+   
+          <Image source={{url: props.image}} style={{width: imageHeight, height: imageWidth}}/>
+
+            <View style ={styles.rowContainer}>
+              <TouchableOpacity>
+                <Image source ={likes} style={styles.icons}  resizeMethod="contain" />
+              </TouchableOpacity> 
+      
+              <TouchableOpacity>
+                <Image source ={messageicon} style={styles.icons}  resizeMethod="contain" />
+              </TouchableOpacity> 
+            </View>
+
+          <Text style={styles.text_sec}>Liked by {props.likes} others</Text>
+          <Text style={styles.text_sec}>{props.user}: {props.description}</Text>
           <Text>{props.comments}</Text>
-          <Text>{props.likes}</Text>
-          <Pressable style={styles.delete} onPress={deleteFromDB}>
-            <Text>Delete</Text>
-            </Pressable>
         </View>
     )
 }
@@ -47,13 +61,32 @@ const SocialMediaPost = (props) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
+      backgroundColor: "#cbc6c3",
+      alignItems: "left",
       justifyContent: "center",
+      marginVertical: '0%',
     },
-    delete:{
-        backgroundColor: "red",
-    }
+    text_prim:{
+        fontWeight: 'bold',
+        marginVertical: 3,
+        marginHorizontal: "1%",
+        fontSize: 20,
+        fontFamily: 'Mishafi'
+      },
+      icons:{
+        maxWidth: 30,
+        maxHeight: 30,
+    },
+    text_sec:{
+        fontSize: 15,
+        marginHorizontal: "1%",
+      },
+      rowContainer: {
+        flexDirection: 'row',
+        height: 30,
+        justifyContent: "space-around",
+        backgroundColor:'#cbc6c3',
+      },
   });
 
 export default SocialMediaPost;

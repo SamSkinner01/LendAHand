@@ -23,13 +23,13 @@ function Signup({ navigation }) {
         style={styles.input}
         placeholder="First Name"
         onChangeText={(text) => setFirstName(text)}
-        value={email}
+        value={firstname}
       />
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         onChangeText={(text) => setLastName(text)}
-        value={email}
+        value={lastname}
       />
       <TextInput
         style={styles.input}
