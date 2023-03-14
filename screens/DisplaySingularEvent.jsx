@@ -1,23 +1,38 @@
-// all the functionalities of a single event
-// async function search_by_id() {
-//   const docRef = doc(db, "users", "eAbvxcKZ1BogQ3af37XF"); //search by id
-//   const docSnap = await getDoc(docRef);
-//   if (docSnap.exists()) {
-//     console.log("Document data:", docSnap.data());
-//   } else {
-//     // doc.data() will be undefined in this case
-//     console.log("No such document!");
-//   }
-// }
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationBar } from "../components/navigationBar";
+import { useState, useEffect, route } from "react";
+import { RenderEvent } from "../components/RenderEvent";
+import React from 'react';
+import { search_by_id } from "../auth/firebaseConfig";
 
-// just updates an event if it needs to like cahnge a date and do not want to delete it
-// async function updateEvent() {
-//   //You can update anything that is in the event except adding users to the signed_up_users field
-//   const docRef = doc(db, "Events", "xsuUhAt6RtT3ykaWDP0K");
-//   try {
-//     updateDoc(docRef, { is_organization: true })
-//     console.log("Document successfully updated!");
-//   } catch (error) {
-//     console.error("Error updating document: ", error);
-//   }
-// }
+
+const DisplaySingularEvent = ({ route }) => {
+    const { item } = route.params;
+  
+    return (
+      <View style={styles.container}>
+        <Text>{item.data.title}</Text>
+        <Text>{item.data.description}</Text>
+        <Text>{item.data.event_type}</Text>
+        <Text>{item.data.start_time}</Text>
+        <Text>{item.data.end_time}</Text>
+        <Text>{item.data.number_of_volunteers}</Text>
+        <Pressable onPress = {() => useNavigation.navigate("Post Event")}>
+            <Text>Update Event</Text>
+            <Text>Delete Event</Text>
+        </Pressable>
+      </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
+export { DisplaySingularEvent } 

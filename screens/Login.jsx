@@ -6,8 +6,8 @@ import { auth } from "../auth/firebaseConfig";
 import logo from "../assets/logo.png"
 
 function Login({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("ceast@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [loggedIn, setLoggedIn] = useState(false);
 
   function isUserLoggedIn() {
