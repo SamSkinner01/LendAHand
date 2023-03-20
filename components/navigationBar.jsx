@@ -41,6 +41,13 @@ function NavigationBar({}) {
           navigation.navigate("MyProfile");
         }}
       />
+
+    <Button
+        title="Forum"
+        onPress={() => {
+          navigation.navigate("Forum Page");
+        }}
+      />
     </View>
   );
 }
