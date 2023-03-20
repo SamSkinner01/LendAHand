@@ -1,19 +1,25 @@
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { Text, ScrollView, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
 const RenderEvents = ({ allEvents }) => {
+  //navigation.navigate('Event Page', { id: item.id })
+  function printID(event) {
+    console.log('Pressed', event.data.title);
+  }
+  const navigation = useNavigation();
   return (
       <ScrollView style = {styles.eventsContainer}>
       {allEvents.map((item, index) => (
-        <View key={item.title} style = {styles.eventStyle}>
-          <Text>{item.title}</Text> 
-          <Text>{item.description}</Text> 
-          <Text>{item.event_type}</Text>
-          <Text>{item.start_time}</Text>
-          <Text>{item.end_time}</Text>
-          <Text>{item.number_of_volunteers}</Text>
-        </View>
+        <Pressable key={item.id} style = {styles.eventStyle} onPress={()=>navigation.navigate('Event Page', { item: item })}>  
+            <Text>{item.data.title}</Text> 
+            <Text>{item.data.description}</Text> 
+            <Text>{item.data.event_type}</Text>
+            <Text>{item.data.date}</Text>
+            <Text>{item.data.start_time}</Text>
+            <Text>{item.data.eventLocation}</Text>
+        </Pressable>
       ))}
       </ScrollView>
   );
@@ -22,6 +28,9 @@ const RenderEvents = ({ allEvents }) => {
 const styles = StyleSheet.create({
   eventStyle:{
     margin: 5,
+    borderWidth:1,
+    padding: 10,
+    borderRadius: 10,
   },
   eventsContainer:{
     marginTop: 40,

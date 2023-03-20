@@ -59,22 +59,20 @@ function SocialMedia() {
         }}
         color="#0F4D92"
       >
-        <Image source ={Refresh} style={styles.icons}  resizeMethod="contain" />
+        <Image source ={Refresh} style={styles.icons}  />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => {
           navigation.navigate("PostSocialMediaPage");
         }}>
-        <Image source ={messageicon} style={styles.icons2}  resizeMethod="contain" />
+        <Image source ={messageicon} style={styles.icons2}  />
         </TouchableOpacity> 
 
         <TouchableOpacity onPress={() => {
           navigation.navigate("PostSocialMediaPage");
         }}>
-        <Image source ={add} style={styles.icons}  resizeMethod="contain" />
+        <Image source ={add} style={styles.icons}  />
         </TouchableOpacity> 
-       
-
       </View>
       <View style={styles.line}></View>
       
@@ -137,7 +135,7 @@ text_prim:{
   marginVertical: 1,
   fontSize: 35,
   marginRight: '20%',
-  fontFamily:'Savoye LET'
+  //fontFamily:'Savoye LET'
 },
 line: {
   borderBottomWidth: 1,
