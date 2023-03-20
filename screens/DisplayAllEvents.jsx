@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import {db, readFromDb} from "../auth/firebaseConfig";
+import { readFromDb} from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 
 function DisplayAllEvents () {
