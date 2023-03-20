@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
-import { collection, getDocs, getDoc, doc} from "firebase/firestore";
+import { collection, getDocs, getDoc, where, query, doc, deleteDoc} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -73,6 +73,27 @@ export async function search_by_id(id) {
     console.log("Document data:", docSnap.data());
   } else {
     console.log("No such document!");
+  }
+}
+
+export async function search_by_keyword(keyword) {
+  //search for any event type using the keyword
+    const q = query(collection(db, "Events"), where("event_type", "==", keyword)); // find a group using a keyword
+    const querySnapshot = await getDocs(q);
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+  }));
+  return data
+}
+
+export async function deleteCollection(id, collectionName) {
+  // const db = await database();
+  try {
+    await deleteDoc(doc(db, collectionName, id));
+    console.log("Document successfully deleted!");
+  } catch (error) {
+    console.error("Error removing document: ", error);
   }
 }
 

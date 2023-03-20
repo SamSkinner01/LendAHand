@@ -13,17 +13,35 @@ function DisplayAllEvents () {
       const allEvents = await readFromDb('Events')
       setEvents(allEvents);
     }
-    getAllEvents();
-  }, []);
+    
+    const unsubscribe = navigation.addListener('focus', () => { // this was added because on naviagtion to this screen would not reload to show the updated database
+      getAllEvents();
+    });
+    return unsubscribe;
+
+  }, [navigation]);
+
 
   return (
-    <View style = {styles.mainContainer}>
-      <View > 
-      <Pressable onPress = {() => navigation.navigate("Post Event")}>
-      <Text>Create Event</Text>
-      </Pressable>
+    <View style={{flex:1,margin:10, flexDirection:'column'}}>
+      <View style={{marginTop:20}}> 
+        <Pressable  onPress={() => navigation.navigate("Post Event")}>
+          <Text>Create Event</Text>
+        </Pressable>
+        <Pressable  onPress={() => navigation.navigate('Search Results', { term: 'Food' })}>
+          <Text>Food</Text>
+        </Pressable>
+        <Pressable  onPress={() => navigation.navigate('Search Results', { term: 'Education' })}>
+          <Text>Education</Text>
+        </Pressable>
+        <Pressable  onPress={() => navigation.navigate('Search Results', { term: 'Sanitation' })}>
+          <Text>Sanitation</Text>
+        </Pressable>
+        <Pressable  onPress={() => navigation.navigate('Search Results', { term: 'Shelter' })}>
+          <Text>Shelter</Text>
+        </Pressable>
       </View>
-      <View style={styles.bottomContainer} >
+      <View  style={{height:'90%'}}>
         <RenderEvents allEvents={events} />
       </View>
       <View>
@@ -34,21 +52,7 @@ function DisplayAllEvents () {
 }
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  topContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: 'center',
-    alignItems: 'left',
-  },
-  bottomContainer: {
-    flex: 5,
-    backgroundColor: "#fff",
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
 })
 
 export { DisplayAllEvents };

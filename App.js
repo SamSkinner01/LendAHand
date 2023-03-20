@@ -13,6 +13,8 @@ import { SocialMedia } from "./screens/SocialMedia";
 import { PostSocialMediaPage } from "./screens/PostSocialMediaPage";
 import { PostEvent } from "./screens/PostEvent";
 import { DisplaySingularEvent } from "./screens/DisplaySingularEvent";
+import { UpdateEvent } from "./screens/UpdateEvent";
+import { DisplaySearched } from "./screens/DisplaySearched";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -29,6 +31,8 @@ export default function App() {
         <Stack.Screen name="Post Event" component={PostEvent} />
         <Stack.Screen name="Events" component={DisplayAllEvents} />
         <Stack.Screen name="Event Page" component={DisplaySingularEvent} />
+        <Stack.Screen name="Update Event" component={UpdateEvent} />
+        <Stack.Screen name="Search Results" component={DisplaySearched} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="MyProfile" component={MyProfile} />

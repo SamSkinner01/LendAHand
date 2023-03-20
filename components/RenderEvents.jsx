@@ -16,9 +16,9 @@ const RenderEvents = ({ allEvents }) => {
             <Text>{item.data.title}</Text> 
             <Text>{item.data.description}</Text> 
             <Text>{item.data.event_type}</Text>
+            <Text>{item.data.date}</Text>
             <Text>{item.data.start_time}</Text>
-            <Text>{item.data.end_time}</Text>
-            <Text>{item.data.number_of_volunteers}</Text>
+            <Text>{item.data.eventLocation}</Text>
         </Pressable>
       ))}
       </ScrollView>
