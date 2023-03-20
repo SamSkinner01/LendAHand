@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from "./screens/Login";
 import { Signup } from "./screens/Signup";
-import { Events } from "./screens/Events";
+import { DisplayAllEvents } from "./screens/DisplayAllEvents";
 import { Leaderboard } from "./screens/Leaderboard";
 import { Messages } from "./screens/Messages";
 import { MyProfile } from "./screens/MyProfile";
@@ -14,6 +14,10 @@ import { ForumPage } from "./screens/ForumPage";
 import { PostToForum } from "./screens/PostToForum";
 import { ForumSearch } from "./screens/ForumSearch";
 import { PostSocialMediaPage } from "./screens/PostSocialMediaPage";
+import { PostEvent } from "./screens/PostEvent";
+import { DisplaySingularEvent } from "./screens/DisplaySingularEvent";
+import { UpdateEvent } from "./screens/UpdateEvent";
+import { DisplaySearched } from "./screens/DisplaySearched";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -27,7 +31,11 @@ export default function App() {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Events" component={Events} />
+        <Stack.Screen name="Post Event" component={PostEvent} />
+        <Stack.Screen name="Events" component={DisplayAllEvents} />
+        <Stack.Screen name="Event Page" component={DisplaySingularEvent} />
+        <Stack.Screen name="Update Event" component={UpdateEvent} />
+        <Stack.Screen name="Search Results" component={DisplaySearched} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
