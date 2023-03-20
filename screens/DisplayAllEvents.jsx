@@ -23,7 +23,7 @@ function DisplayAllEvents () {
 
 
   return (
-    <View style={{flex:1,margin:10, flexDirection:'column'}}>
+    <View style={{flex:1,margin:80, flexDirection:'column'}}>
       <View style={{marginTop:20}}> 
         <Pressable  onPress={() => navigation.navigate("Post Event")}>
           <Text>Create Event</Text>
@@ -41,7 +41,7 @@ function DisplayAllEvents () {
           <Text>Shelter</Text>
         </Pressable>
       </View>
-      <View  style={{height:'50%'}}>
+      <View  style={{height:'80%'}}>
         <RenderEvents allEvents={events} />
       </View>
       <View>
