@@ -6,7 +6,7 @@ import { auth } from "../auth/firebaseConfig";
 import logo from "../assets/logo.png"
 
 function Login({ navigation }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -21,7 +21,7 @@ function Login({ navigation }) {
   }
 
   function clearFields() {
-    setUsername("");
+    setEmail("");
     setPassword("");
   }
 
@@ -42,9 +42,9 @@ function Login({ navigation }) {
         <Image source={logo} style={[styles.logo]}/>
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          onChangeText={(text) => setUsername(text)}
-          value={username}
+          placeholder="email"
+          onChangeText={(text) => setEmail(text)}
+          value={email}
         />
         <TextInput
           style={styles.input}
@@ -54,7 +54,7 @@ function Login({ navigation }) {
           secureTextEntry={true}
         />
          <Pressable onPress={() => {
-            signin(username, password);
+            signin(email, password);
             isUserLoggedIn();
             clearFields();
           }}
