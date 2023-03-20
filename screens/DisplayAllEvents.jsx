@@ -41,7 +41,7 @@ function DisplayAllEvents () {
           <Text>Shelter</Text>
         </Pressable>
       </View>
-      <View  style={{height:'90%'}}>
+      <View  style={{height:'50%'}}>
         <RenderEvents allEvents={events} />
       </View>
       <View>
