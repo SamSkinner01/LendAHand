@@ -7,7 +7,6 @@ import { Login } from "./screens/Login";
 import { Signup } from "./screens/Signup";
 import { DisplayAllEvents } from "./screens/DisplayAllEvents";
 import { Leaderboard } from "./screens/Leaderboard";
-import { Messages } from "./screens/Messages";
 import { MyProfile } from "./screens/MyProfile";
 import { SocialMedia } from "./screens/SocialMedia";
 import { ForumPage } from "./screens/ForumPage";
@@ -18,6 +17,8 @@ import { PostEvent } from "./screens/PostEvent";
 import { DisplaySingularEvent } from "./screens/DisplaySingularEvent";
 import { UpdateEvent } from "./screens/UpdateEvent";
 import { DisplaySearched } from "./screens/DisplaySearched";
+import DisplayAllChats from "./screens/DisplayAllChats";
+import Chat from "./components/Chat";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -37,12 +38,13 @@ export default function App() {
         <Stack.Screen name="Update Event" component={UpdateEvent} />
         <Stack.Screen name="Search Results" component={DisplaySearched} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
-        <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="Social Media" component={SocialMedia} />
         <Stack.Screen name="Forum Page" component={ForumPage} />
         <Stack.Screen name="Post To Forum" component={PostToForum} />
         <Stack.Screen name="Search Forum" component={ForumSearch} />
+        <Stack.Screen name="DisplayAllChats" component={DisplayAllChats} />
+        <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen 
           options={{ headerShown: true }}
           name="PostSocialMediaPage" 
