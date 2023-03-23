@@ -117,9 +117,9 @@ function DisplayAllChats(){
 
             <Pressable
                 style={styles.sendmessage}
-                onPress={createRoom}
+                onPress = {() => {navigation.navigate("Search Page")}}
             >
-                    <Text>Send a message</Text>
+                    <Text>Navigate to Search</Text>
             </Pressable>
         </View>
 
