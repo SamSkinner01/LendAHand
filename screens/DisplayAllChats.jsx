@@ -14,53 +14,6 @@ function DisplayAllChats(){
     const [chatroom_ids, setChatroom_ids] = useState([])
     const [email, setEmail] = useState('');
 
-    async function createRoom(){
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.size === 1 && email !== current_user) {
-
-            // see if chatroom already exists
-            // if it does, navigate to it
-            const chatRoomRef = collection(db, "chatroom");
-            const q = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
-            const querySnapshot = await getDocs(q);
-            if(querySnapshot.size !== 0) {
-                console.log("createRoom() called")
-                return
-            }
-
-            // Create a chatroom between the two users
-            try{
-                addDoc(collection(db, "chatroom"), {
-                    user1email: email,
-                    user2email: current_user,
-                    messages: [],
-                });
-            }
-            catch(e){
-                console.log(e);
-            }
-
-            // Get the chatroom id
-            const crR = collection(db, "chatroom");
-            const qu = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
-            const qS = await getDocs(qu);
-
-            let chatroom_id = "";  
-            qS.forEach((doc) => {
-                chatroom_id = doc.id;
-            });
-
-            // Navigate to the chatroom
-            navigation.navigate('ChatRoom', {chatroom_id: chatroom_id, current_user: current_user});
-        }
-        else {
-            console.log("No such user!");
-        }
-
-    }
 
     // Queries for all the chatrooms
     function getAllChatrooms(){
