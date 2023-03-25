@@ -22,13 +22,6 @@ function NavigationBar({}) {
       />
 
       <Button
-        title="Messages"
-        onPress={() => {
-          navigation.navigate("Messages");
-        }}
-      />
-
-      <Button
         title="Leaderboard"
         onPress={() => {
           navigation.navigate("Leaderboard");

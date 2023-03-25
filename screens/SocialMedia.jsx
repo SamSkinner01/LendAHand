@@ -63,7 +63,7 @@ function SocialMedia() {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => {
-          navigation.navigate("PostSocialMediaPage");
+          navigation.navigate("DisplayAllChats");
         }}>
         <Image source ={messageicon} style={styles.icons2}  />
         </TouchableOpacity> 
