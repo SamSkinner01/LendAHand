@@ -11,7 +11,7 @@ function DisplayAllEvents () {
   useEffect(() => {
     async function getAllEvents() {
       const allEvents = await readFromDb('Events')
-      setEvents(allEvents);
+      //setEvents(allEvents);
     }
     
     const unsubscribe = navigation.addListener('focus', () => { // this was added because on naviagtion to this screen would not reload to show the updated database
