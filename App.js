@@ -20,6 +20,8 @@ import { DisplaySearched } from "./screens/DisplaySearched";
 import DisplayAllChats from "./screens/DisplayAllChats";
 import Chat from "./components/Chat";
 import SearchPage from "./screens/SearchPage";
+import SearchProfile from "./screens/SearchProfile";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -47,6 +49,7 @@ export default function App() {
         <Stack.Screen name="DisplayAllChats" component={DisplayAllChats} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Search Page" component={SearchPage} /> 
+        <Stack.Screen name = "Search Profile" component = {SearchProfile} />
         <Stack.Screen 
           options={{ headerShown: true }}
           name="PostSocialMediaPage" 

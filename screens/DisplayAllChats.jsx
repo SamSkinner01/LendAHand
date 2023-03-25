@@ -107,16 +107,6 @@ function DisplayAllChats(){
 
             <Pressable
                 style={styles.sendmessage}
-            >
-                   <TextInput 
-                        placeholder="Enter an email:"
-                        onChangeText={setEmail}
-                        value={email}
-                   />
-            </Pressable>
-
-            <Pressable
-                style={styles.sendmessage}
                 onPress = {() => {navigation.navigate("Search Page")}}
             >
                     <Text>Navigate to Search</Text>

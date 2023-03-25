@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Image, FlatList } from "react-native";
 import { auth, db } from "../auth/firebaseConfig";
 import { collection, getDocs, query, where, addDoc, setDoc, updateDoc, limit, orderBy, onSnapshot } from "firebase/firestore";
-
+import { useNavigation } from "@react-navigation/native";
+import { SearchProfile } from "./SearchProfile";
+import DisplaySearchedUser from "../components/DisplaySearchedUser";
 function SearchPage() {
+  const navigation = useNavigation();
+
   const [searchContent, setSearchContent] = useState("");
   const [results, setResults] = useState([]);
 
@@ -38,11 +42,7 @@ function SearchPage() {
 
   const renderItem = ({ item }) => {
   return (
-    <View style={styles.userContainer}>
-      <View style={styles.userInfo}>
-        <Text style={styles.userName}>{item.username}</Text>
-      </View>
-    </View>
+    <DisplaySearchedUser item={item} />
   );
 };
 
@@ -79,17 +79,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 5,
     padding: 10,
-  },
-  userContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
-  },
-  userName: {
-    fontSize: 18,
-    fontWeight: "bold",
   },
   noResultsContainer: {
   flex: 1,
