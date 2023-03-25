@@ -8,6 +8,7 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -20,23 +21,24 @@ function PostSocialMediaPage() {
   const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  async function getAuthUser() {
-    /*
-    Gets the current user's email via firebase authentication. 
-    Then, recieves the username from the database using the email. 
-    */
-    if (auth.currentUser.email) {
-      setEmail(auth.currentUser.email);
-    } else {
-      console.log("No user is signed in");
-      return;
-    }
 
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("email", "==", email));
-    const querySnapshot = await getDocs(q);
-    const temp_username = querySnapshot.docs[0].data().username;
-    setUsername(temp_username);
+  async function getAuthUser() {
+    // try{
+    //   console.log(auth.currentUser.email)
+    //   const usersRef = collection(db, "users");
+    //   console.log("DSDS")
+    //   const q = query(usersRef, where("email", "==", auth.currentUser.email));
+    //   console.log("DSDS")
+    //   const querySnapshot = await getDocs(q);
+    //   console.log("DSDS")
+    //   const temp_username = querySnapshot.docs[0].data().username;
+    //   console.log("DSDS")
+    //   console.log("Username: ", temp_username)
+    //   setUsername(temp_username);
+    // }catch(error){
+    //   console.log("Error getting username: ", error);
+    // }
+    setUsername(auth.currentUser.email)
   }
 
   async function postToDatabase(downloadURL) {
@@ -44,6 +46,9 @@ function PostSocialMediaPage() {
     Makes a social media post in the database.
     */
     try {
+      console.log("Description: ", description)
+      console.log("Image: ", downloadURL)
+      
       await addDoc(collection(db, "social_media_posts"), {
         description: description,
         image: downloadURL,
@@ -53,7 +58,7 @@ function PostSocialMediaPage() {
         time: new Date(),
       });
     } catch (error) {
-      console.log(error);
+      console.log("Error adding document: ", error);
     }
   }
 
@@ -90,7 +95,6 @@ function PostSocialMediaPage() {
     };
   
     const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
-  
     return new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
