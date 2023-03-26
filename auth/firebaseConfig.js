@@ -8,8 +8,6 @@ import { collection, getDocs, getDoc, where, query, doc, deleteDoc} from "fireba
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 
-//Your web app's Firebase configuration
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
 
@@ -22,9 +20,6 @@ const firebaseConfig = {
 
 };
 
-
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -32,7 +27,6 @@ const db = getFirestore(app);
 
 
 export async function readFromDb(collectionName) {
-  // const db = await database();
   const querySnapshot = await getDocs(collection(db, collectionName));
   const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -87,7 +81,6 @@ export async function search_by_keyword(keyword) {
 }
 
 export async function deleteCollection(id, collectionName) {
-  // const db = await database();
   try {
     await deleteDoc(doc(db, collectionName, id));
     console.log("Document successfully deleted!");
@@ -98,4 +91,3 @@ export async function deleteCollection(id, collectionName) {
 
 
 export {auth, db};
-
