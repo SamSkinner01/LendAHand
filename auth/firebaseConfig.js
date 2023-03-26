@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
-import { collection, getDocs, getDoc, where, query, doc, deleteDoc} from "firebase/firestore";
+import { collection, getDocs, getDoc, where, query, doc, deleteDoc, updateDoc, arrayUnion} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -89,5 +89,19 @@ export async function deleteCollection(id, collectionName) {
   }
 }
 
+export async function add_to_array(event_id, user_id) {
+  // const db = await database();
+  const eventRef = doc(db, 'Events', event_id)
+  const userRef = doc(db, 'users', user_id)
+  try {
+    await updateDoc(eventRef, 
+      {signed_up_users: arrayUnion(user_id)});
+      await updateDoc(userRef, 
+        {signed_up_for_events: arrayUnion(event_id)});
+    console.log('info updated!')
+  } catch (error) {
+    console.log(error, 'Please check infomation')
+  }
+}
 
 export {auth, db};
