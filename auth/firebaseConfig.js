@@ -107,7 +107,7 @@ export async function getProfile() {
       id: doc.id,
       data: doc.data(),
     }));
-    return data
+    return data;
   } catch (error) {
     console.log(error);
   }

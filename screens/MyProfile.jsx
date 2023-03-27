@@ -19,9 +19,12 @@ function MyProfile() {
       navigation.navigate("Login");
       signUserOut();
     }
+
+    setProfileInfo(getProfile())
+
   }, [loggedIn]);
 
-  
+
 
   
 
@@ -31,9 +34,10 @@ function MyProfile() {
 
   return (
     <>
-      <View style={styles.container}>
-        
+      <View>
 
+      </View>
+      <View style={styles.container}>
         <Button
           title="Sign out"
           onPress={() => {
