@@ -78,6 +78,7 @@ function PostEvent(){
         "end_time": endTime,
         "event_type": event_type,
         "date": date,
+        "full_date": fullDate,
         "eventLocation": eventLocation,
         "number_of_volunteers": number_of_volunteers,
         "slots_remaining": number_of_volunteers,
