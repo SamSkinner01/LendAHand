@@ -1,8 +1,6 @@
 // displays 1 post
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { deleteFromDB, updateEvent,  } from "../auth/firebaseConfig";
+import { View, Text, Pressable, StyleSheet} from 'react-native';
 
 const RenderEvent = (event) => {
 

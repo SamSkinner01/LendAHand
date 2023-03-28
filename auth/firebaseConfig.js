@@ -3,12 +3,10 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
-import { collection, getDocs, getDoc, where, query, doc, deleteDoc} from "firebase/firestore";
+import { collection, getDocs, getDoc, where, query, doc, deleteDoc, updateDoc, arrayUnion} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-
-//Your web app's Firebase configuration
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,9 +20,6 @@ const firebaseConfig = {
 
 };
 
-
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -32,7 +27,6 @@ const db = getFirestore(app);
 
 
 export async function readFromDb(collectionName) {
-  // const db = await database();
   const querySnapshot = await getDocs(collection(db, collectionName));
   const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -87,7 +81,6 @@ export async function search_by_keyword(keyword) {
 }
 
 export async function deleteCollection(id, collectionName) {
-  // const db = await database();
   try {
     await deleteDoc(doc(db, collectionName, id));
     console.log("Document successfully deleted!");
@@ -96,6 +89,19 @@ export async function deleteCollection(id, collectionName) {
   }
 }
 
+export async function add_to_array(event_id, user_id) {
+  // const db = await database();
+  const eventRef = doc(db, 'Events', event_id)
+  const userRef = doc(db, 'users', user_id)
+  try {
+    await updateDoc(eventRef, 
+      {signed_up_users: arrayUnion(user_id)});
+      await updateDoc(userRef, 
+        {signed_up_for_events: arrayUnion(event_id)});
+    console.log('info updated!')
+  } catch (error) {
+    console.log(error, 'Please check infomation')
+  }
+}
 
 export {auth, db};
-
