@@ -9,19 +9,35 @@ import { auth } from "../auth/firebaseConfig";
 function MyProfile() {
   const navigation = useNavigation();
   const [loggedIn, setLoggedIn] = useState(true);
+  const [profileInfo, setProfileInfo] = useState([]);
+  const [profileEvents, setProfileEvetns] = useState([]);
+  const [profilePosts, setProfilePosts] = useState([]);
+  const auth = firebase.auth();
 
   useEffect(() => {
     if (!loggedIn) {
       navigation.navigate("Login");
       signUserOut();
     }
+
+    setProfileInfo(getProfile())
+
   }, [loggedIn]);
+
+
+
+  
+
+  
+
+  
 
   return (
     <>
-      <View style={styles.container}>
-        <Text>My Profile</Text>
+      <View>
 
+      </View>
+      <View style={styles.container}>
         <Button
           title="Sign out"
           onPress={() => {

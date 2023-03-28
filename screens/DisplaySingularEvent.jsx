@@ -42,6 +42,7 @@ const DisplaySingularEvent = ({ route }) => {
         <Text>{item.data.event_host}</Text>
         <Text>{item.data.description}</Text>
         <Text>{item.data.event_type}</Text>
+        {/* <Text>{item.data.date}</Text> */}
         <Text>{item.data.full_date}</Text>
         <Text>{item.data.start_time}</Text>
         <Text>{item.data.end_time}</Text>
