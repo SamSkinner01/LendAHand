@@ -36,7 +36,6 @@ const DisplaySingularEvent = ({ route }) => {
     }
     // navigation.navigate("Events")
   }
-
   return (
     <View style={styles.container}>
       <Text>{item.data.title}</Text>

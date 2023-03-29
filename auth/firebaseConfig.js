@@ -100,6 +100,61 @@ export async function deleteCollection(id, collectionName) {
   }
 }
 
+
+//Search for the currently logged in user's profile info using their UUID
+export async function getProfile() {
+  try {
+    const profileRef = collection(db, "user_profiles");
+    const q = query(profileRef, where("UUID", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    //Should only be 1 doc in the search results
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//Variable Names and structure will change depending on the structure of event database
+export async function getProfileEvents(uuid) {
+  try {
+    const eventRef = collection(db, "events");
+    const q = query(eventRef, where("event_id", "==", profileInfo.events))   //WRONG!!! find way to say profileInfo.events.includes(event_id)
+    const querySnapshot = await getDocs(q);
+
+    const fetchedEvents = [];
+    querySnapshot.docs.map((doc) => ({
+      data: doc.data(),
+    }));
+    return data;
+    setProfileEvetns(fetchedEvents);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getProfilePosts() {
+  try {
+    const eventRef = collection(db, "socialMedia");
+    const q = query(eventRef, where("user_id", "==", profileInfo.user))   //WRONG!!! 
+    const querySnapshot = await getDocs(q);
+
+    const fetchedPosts = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      fetchedPosts.push({
+        //Set data based on how the event database works
+      });
+    });
+    setProfilePosts(fetchedPosts);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function add_to_array(event_id, user_id) {
   const eventRef = doc(db, 'Events', event_id)
   const userRef = doc(db, 'users', user_id)
@@ -124,5 +179,6 @@ export async function isOrganization(user_id){
     console.log("No such document!");
   }
 }
+
 
 export {auth, db};
