@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
-import { collection, getDocs, getDoc, where, query, doc, deleteDoc, updateDoc, arrayUnion} from "firebase/firestore";
+import { collection, getDocs, getDoc, where, query, doc, deleteDoc, updateDoc, arrayUnion, orderBy } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,8 +26,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-export async function readFromDb(collectionName) {
-  const querySnapshot = await getDocs(collection(db, collectionName));
+export async function readFromDb(collectionName) { // reads all data from database when giving the collection name
+  const docRef = collection(db, collectionName);
+  const q = query(docRef, orderBy("date", "asc"));
+  const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
@@ -35,8 +37,7 @@ export async function readFromDb(collectionName) {
   return data
 }
 
-export async function deleteEvent(id, collectionName) {
-  const db = await database();
+export async function deleteEvent(id, collectionName) { // removes a collection from a doc when giving the collection name and id of the collection
   const collection = database().collection(collectionName);
   try {
       await collection.doc(id).delete();
@@ -48,7 +49,6 @@ export async function deleteEvent(id, collectionName) {
 //just updates an event if it needs to like cahnge a date and do not want to delete it
 // data is an obect which holds the new value and the data field that is being changed
 export async function updateEvent(id, collectionName, data) {
-  const db = await database();
   //You can update anything that is in the event except adding users to the signed_up_users field
   const docRef = doc(db, collectionName, id);
   try {
@@ -71,7 +71,7 @@ export async function search_by_id(id) {
 
 export async function search_by_keyword(keyword) {
   //search for any event type using the keyword
-    const q = query(collection(db, "Events"), where("event_type", "==", keyword)); // find a group using a keyword
+    const q = query(collection(db, "Events"), where("event_type", "==", keyword), orderBy("date", "asc")); // find a group using a keyword
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -79,6 +79,17 @@ export async function search_by_keyword(keyword) {
   }));
   return data
 }
+
+// export async function search_by_keyword(keyword) {
+//   //search for any event type using the keyword
+//     const q = query(collection(db, "Events"), where("event_type", "==", keyword)); // find a group using a keyword
+//     const querySnapshot = await getDocs(q);
+//     const data = querySnapshot.docs.map((doc) => ({
+//       id: doc.id,
+//       data: doc.data(),
+//   }));
+//   return data
+// }
 
 export async function deleteCollection(id, collectionName) {
   try {
@@ -90,7 +101,6 @@ export async function deleteCollection(id, collectionName) {
 }
 
 export async function add_to_array(event_id, user_id) {
-  // const db = await database();
   const eventRef = doc(db, 'Events', event_id)
   const userRef = doc(db, 'users', user_id)
   try {
@@ -98,9 +108,20 @@ export async function add_to_array(event_id, user_id) {
       {signed_up_users: arrayUnion(user_id)});
       await updateDoc(userRef, 
         {signed_up_for_events: arrayUnion(event_id)});
-    console.log('info updated!')
+    return 'success';
   } catch (error) {
-    console.log(error, 'Please check infomation')
+    console.log("Error updating")
+  }
+}
+
+export async function isOrganization(user_id){
+  const orgRef = collection(db, "users", user_id);
+  const q = query(orgRef, where("is_organization", "==", true));
+  const docSnap = await getDoc(q);
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    console.log("No such document!");
   }
 }
 

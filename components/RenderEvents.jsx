@@ -4,10 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
 const RenderEvents = ({ allEvents }) => {
-  //navigation.navigate('Event Page', { id: item.id })
-  function printID(event) {
-    console.log('Pressed', event.data.title);
-  }
   const navigation = useNavigation();
   return (
       <ScrollView style = {styles.eventsContainer}>
