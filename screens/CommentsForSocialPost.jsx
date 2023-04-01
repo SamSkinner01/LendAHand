@@ -66,9 +66,10 @@ function CommentsForSocialPost() {
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <ScrollView style={styles.commentsContainer}>
-                {commentsData.map((comment) => {
+                {commentsData.map((comment, index) => {
                     return (
                         <Comments
+                            key = {index}
                             email={comment.email}
                             comment={comment.comment}
                         />
