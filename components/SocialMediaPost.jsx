@@ -6,13 +6,14 @@ import { db } from "../auth/firebaseConfig";
 import likes from "../assets/likes.png"
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import messageicon from '../assets/messageicon.png';
-
+import { useNavigation } from "@react-navigation/native";
 const storage = getStorage();
 const dimensions = Dimensions.get('window');
 const imageHeight = Math.round(dimensions.width * 9/9);
 const imageWidth = dimensions.width;
 
 const SocialMediaPost = (props) => {
+    const navigation = useNavigation();
     const storageRef = ref(storage, props.image);
     // deletes a post from the database.
     // When a delete button is pressed, the function is called.
@@ -45,9 +46,12 @@ const SocialMediaPost = (props) => {
               <TouchableOpacity>
                 <Image source ={likes} style={styles.icons}  resizeMethod="contain" />
               </TouchableOpacity> 
-      
-              <TouchableOpacity>
-                <Image source ={messageicon} style={styles.icons}  resizeMethod="contain" />
+              <TouchableOpacity onPress={() => {navigation.navigate('CommentsForSocialPost', {postId: props.id})}}>
+                <Image 
+                  source ={messageicon} 
+                  style={styles.icons}  
+                  resizeMethod="contain" 
+                />
               </TouchableOpacity> 
             </View>
 
@@ -71,7 +75,6 @@ const styles = StyleSheet.create({
         marginVertical: 3,
         marginHorizontal: "1%",
         fontSize: 20,
-        fontFamily: 'Mishafi'
       },
       icons:{
         maxWidth: 30,
