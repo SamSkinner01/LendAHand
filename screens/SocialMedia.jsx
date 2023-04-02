@@ -135,7 +135,7 @@ text_prim:{
   marginVertical: 1,
   fontSize: 35,
   marginRight: '20%',
-  //fontFamily:'Savoye LET'
+  fontFamily:'Savoye LET'
 },
 line: {
   borderBottomWidth: 1,

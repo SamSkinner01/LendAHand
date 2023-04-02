@@ -1,14 +1,17 @@
 import { useRoute } from "@react-navigation/native";
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView,TouchableOpacity,Image} from "react-native";
 import { collection, addDoc, getDocs, query, where, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "../auth/firebaseConfig";
+import back from '../assets/back.png';
 
 
 function Chat(){
     const route = useRoute();
     const chatroom_id = route.params.chatroom_id;
     const current_user = route.params.current_user;
+    const navigation = useNavigation();
 
     const [displayMessages, setDisplayMessages] = useState([]);
     const [senderOfMessage, setSenderOfMessage] = useState([]);
@@ -72,6 +75,21 @@ function Chat(){
 
 
     return(
+        <>
+         <View style={styles.rowContainer}>
+            
+            <TouchableOpacity
+             onPress={() => {
+                navigation.navigate("DisplayAllChats");
+             }}
+        color="#0F4D92"
+      >
+        <Image source ={back} style={styles.icons}  />
+      </TouchableOpacity>
+      <Text style={styles.text_prim}>{senderOfMessage[1]}</Text>
+
+         </View>
+         <View style={styles.line}></View>
         <View style={styles.container}>
             <ScrollView>
             <View style={styles.messages}>
@@ -99,20 +117,22 @@ function Chat(){
                 </Pressable>
             </View>
         </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "#cbc6c3",
     },
     input: {
-        position: 'absolute',
+    
         bottom: 0,
         width: '100%',
         paddingLeft: 20,
         backgroundColor: 'white',
-        height: 50,
+        height: 55,
         justifyContent: 'left',
         alignItems: 'center',
         display: 'flex',
@@ -164,8 +184,30 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: 'gray',
       },
-      
-      
+      rowContainer: {
+        flexDirection: "row",
+        height: '9%',
+        justifyContent: "space-evenly",
+        paddingTop: '11%',
+        backgroundColor:'#00548e',
+        marginVertical: 0,
+        alignItems: 'center',
+      },
+      line: {
+        borderBottomWidth: 1,
+        borderColor: 'black',
+        marginVertical: 0,
+      },
+      text_prim:{
+        fontStyle: 'bold',
+        fontSize: 25,
+        flex: 1,
+        marginHorizontal: '2%'
+      },
+      icons:{
+        maxWidth: 25,
+        maxHeight: 25,
+    },
 
 });
 

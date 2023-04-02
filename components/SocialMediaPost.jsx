@@ -67,11 +67,11 @@ const styles = StyleSheet.create({
       marginVertical: '0%',
     },
     text_prim:{
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         marginVertical: 3,
         marginHorizontal: "1%",
         fontSize: 20,
-        fontFamily: 'Mishafi'
+        //fontFamily: 'Mishafi'
       },
       icons:{
         maxWidth: 30,
