@@ -19,6 +19,7 @@ const SocialMediaPost = (props) => {
 
   const [liked, setLiked] = useState(false);
   const [image, setImage] = useState("");
+  const [numberOfLikes, setNumberOfLikes] = useState(props.likes);
 
   const navigation = useNavigation();
   const storageRef = ref(storage, props.image);
@@ -52,10 +53,12 @@ const SocialMediaPost = (props) => {
     // If the post is already liked, unlike it
     if (liked) {
       setLiked(false);
+      setNumberOfLikes(numberOfLikes - 1);
     }
     // If the post is not liked, like it
     else {
       setLiked(true);
+      setNumberOfLikes(numberOfLikes + 1);
     }
 
   }
@@ -88,7 +91,7 @@ const SocialMediaPost = (props) => {
           />
         </TouchableOpacity>
       </View>
-      <Text style={styles.text_sec}>Liked by {props.likes} others</Text>
+      <Text style={styles.text_sec}>Liked by {numberOfLikes} others</Text>
       <Text style={styles.text_sec}>{props.user}: {props.description}</Text>
       <Text>{props.comments}</Text>
     </View>
