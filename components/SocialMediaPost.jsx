@@ -3,12 +3,12 @@ import { View, Text, Image, Pressable, TouchableOpacity, Dimensions } from 'reac
 import { StyleSheet } from 'react-native';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../auth/firebaseConfig";
-import likes from "../assets/likes.png";
-import like_clicked from "../assets/like_clicked.png";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import messageicon from '../assets/messageicon.png';
 import { useNavigation } from "@react-navigation/native";
-import { collection, query, where } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
+import likes from "../assets/likes.png";
+import like_clicked from "../assets/like_clicked.png";
 
 const SocialMediaPost = (props) => {
 
@@ -44,6 +44,24 @@ const SocialMediaPost = (props) => {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    /*
+      Updates the number of likes in the database when the number of likes is changed.
+    */
+    const updateLikes = async () => {
+      try {
+        const docRef = doc(db, "social_media_posts", props.id);
+        await updateDoc(docRef, {
+          likes: numberOfLikes,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    updateLikes();
+  }, [numberOfLikes])
+
 
   const handleLike = () => {
     /*
