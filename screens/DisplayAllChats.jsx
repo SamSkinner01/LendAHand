@@ -17,19 +17,21 @@ function DisplayAllChats(){
 
     // Queries for all the chatrooms
     function getAllChatrooms(){
-        const chatRoomRef = collection(db, "chatroom")
-        getDocs(chatRoomRef)
-        .then((querySnapshot) => {
+        const chatRoomRef = collection(db, "chatroom");
+        getDocs(chatRoomRef).then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                if(doc.data().user1email === current_user){
-                    setChatrooms(chatrooms => [...chatrooms, doc.data().user2email]);
-                    setChatroom_ids(chatroom_ids => [...chatroom_ids, doc.id]);
-                }else{
-                    setChatrooms(chatrooms => [...chatrooms, doc.data().user1email]);
-                    setChatroom_ids(chatroom_ids => [...chatroom_ids, doc.id]);
-                    }
-            })
-        })
+                const user1email = doc.data().user1email;
+                const user2email = doc.data().user2email;
+
+                if (user1email === current_user) {
+                    setChatrooms((chatrooms) => [...chatrooms, user2email]);
+                    setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
+                } else if (user2email === current_user) {
+                    setChatrooms((chatrooms) => [...chatrooms, user1email]);
+                    setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
+                }
+            });
+        });
     }
 
     useEffect(()=> {
@@ -48,7 +50,7 @@ function DisplayAllChats(){
                             <Pressable
                                 key={index}
                                 style={styles.chats}
-                                onPress={() => navigation.navigate('Chat', {chatroom_id: chatroom_ids[index], current_user: current_user})}
+                                onPress={() => navigation.navigate('Chat', {chatroom_id: chatroom_ids[index], current_user: current_user, user2: chatrooms[index]})}
                             >
                                 <Text>{chatroom}</Text>
                             </Pressable>

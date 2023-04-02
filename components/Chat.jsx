@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView,TouchableOpacity,Image} from "react-native";
 import { collection, addDoc, getDocs, query, where, onSnapshot, orderBy } from "firebase/firestore";
-import { db } from "../auth/firebaseConfig";
+import { db,auth } from "../auth/firebaseConfig";
 import back from '../assets/back.png';
 
 
@@ -11,6 +11,7 @@ function Chat(){
     const route = useRoute();
     const chatroom_id = route.params.chatroom_id;
     const current_user = route.params.current_user;
+    const user2 = route.params.user2;
     const navigation = useNavigation();
 
     const [displayMessages, setDisplayMessages] = useState([]);
@@ -86,7 +87,7 @@ function Chat(){
       >
         <Image source ={back} style={styles.icons}  />
       </TouchableOpacity>
-      <Text style={styles.text_prim}>{senderOfMessage[1]}</Text>
+      <Text style={styles.text_prim}>{user2}</Text>
 
          </View>
          <View style={styles.line}></View>
