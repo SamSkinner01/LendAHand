@@ -102,17 +102,17 @@ export async function deleteCollection(id, collectionName) {
 
 
 //Search for the currently logged in user's profile info using their UUID
-export async function getProfile() {
-  try {
-    const profileRef = collection(db, "user_profiles");
-    const q = query(profileRef, where("UUID", "==", user.uid));
+
+export async function getProfile(id) {
+  try{
+  //search for any event type using the keyword
+    const q = query(collection(db, "users", id)); // find a group using a keyword
     const querySnapshot = await getDocs(q);
-    //Should only be 1 doc in the search results
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
-    }));
-    return data;
+  }));
+  return data
   } catch (error) {
     console.log(error);
   }

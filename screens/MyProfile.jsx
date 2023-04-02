@@ -15,6 +15,19 @@ function MyProfile() {
   const auth = firebase.auth();
 
   useEffect(() => {
+    async function getProfile() {
+      const profiles = await readFromDb("users");
+      setEvents(allEvents);
+    }
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      // this was added because on naviagtion to this screen would not reload to show the updated database
+      getAllEvents();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     if (!loggedIn) {
       navigation.navigate("Login");
       signUserOut();
@@ -36,7 +49,12 @@ function MyProfile() {
     <>
       <View>
 
+
       </View>
+      
+      
+      
+      
       <View style={styles.container}>
         <Button
           title="Sign out"
