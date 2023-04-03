@@ -67,6 +67,7 @@ export async function search_by_id(id) {
   } else {
     console.log("No such document!");
   }
+  return docSnap.data();
 }
 
 export async function search_by_keyword(keyword) {
@@ -103,15 +104,15 @@ export async function deleteCollection(id, collectionName) {
 
 //Search for the currently logged in user's profile info using their UUID
 
-export async function getProfile(id) {
+export async function getProfile(email) {
   try{
-  //search for any event type using the keyword
-    const q = query(collection(db, "users", id)); // find a group using a keyword
+    const q = query(collection(db, "users"), where("email", "==", email)); // find a group using a keyword
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
   }));
+  // console.log(data)
   return data
   } catch (error) {
     console.log(error);
@@ -119,10 +120,9 @@ export async function getProfile(id) {
 }
 
 //Variable Names and structure will change depending on the structure of event database
-export async function getProfileEvents(uuid) {
+export async function getProfileEvents(email) {
   try {
-    const eventRef = collection(db, "events");
-    const q = query(eventRef, where("event_id", "==", profileInfo.events))   //WRONG!!! find way to say profileInfo.events.includes(event_id)
+    const q = query(collection(db, 'Events'), where("event_id", "==", profileInfo.events))   //WRONG!!! find way to say profileInfo.events.includes(event_id)
     const querySnapshot = await getDocs(q);
 
     const fetchedEvents = [];

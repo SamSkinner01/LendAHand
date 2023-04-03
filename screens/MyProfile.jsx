@@ -4,7 +4,7 @@ import { signUserOut } from "../auth/auth_signout";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../auth/firebaseConfig";
+import { auth, getProfile, search_by_id } from "../auth/firebaseConfig";
 
 function MyProfile() {
   const navigation = useNavigation();
@@ -12,30 +12,29 @@ function MyProfile() {
   const [profileInfo, setProfileInfo] = useState([]);
   const [profileEvents, setProfileEvetns] = useState([]);
   const [profilePosts, setProfilePosts] = useState([]);
-  const auth = firebase.auth();
+  // const auth = firebase.auth();
 
   useEffect(() => {
-    async function getProfile() {
-      const profiles = await readFromDb("users");
-      setEvents(allEvents);
-    }
+    async function checkProfile() {
+      const profile = await getProfile(auth.currentUser.email);
+      console.log(profile)
+      setProfileInfo(profile);
+      console.log(profile[0].data.username)
+    } 
+    checkProfile()
 
-    const unsubscribe = navigation.addListener("focus", () => {
-      // this was added because on naviagtion to this screen would not reload to show the updated database
-      getAllEvents();
-    });
-    return unsubscribe;
-  }, [navigation]);
+      // setProfileEvents(search_by_id())
+  }, []);
 
-  useEffect(() => {
-    if (!loggedIn) {
-      navigation.navigate("Login");
-      signUserOut();
-    }
+  // useEffect(() => {
+  //   if (!loggedIn) {
+  //     navigation.navigate("Login");
+  //     signUserOut();
+  //   }
 
-    setProfileInfo(getProfile())
+  //   setProfileInfo(getProfile())
 
-  }, [loggedIn]);
+  // }, [loggedIn]);
 
 
 

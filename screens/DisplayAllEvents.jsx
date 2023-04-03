@@ -23,7 +23,7 @@ function DisplayAllEvents() {
   }, [navigation]);
 
   return (
-    <View style={{ flex: 1, paddingTop: 50, flexDirection: "column" }}>
+    <View style={{ flex: 1, paddingTop: 50, margin: 80, flexDirection: "column" }}>
       <View style={{ marginTop: 20 }}>
         <Pressable onPress={() => navigation.navigate("Post Event")}>
           <Text>Create Event</Text>
