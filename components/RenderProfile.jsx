@@ -5,17 +5,15 @@ import { StyleSheet } from "react-native";
 
 const renderProfile = (profile) => {
 
-   
-
     const navigation = useNavigation();
     return(
         <View style={styles.container}>
         <View>
             <View>
-                <Text>{profile.name}</Text> 
-                <Text>{profile.description}</Text> 
-                <Text>{profile.hours}</Text>
-                <Text>{profile.events}</Text>
+                <Text>{profile.username}</Text> 
+                <Text>{profile.friends.length}</Text> 
+                <Text>{profile.total_hours}</Text>
+                <Text>{profile.events_volunteered.length}</Text>
             </View>
             <NavigationBar />
         </View>

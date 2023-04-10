@@ -22,6 +22,8 @@ import Chat from "./components/Chat";
 import SearchPage from "./screens/SearchPage";
 import SearchProfile from "./screens/SearchProfile";
 import CommentsForSocialPost from "./screens/CommentsForSocialPost";
+import { ProfileForumPosts } from "./screens/ProfileForumPosts";
+import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +54,8 @@ export default function App() {
         <Stack.Screen name="Search Page" component={SearchPage} /> 
         <Stack.Screen name = "Search Profile" component = {SearchProfile} />
         <Stack.Screen name = "CommentsForSocialPost" component = {CommentsForSocialPost} />
+        <Stack.Screen name = "Profile Forum" component = {ProfileForumPosts} />
+        <Stack.Scree name = "Profile Social" component = {ProfileSocialPosts} />
         <Stack.Screen 
           options={{ headerShown: true }}
           name="PostSocialMediaPage" 

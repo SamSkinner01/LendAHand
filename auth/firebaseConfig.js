@@ -120,36 +120,29 @@ export async function getProfile(email) {
 }
 
 //Variable Names and structure will change depending on the structure of event database
-export async function getProfileEvents(email) {
+export async function getProfileEvents(userID) {
   try {
-    const q = query(collection(db, 'Events'), where("event_id", "==", profileInfo.events))   //WRONG!!! find way to say profileInfo.events.includes(event_id)
+    const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains", userID), orderBy("date", "asc")); 
     const querySnapshot = await getDocs(q);
-
-    const fetchedEvents = [];
     querySnapshot.docs.map((doc) => ({
+      id: doc.id,
       data: doc.data(),
     }));
     return data;
-    setProfileEvetns(fetchedEvents);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getProfilePosts() {
+export async function getProfileForumPosts(email) {
   try {
-    const eventRef = collection(db, "socialMedia");
-    const q = query(eventRef, where("user_id", "==", profileInfo.user))   //WRONG!!! 
+    const q = query(collection(db, "forum_posts"), where("username", "==", email))   //In the forum posts database, the username of the poster is their email
     const querySnapshot = await getDocs(q);
-
-    const fetchedPosts = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      fetchedPosts.push({
-        //Set data based on how the event database works
-      });
-    });
-    setProfilePosts(fetchedPosts);
+    querySnapshot.forEach((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    return data;
   } catch (error) {
     console.log(error);
   }
