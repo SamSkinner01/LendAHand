@@ -42,15 +42,15 @@ function MyProfile() {
         <RenderProfile profile={profileInfo} />
       </View>
 
-      <View>
+      <View style={styles.userEvents}>
         <RenderProfileEvents profileEvents={profileEvents}></RenderProfileEvents>
       </View>
       
-      <View>
+      <View style={styles.Button}>
         <Pressable onPress={()=>navigation.navigate('Profile Forum')}> Forum Posts </Pressable>
       </View>
 
-      <View>
+      <View style={styles.Button}>
         <Pressable onPress={()=>navigation.navigate('Profile Social')}> Social Media Posts</Pressable>
       </View>
       
@@ -82,10 +82,24 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    margin: 5,
   },
+
+  Button: {
+    display: "flex",
+    justifyContent: "center",
+    borderRadius: 10,
+    borderColor: "black",
+    margin: 5,
+  },
+
+
 
   userEvents: {
     display: "flex",
+    flex: 1,
+    margin: 10,
+    flexDirection: "column",
   }
 });
 
