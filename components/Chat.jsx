@@ -96,8 +96,9 @@ function Chat(){
             <View style={styles.messages}>
                 {displayMessages.map((message, index) => (
                     <View style={styles.message_container}  key={index}>
-                        <Text style={styles.message_content}>{message.message}</Text>
                         <Text style={styles.message_sender}>{senderOfMessage[index]}</Text>
+                        <Text style={styles.message_content}>{message.message}</Text>
+                        
                     </View>
                 ))}
             </View>
@@ -169,21 +170,22 @@ const styles = StyleSheet.create({
       
       message_content: {
         width: '100%',
-        height: 50,
+        height: 30,
         margin: 5,
         padding: 5,
         textAlign: 'left',
         fontSize: 18,
+        color:'black'
       },
       
       
       message_sender: {
         width: '100%',
         height: 20,
-        marginVertical: 2,
+        marginVertical: 1,
         paddingHorizontal: 5,
         textAlign: 'left',
-        color: 'gray',
+        color: 'black',
       },
       rowContainer: {
         flexDirection: "row",

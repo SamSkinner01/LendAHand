@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: "#cbc6c3",
   },
 });
 
