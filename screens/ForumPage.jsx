@@ -50,7 +50,7 @@ function ForumPage() {
         setUser((user) => [...user, data.username]);
         setTitle((title) => [...title, data.title]);
         setDescription((description) => [...description, data.description]);
-        setComments((comments) => [...comments, data.comments]);
+        //setComments((comments) => [...comments, data.comments]);
         setID((id) => [...id, doc.id]);
       });
     } catch (error) {

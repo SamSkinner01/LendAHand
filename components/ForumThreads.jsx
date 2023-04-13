@@ -9,10 +9,10 @@
 import { useRoute } from "@react-navigation/native";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../auth/firebaseConfig";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db, auth } from "../auth/firebaseConfig";
 import { KeyboardAvoidingView } from "react-native";
-import { TextInput } from "react-native";
+import { TextInput, ScrollView } from "react-native";
 
 export default function ForumThreads() {
   const route = useRoute();
@@ -40,7 +40,29 @@ export default function ForumThreads() {
   }
 
   async function handleSubmit() {
-    // Will add a comment to the database
+    // handle if the user submits an empty comment
+    if (textInput === "") {
+      return;
+    }
+
+    setTextInput("");
+
+    const new_data = {
+      textInput,
+      username: auth.currentUser.email,
+      time: new Date(),
+    };
+
+    // append the new comment to existng firebase array
+    try {
+      await updateDoc(doc(db, "forum_posts", forum_id), {
+        comments: arrayUnion(new_data),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    getForumData();
   }
 
   useEffect(() => {
@@ -58,9 +80,16 @@ export default function ForumThreads() {
       </View>
 
       <View style={styles.middle}>
-        {
-          // contains comments
-        }
+        <ScrollView>
+          {data.comments &&
+            data.comments.map((comment, index) => (
+              <View style={styles.comments} key={index}>
+                <Text>
+                  {comment.username}: {comment.textInput}
+                </Text>
+              </View>
+            ))}
+        </ScrollView>
       </View>
 
       <KeyboardAvoidingView style={styles.bottom} behavior="padding">
@@ -70,6 +99,7 @@ export default function ForumThreads() {
             style={styles.keyboard}
             placeholder="Add a comment"
             onChangeText={(text) => setTextInput(text)}
+            value={textInput}
           />
           <Pressable style={styles.submit_button} onPress={handleSubmit}>
             <Text>Submit</Text>
@@ -134,5 +164,13 @@ const styles = StyleSheet.create({
     borderColor: "#00548e",
     alignItems: "center",
     justifyContent: "center",
+  },
+  comments: {
+    backgroundColor: "#fff",
+    height: 50,
+    width: 350,
+    borderRadius: 10,
+    paddingLeft: 30,
+    paddingTop: 15,
   },
 });
