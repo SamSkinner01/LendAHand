@@ -55,7 +55,7 @@ export default function App() {
         <Stack.Screen name = "Search Profile" component = {SearchProfile} />
         <Stack.Screen name = "CommentsForSocialPost" component = {CommentsForSocialPost} />
         <Stack.Screen name = "Profile Forum" component = {ProfileForumPosts} />
-        <Stack.Scree name = "Profile Social" component = {ProfileSocialPosts} />
+        <Stack.Screen name = "Profile Social" component = {ProfileSocialPosts} />
         <Stack.Screen 
           options={{ headerShown: true }}
           name="PostSocialMediaPage" 
