@@ -4,7 +4,12 @@ import { signUserOut } from "../auth/auth_signout";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, getProfile, search_by_id, getProfileEvents } from "../auth/firebaseConfig";
+import {
+  auth,
+  getProfile,
+  search_by_id,
+  getProfileEvents,
+} from "../auth/firebaseConfig";
 import { RenderProfileEvents } from "../components/RenderProfileEvents";
 import { RenderProfile } from "../components/RenderProfile";
 import { ScrollView } from "react-native-web";
@@ -18,21 +23,19 @@ function MyProfile() {
   useEffect(() => {
     async function checkProfile() {
       const profile = await getProfile(auth.currentUser.email);
-      console.log(profile)
+      console.log(profile);
       setProfileInfo(profile.id);
-      console.log(profile[0].data.signed_up_for_events)
+      console.log(profile[0].data.signed_up_for_events);
 
       const events = await getProfileEvents(profile[0].id);
       setProfileEvetns(events);
       console.log(events);
     }
 
-    checkProfile()
+    checkProfile();
 
-      // setProfileEvents(search_by_id())
+    // setProfileEvents(search_by_id())
   }, []);
-
-  
 
   return (
     <>
@@ -41,17 +44,27 @@ function MyProfile() {
       </View>
 
       <View style={styles.userEvents}>
-        <RenderProfileEvents profileEvents={profileEvents}></RenderProfileEvents>
-      </View>
-      
-      <View style={styles.Button}>
-        <Pressable onPress={()=>navigation.navigate('Profile Forum')}> Forum Posts </Pressable>
+        <RenderProfileEvents
+          profileEvents={profileEvents}
+        ></RenderProfileEvents>
       </View>
 
       <View style={styles.Button}>
-        <Pressable onPress={()=>navigation.navigate('Profile Social')}> Social Media Posts</Pressable>
+        <Pressable onPress={() => navigation.navigate("Profile Forum")}>
+          {/* {" "}
+          Forum Posts{" "} */}
+          <Text>Forum Posts</Text>
+        </Pressable>
       </View>
-      
+
+      <View style={styles.Button}>
+        <Pressable onPress={() => navigation.navigate("Profile Social")}>
+          {/* {" "}
+          Social Media Posts */}
+          <Text>Forum Posts</Text>
+        </Pressable>
+      </View>
+
       <View style={styles.container}>
         <Button
           title="Sign out"
@@ -91,14 +104,12 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 
-
-
   userEvents: {
     display: "flex",
     flex: 1,
     margin: 10,
     flexDirection: "column",
-  }
+  },
 });
 
 export { MyProfile };
