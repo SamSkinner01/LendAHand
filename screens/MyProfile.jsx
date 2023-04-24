@@ -14,8 +14,6 @@ function MyProfile() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [profileInfo, setProfileInfo] = useState([]);
   const [profileEvents, setProfileEvetns] = useState([]);
-  const [profilePosts, setProfilePosts] = useState([]);
-  // const auth = firebase.auth();
 
   useEffect(() => {
     async function checkProfile() {
