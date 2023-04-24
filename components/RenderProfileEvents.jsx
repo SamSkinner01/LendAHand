@@ -6,28 +6,29 @@ import { StyleSheet } from "react-native";
 const RenderProfileEvents = ({ profileEvents }) => {
   const navigation = useNavigation();
   return (
-      <ScrollView style = {styles.eventsContainer}>
-      {profileEvents.map((item, index) => (
-        <Pressable key={item.id} style = {styles.eventStyle} onPress={()=>navigation.navigate('Event Page', { item: item })}>  
-            <Text>{item.data.title}</Text> 
-            <Text>{item.data.event_type}</Text>
-            <Text>{item.data.eventLocation}</Text>
-        </Pressable>
-      ))}
-      </ScrollView>
+    // <ScrollView style = {styles.eventsContainer}>
+    // {profileEvents.map((item, index) => (
+    //   <Pressable key={item.id} style = {styles.eventStyle} onPress={()=>navigation.navigate('Event Page', { item: item })}>
+    //       <Text>{item.data.title}</Text>
+    //       <Text>{item.data.event_type}</Text>
+    //       <Text>{item.data.eventLocation}</Text>
+    //   </Pressable>
+    // ))}
+    // </ScrollView>
+    <Text>Hello</Text>
   );
 };
 
 const styles = StyleSheet.create({
-  eventStyle:{
+  eventStyle: {
     margin: 5,
-    borderWidth:1,
+    borderWidth: 1,
     padding: 10,
     borderRadius: 10,
   },
-  eventsContainer:{
+  eventsContainer: {
     marginTop: 40,
-  }
+  },
 });
 
 export { RenderProfileEvents };
