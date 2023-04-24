@@ -42,7 +42,7 @@ function Login({ navigation }) {
         <Image source={logo} style={[styles.logo]}/>
         <TextInput
           style={styles.input}
-          placeholder="email"
+          placeholder="Email"
           onChangeText={(text) => setEmail(text)}
           value={email}
         />

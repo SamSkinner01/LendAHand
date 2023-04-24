@@ -117,33 +117,35 @@ const SocialMediaPost = (props) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#cbc6c3",
-    alignItems: "left",
-    justifyContent: "center",
-    marginVertical: '0%',
-  },
-  text_prim: {
-    fontWeight: 'bold',
-    marginVertical: 3,
-    marginHorizontal: "1%",
-    fontSize: 20,
-  },
-  icons: {
-    maxWidth: 30,
-    maxHeight: 30,
-  },
-  text_sec: {
-    fontSize: 15,
-    marginHorizontal: "1%",
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    height: 30,
-    justifyContent: "space-around",
-    backgroundColor: '#cbc6c3',
-  },
-});
+    container: {
+      flex: 1,
+      backgroundColor: "#cbc6c3",
+      alignItems: "left",
+      justifyContent: "center",
+      marginVertical: '0%',
+    },
+    text_prim:{
+        //fontWeight: 'bold',
+        marginVertical: 3,
+        marginHorizontal: "1%",
+        fontSize: 20,
+        //fontFamily: 'Mishafi'
+      },
+      icons:{
+        maxWidth: 30,
+        maxHeight: 30,
+    },
+    text_sec:{
+        fontSize: 15,
+        marginHorizontal: "1%",
+      },
+      rowContainer: {
+        flexDirection: 'row',
+        height: 30,
+        justifyContent: "space-around",
+        backgroundColor:'#cbc6c3',
+      },
+  });
+
 
 export default SocialMediaPost;
