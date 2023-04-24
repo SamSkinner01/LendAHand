@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import {
   addDoc,
   collection,
-  getDocs,
+  getDoc,
   query,
   orderBy,
 } from "firebase/firestore";
@@ -20,24 +20,25 @@ function PostToForum() {
     const [description, setDescription] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
-    async function getAuthUser() {
-    /*
-    Gets the current user's email via firebase authentication. 
-    Then, recieves the username from the database using the email. 
-    */
-    if (auth.currentUser.email) {
-        setEmail(auth.currentUser.email);
-    } else {
-        console.log("No user is signed in");
-        return;
-    }
+    
+    // async function getAuthUser() {
+    //     /*
+    //     Gets the current user's email via firebase authentication. 
+    //     Then, recieves the username from the database using the email. 
+    //     */
+    //     if (auth.currentUser.email) {
+    //         setEmail(auth.currentUser.email);
+    //     } else {
+    //         console.log("No user is signed in");
+    //         return;
+    //     }
 
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("email", "==", email));
-    const querySnapshot = await getDocs(q);
-    const temp_username = querySnapshot.docs[0].data().username;
-    setUsername(temp_username);
-    }
+    //     const usersRef = collection(db, "users");
+    //     const q = query(usersRef, orderBy("email", "==", email));
+    //     const querySnapshot = await getDoc(q);
+    //     const temp_username = querySnapshot.docs.data().username;
+    //     setUsername(temp_username);
+    // }
 
     async function postToDatabase() {
         /*
@@ -47,7 +48,7 @@ function PostToForum() {
             await addDoc(collection(db, "forum_posts"), {
             title: title,
             description: description,
-            user: username,
+            username: auth.currentUser.email,
             comments: [],
          time: new Date(),
             });
@@ -59,7 +60,7 @@ function PostToForum() {
 
     useEffect(() => {
         // Gets the current authenticated user and email on page load.
-        getAuthUser();
+        //getAuthUser();
     }, []);
   
   

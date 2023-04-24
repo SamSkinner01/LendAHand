@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  ScrollView,
 } from "react-native";
 import { auth, db } from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ import {
   getDocs,
   orderBy,
   query,
+  onSnapshot,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import ForumPost from "../components/ForumPost";
@@ -42,7 +44,7 @@ function ForumPage() {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
 
-        setUser((user) => [...user, data.user]);
+        setUser((user) => [...user, data.username]);
         setTitle((title) => [...title, data.title]);
         setDescription((description) => [...description, data.description]);
         setComments((comments) => [...comments, data.comments]);
@@ -54,55 +56,52 @@ function ForumPage() {
   }
 
   useEffect(() => {
-    getForumPosts();
-  }, []);
+        const unsubscribe = navigation.addListener("focus", () => {
+      // this was added because on naviagtion to this screen would not reload to show the updated database
+      getForumPosts();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
-      <FlatList
-        data={description}
-        renderItem={({ item, index }) => (
+      
+      <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        {user.map((user, index) => (
           <ForumPost
-            user={user[index]}
+            key={index}
+            user={user}
             title={title[index]}
             description={description[index]}
             comments={comments[index]}
             id={id[index]}
-            getForumPosts={getForumPosts}
           />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+        ))}
+      </ScrollView>
+
       <Pressable
         onPress={() => {
-          navigation.navigate("Forum");
+          navigation.navigate("Post To Forum");
         }}
-        style={styles.container}
+        style={styles.makePost}
       >
         <Text>Post</Text>
       </Pressable>
 
-      <Pressable
-        onPress={() => {
-          getForumPosts();
-        }}
-        style={styles.container}
-      >
-        <Text>Refresh</Text>
-      </Pressable>
-
-      <Pressable
+      {/* <Pressable
         onPress={() => {
           navigation.navigate("Search Forum");
         }}
         style={styles.container}
       >
         <Text>Search</Text>
-      </Pressable>
+      </Pressable> */}
 
       <View>
         <NavigationBar />
       </View>
+    </View>
     </>
   );
 }
@@ -111,11 +110,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    //alignItems: "center",
+    //justifyContent: "center",
   },
   post: {
-    flex: 1,
+    flex: 5,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
