@@ -62,7 +62,7 @@ function DisplayAllEvents() {
           <Text>Search</Text>
         </Pressable>
       </View>
-      <View style={{ height: "80%" }}>
+      <View style={{flex: 1}}>
         <RenderEvents allEvents={events} />
       </View>
       <View>
