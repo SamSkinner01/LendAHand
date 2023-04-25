@@ -29,16 +29,16 @@ function NavigationBar({}) {
       /> */}
 
       <Button
-        title="Profile"
+        title="Forum"
         onPress={() => {
-          navigation.navigate("MyProfile");
+          navigation.navigate("Forum Page");
         }}
       />
 
       <Button
-        title="Forum"
+        title="Profile"
         onPress={() => {
-          navigation.navigate("Forum Page");
+          navigation.navigate("MyProfile");
         }}
       />
     </View>
@@ -48,8 +48,12 @@ function NavigationBar({}) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
+    alignItems: "center",
     backgroundColor: "#cbc6c3",
+    padding: 5,
+    paddingBottom: 10,
+    width: "100%",
   },
 });
 
