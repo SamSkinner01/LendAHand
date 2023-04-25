@@ -29,7 +29,9 @@ function SearchProfile(){
             const chatRoomRef = collection(db, "chatroom");
             const q = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
             const querySnapshot = await getDocs(q);
+
             if(querySnapshot.size !== 0) {
+                console.log(querySnapshot.docs[0].id)
                 navigation.navigate('Chat', {chatroom_id: querySnapshot.docs[0].id, current_user: current_user, user2: email});
                 return
             }
@@ -66,7 +68,7 @@ function SearchProfile(){
 
     return (
        <><View style={styles.container}>
-            <Text> {userInfo.username} Proflile Page</Text>
+            <Text> {userInfo.username} Profile Page</Text>
         </View>
         
         <Pressable 

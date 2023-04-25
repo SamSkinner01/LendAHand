@@ -25,6 +25,7 @@ import back from "../assets/back.png";
 import { KeyboardAvoidingView } from "react-native";
 
 
+
 function Chat() {
   const route = useRoute();
   const chatroom_id = route.params.chatroom_id;
@@ -39,14 +40,18 @@ function Chat() {
   const [userSubmit , setUserSubmit] = useState(false);
 
 
-  /*
-        1. Be able to create and send message to database
-        2. Be able to display all messages in chatroom
-        3. Update messages in real time
-    */
+  /* 
+    Currently does not render when the chatroom is navigated to 
+    from the SearchProfile screen.
+  */
 
   function sendMessage() {
     setUserSubmit(true);
+
+    if(sendUserMessage === ""){
+      return;
+    }
+
     try {
       addDoc(collection(db, "messages"), {
         chatroom_id: chatroom_id,
@@ -107,6 +112,11 @@ function Chat() {
   useEffect(() => {
       displayAllMessages();
   }, [userSubmit]);
+
+  useEffect(() => {
+    displayAllMessages();
+  }, [chatroom_id]);
+
 
 
 
