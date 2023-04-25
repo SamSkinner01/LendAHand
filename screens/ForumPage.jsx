@@ -7,6 +7,9 @@ import {
   TextInput,
   View,
   ScrollView,
+  Image,
+  TouchableOpacity,
+  Button,
 } from "react-native";
 import { auth, db } from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
@@ -47,7 +50,7 @@ function ForumPage() {
         setUser((user) => [...user, data.username]);
         setTitle((title) => [...title, data.title]);
         setDescription((description) => [...description, data.description]);
-        setComments((comments) => [...comments, data.comments]);
+        //setComments((comments) => [...comments, data.comments]);
         setID((id) => [...id, doc.id]);
       });
     } catch (error) {
@@ -56,7 +59,7 @@ function ForumPage() {
   }
 
   useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       // this was added because on naviagtion to this screen would not reload to show the updated database
       getForumPosts();
     });
@@ -65,43 +68,59 @@ function ForumPage() {
 
   return (
     <>
-      
-      <View style={styles.container}>
-      <ScrollView style={styles.container}>
-        {user.map((user, index) => (
-          <ForumPost
-            key={index}
-            user={user}
-            title={title[index]}
-            description={description[index]}
-            comments={comments[index]}
-            id={id[index]}
+      <View style={styles.rowContainer}>
+        <Text style={styles.text_prim}>Lend-A-Hand</Text>
+        <TouchableOpacity
+          onPress={() => {
+            getForumPosts();
+          }}
+          color="#0F4D92"
+          style={styles.refresh}
+        >
+          <Button title="Refresh" color="#0F4D92" onPress={getForumPosts} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Post To Forum");
+          }}
+          style={styles.post}
+        >
+          <Button
+            title="Post"
+            color="#0F4D92"
+            onPress={() => {
+              navigation.navigate("Post To Forum");
+            }}
           />
-        ))}
-      </ScrollView>
-
-      <Pressable
-        onPress={() => {
-          navigation.navigate("Post To Forum");
-        }}
-        style={styles.makePost}
-      >
-        <Text>Post</Text>
-      </Pressable>
-
-      {/* <Pressable
-        onPress={() => {
-          navigation.navigate("Search Forum");
-        }}
-        style={styles.container}
-      >
-        <Text>Search</Text>
-      </Pressable> */}
-
-      <View>
-        <NavigationBar />
+        </TouchableOpacity>
       </View>
-    </View>
+      <View style={styles.line}></View>
+
+      <View style={styles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ marginHorizontal: 0 }}
+        >
+          {user.map((user, index) => (
+            <ForumPost
+              key={index}
+              user={user}
+              title={title[index]}
+              description={description[index]}
+              comments={comments[index]}
+              id={id[index]}
+            />
+          ))}
+        </ScrollView>
+
+        {/* Navigate to a PostSocialMediaPage*/}
+
+        {/* Navigation Bar */}
+        <View>
+          <NavigationBar />
+        </View>
+      </View>
     </>
   );
 }
@@ -109,24 +128,53 @@ function ForumPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    //alignItems: "center",
-    //justifyContent: "center",
+    backgroundColor: "#cbc6c3",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  post: {
-    flex: 5,
-    backgroundColor: "#fff",
+  rowContainer: {
+    flexDirection: "row",
+    height: "9%",
+    justifyContent: "space-evenly",
+    paddingTop: "11%",
+    backgroundColor: "#00548e",
+    marginVertical: 0,
+  },
+  text_prim: {
+    fontStyle: "bold",
+    marginVertical: 1,
+    fontSize: 35,
+    marginRight: "20%",
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderColor: "black",
+    marginVertical: 0,
+  },
+  refresh: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
     borderColor: "#202020",
+    marginVertical: 0,
+    marginHorizontal: 0,
+    width: "20%",
+    height: "100%",
+    borderRadius: 10,
   },
-  makePost: {
+  post: {
     flex: 1,
-    backgroundColor: "#55009B",
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
+    borderColor: "#202020",
+    marginVertical: 0,
+    marginHorizontal: 0,
+    width: "20%",
+    height: "100%",
+    borderRadius: 10,
   },
 });
 
 export { ForumPage };
-
