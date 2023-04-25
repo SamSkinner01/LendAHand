@@ -24,6 +24,7 @@ import { db, auth } from "../auth/firebaseConfig";
 import back from "../assets/back.png";
 import { KeyboardAvoidingView } from "react-native";
 
+
 function Chat() {
   const route = useRoute();
   const chatroom_id = route.params.chatroom_id;
@@ -35,6 +36,8 @@ function Chat() {
   const [senderOfMessage, setSenderOfMessage] = useState([]);
 
   const [sendUserMessage, setSendUserMessage] = useState("");
+  const [userSubmit , setUserSubmit] = useState(false);
+
 
   /*
         1. Be able to create and send message to database
@@ -43,6 +46,7 @@ function Chat() {
     */
 
   function sendMessage() {
+    setUserSubmit(true);
     try {
       addDoc(collection(db, "messages"), {
         chatroom_id: chatroom_id,
@@ -77,6 +81,7 @@ function Chat() {
   }
 
   useEffect(() => {
+    console.log("rendered page")
     displayAllMessages();
 
     const unsubscribe = onSnapshot(
@@ -99,6 +104,14 @@ function Chat() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    console.log("IN")
+      displayAllMessages();
+  }, [userSubmit]);
+
+
+
 
   return (
     <>

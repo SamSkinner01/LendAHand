@@ -23,9 +23,21 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { auth, db } from "../auth/firebaseConfig";
 import { NavigationBar } from "../components/navigationBar";
 import Edit from "../assets/Edit.png";
+import { RefreshControl } from "react-native";
+import { useCallback } from "react";
 
 function DisplayAllChats() {
   const navigation = useNavigation();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
 
   // recieve the current user's email
   const current_user = auth.currentUser.email;
@@ -58,7 +70,7 @@ function DisplayAllChats() {
     setChatrooms([]);
     setChatroom_ids([]);
     getAllChatrooms();
-  }, []);
+  }, [refreshing]);
 
   return (
     <>
@@ -75,7 +87,11 @@ function DisplayAllChats() {
           </TouchableOpacity>
         </View>
         <View style={styles.line}></View>
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
           {chatrooms.map((chatroom, index) => {
             return (
               <Pressable
