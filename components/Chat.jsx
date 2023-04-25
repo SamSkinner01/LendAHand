@@ -81,7 +81,6 @@ function Chat() {
   }
 
   useEffect(() => {
-    console.log("rendered page")
     displayAllMessages();
 
     const unsubscribe = onSnapshot(
@@ -106,7 +105,6 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    console.log("IN")
       displayAllMessages();
   }, [userSubmit]);
 
