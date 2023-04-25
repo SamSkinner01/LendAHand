@@ -53,11 +53,7 @@ export default function App() {
         <Stack.Screen name = "Search Profile" component = {SearchProfile} />
         <Stack.Screen name = "CommentsForSocialPost" component = {CommentsForSocialPost} />
         <Stack.Screen name = "ForumThreads" component = {ForumThreads} />
-       <Stack.Screen 
-          options={{ headerShown: true }}
-          name="PostSocialMediaPage" 
-          component={PostSocialMediaPage} 
-        />
+        <Stack.Screen name="PostSocialMediaPage" component={PostSocialMediaPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

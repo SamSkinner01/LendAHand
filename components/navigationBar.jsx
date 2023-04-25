@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {messageicon} from '../assets/messageicon.png'
+import { messageicon } from "../assets/messageicon.png";
 
 function NavigationBar({}) {
   const navigation = useNavigation();
@@ -21,10 +21,17 @@ function NavigationBar({}) {
         }}
       />
 
-      <Button
+      {/* <Button
         title="Leaderboard"
         onPress={() => {
           navigation.navigate("Leaderboard");
+        }}
+      /> */}
+
+      <Button
+        title="Forum"
+        onPress={() => {
+          navigation.navigate("Forum Page");
         }}
       />
 
@@ -34,13 +41,6 @@ function NavigationBar({}) {
           navigation.navigate("MyProfile");
         }}
       />
-
-    <Button
-        title="Forum"
-        onPress={() => {
-          navigation.navigate("Forum Page");
-        }}
-      />
     </View>
   );
 }
@@ -48,7 +48,12 @@ function NavigationBar({}) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "#cbc6c3",
+    padding: 5,
+    paddingBottom: 10,
+    width: "100%",
   },
 });
 
