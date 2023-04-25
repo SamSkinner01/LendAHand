@@ -21,6 +21,7 @@ function PostSocialMediaPage() {
   const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [displayIsImageSelected, setDisplayIsImageSelected] = useState("No image selected yet.");
 
   async function getAuthUser() {
     // try{
@@ -126,31 +127,47 @@ function PostSocialMediaPage() {
     getAuthUser();
   }, []);
 
+  useEffect(() => {
+    // Updates the display of whether an image is selected or not.
+    if (image) {
+      setDisplayIsImageSelected("Image selected");
+    } else {
+      setDisplayIsImageSelected("No image selected yet.");
+    }
+  }, [image]);
+
 
   return (
     <>
       <View style={styles.container}>
-        <Text>Make A Post</Text>
-        <TextInput
-          onChangeText={(text) => setDescription(text)}
-          style={styles.container}
-          placeholder="description"
-        />
+        <Text style={styles.title}>Make A Post</Text>
+        
+        <View style={styles.description_containter}>
+          <Text style={styles.description_title}>Give your post a description: </Text>
+          <TextInput
+            multiline={true}
+            blurOnSubmit={true} // dismisses keyboard when done is pressed
+            onChangeText={(text) => setDescription(text)}
+            style={styles.description_input}
+            placeholder="Enter your description here..."
+          />
+        </View>
+
+
+        <Text style={styles.is_image_selected}>{displayIsImageSelected}</Text>
         <Pressable 
         onPress={() => {
           pickImage();
-        } 
-      }
-          
-        style={styles.container}>
-          <Text>Upload Image</Text>
+        }} 
+        style={styles.upload_image}>
+          <Text>Click me to select your image!</Text>
         </Pressable>
 
         <Pressable
           onPress={() => {
             onClickPostPictureToDB();
           }}
-          style={styles.container}
+          style={styles.post}
         >
           <Text>Post</Text>
         </Pressable>
@@ -166,9 +183,62 @@ function PostSocialMediaPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+  },
+  title:{
+    fontSize: 40,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingTop: 60,
+    backgroundColor: "#00548e",
+  },
+  description_containter: {
+    flex: 4,
+    padding: 10,
+    paddingTop: 20,
+    flexDirection: "column",
+  },
+  description_title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  description_input: {
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 5,
+    textAlignVertical: "top",
+    fontSize: 20,
+    height: "80%",
+  },
+  upload_image:{
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 5,
+    margin: 10,
+    backgroundColor: "lightgrey",
+  },
+  post:{
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 5,
+    margin: 10,
+    backgroundColor: "lightgrey",
+
+  },
+  is_image_selected:{
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    fontSize: 20,
+    color: "red",
   },
 });
 
