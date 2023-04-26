@@ -20,59 +20,52 @@ function MyProfile() {
   const [profileEvents, setProfileEvetns] = useState([]);
 
   useEffect(() => {
-    async function checkProfile() {
-      const profile = await getProfile(auth.currentUser.email);
-      console.log(profile);
-      setProfileInfo(profile.id);
-      console.log(profile[0].data.signed_up_for_events);
+    // async function checkProfile() {
+    //   const profile = await getProfile(auth.currentUser.email);
+    //   console.log(profile);
+    //   setProfileInfo(profile.id);
+    //   console.log(profile[0].data.signed_up_for_events);
 
-      const events = await getProfileEvents(profile[0].id);
-      setProfileEvetns(events);
-      console.log(events);
-    }
+    //   const events = await getProfileEvents(profile[0].id);
+    //   setProfileEvetns(events);
+    //   console.log(events);
+    // }
 
-    checkProfile();
+    // checkProfile();
 
     // setProfileEvents(search_by_id())
   }, []);
 
   return (
     <>
-      <View style={styles.userInfo}>
-        <RenderProfile profile={profileInfo} />
-      </View>
-
-      <View style={styles.userEvents}>
-        <RenderProfileEvents
-          profileEvents={profileEvents}
-        ></RenderProfileEvents>
-      </View>
-
-      <View style={styles.Button}>
-        <Pressable onPress={() => navigation.navigate("Profile Forum")}>
-          {/* {" "}
-          Forum Posts{" "} */}
-          <Text>Forum Posts</Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.Button}>
-        <Pressable onPress={() => navigation.navigate("Profile Social")}>
-          {/* {" "}
-          Social Media Posts */}
-          <Text>Social Posts</Text>
-        </Pressable>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>My Profile</Text>
       </View>
 
       <View style={styles.container}>
-        <Button
-          title="Sign out"
-          onPress={() => {
-            setLoggedIn(false);
-            signUserOut();
-            navigation.navigate("Login");
-          }}
-        />
+
+        {/* View Social Media Posts Button*/}
+        <View style={styles.button}>
+          <Pressable onPress={() => navigation.navigate("Profile Social")}>
+            <Text style={styles.buttonText}>View your posts</Text>
+          </Pressable>
+        </View>
+
+        {/* Sign out button*/}
+        <View >
+          <Pressable 
+            style = {styles.button}
+            onPress={() => {
+              signUserOut();
+              setLoggedIn(false);
+              navigation.navigate("Login");
+            }}
+          >
+            <Text style={styles.buttonText}>Sign Out</Text>
+          </Pressable>
+
+        </View>
       </View>
       <View>
         <NavigationBar />
@@ -84,33 +77,30 @@ function MyProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
-
-  userInfo: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+  header: {
+    backgroundColor: "#00548e",
+    padding: 10,
     alignItems: "center",
-    margin: 5,
-  },
-
-  Button: {
-    display: "flex",
+    height: 100,
     justifyContent: "center",
+    paddingTop: 50,
+  },
+  headerText: {
+    color: "black",
+    fontSize: 30,
+  },
+  button: {
+    backgroundColor: "#cbc6c3",
+    padding: 10,
     borderRadius: 10,
-    borderColor: "black",
-    margin: 5,
+    margin: 10,
+  },
+  buttonText: {
+    color: "black",
+    fontSize: 20,
   },
 
-  userEvents: {
-    display: "flex",
-    flex: 1,
-    margin: 10,
-    flexDirection: "column",
-  },
 });
 
 export { MyProfile };

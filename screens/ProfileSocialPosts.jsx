@@ -36,11 +36,10 @@ function ProfileSocialPosts() {
         </View>
 
         <ScrollView>
-          {profilePosts.map((post, index) => {
+          {profilePosts.map((post) => {
             return (
-              <View style={styles.post}>
+              <View key={post.id} style={styles.post}>
                 <SocialMediaPost
-                  key={post.id}
                   title={post.data.title}
                   description={post.data.description}
                   image={post.data.image}
