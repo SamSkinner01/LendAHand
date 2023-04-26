@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { NavigationBar } from "../components/navigationBar";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../auth/firebaseConfig";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { Image,TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import SocialMediaPost from "../components/SocialMediaPost";
-import add from '../assets/add.png'
-import Refresh from '../assets/Refresh.png'
-import messageicon from '../assets/messageicon.png';
-
-
+import add from "../assets/add.png";
+import Refresh from "../assets/Refresh.png";
+import messageicon from "../assets/messageicon.png";
 
 function SocialMedia() {
   const [posts, setPosts] = useState([]); // will contain an array of post objects
@@ -49,59 +54,61 @@ function SocialMedia() {
 
   return (
     <>
-    <View style = {styles.rowContainer}>
-      <Text style={styles.text_prim}>Lend-A-Hand</Text>
+      <View style={styles.rowContainer}>
+        <Text style={styles.text_prim}>Lend-A-Hand</Text>
 
-      
-      <TouchableOpacity
-        onPress={() => {
-          getAllPosts();
-        }}
-        color="#0F4D92"
-      >
-        <Image source ={Refresh} style={styles.icons}  />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            getAllPosts();
+          }}
+          color="#0F4D92"
+        >
+          <Image source={Refresh} style={styles.icons} />
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => {
-          navigation.navigate("DisplayAllChats");
-        }}>
-        <Image source ={messageicon} style={styles.icons2}  />
-        </TouchableOpacity> 
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("DisplayAllChats");
+          }}
+        >
+          <Image source={messageicon} style={styles.icons2} />
+        </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
-          navigation.navigate("PostSocialMediaPage");
-        }}>
-        <Image source ={add} style={styles.icons}  />
-        </TouchableOpacity> 
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("PostSocialMediaPage");
+          }}
+        >
+          <Image source={add} style={styles.icons} />
+        </TouchableOpacity>
       </View>
       <View style={styles.line}></View>
-      
-    <View style={styles.container}>
 
-      <ScrollView 
-      showsVerticalScrollIndicator={false}
-      style={{marginHorizontal:0}}
-      >
-        {posts.map((post, index) => (
-          <SocialMediaPost
-            key={index}
-            image={post.image}
-            user={post.user}
-            description={post.description}
-            comments={post.comments}
-            likes={post.likes}
-            id={post.id}
-            getAllPosts={getAllPosts}
-          />
-        ))}
+      <View style={styles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ marginHorizontal: 0 }}
+        >
+          {posts.map((post, index) => (
+            <SocialMediaPost
+              key={index}
+              image={post.image}
+              user={post.user}
+              description={post.description}
+              comments={post.comments}
+              likes={post.likes}
+              id={post.id}
+              getAllPosts={getAllPosts}
+            />
+          ))}
         </ScrollView>
-      
-      {/* Navigate to a PostSocialMediaPage*/}
-     
-      {/* Navigation Bar */}
-      <View>
-        <NavigationBar />
-      </View>
+
+        {/* Navigate to a PostSocialMediaPage*/}
+
+        {/* Navigation Bar */}
+        <View>
+          <NavigationBar />
+        </View>
       </View>
     </>
   );
@@ -116,33 +123,32 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: "row",
-    height: '9%',
+    height: "9%",
     justifyContent: "space-evenly",
-    paddingTop: '11%',
-    backgroundColor:'#00548e',
-    marginVertical: 0
+    paddingTop: "11%",
+    backgroundColor: "#00548e",
+    marginVertical: 0,
   },
-  icons:{
+  icons: {
     maxWidth: 25,
     maxHeight: 25,
-},
-icons2:{
-  maxWidth: 40,
-  maxHeight: 25,  
-},
-text_prim:{
-  fontStyle: 'bold',
-  marginVertical: 1,
-  fontSize: 35,
-  marginRight: '20%',
-  //fontFamily:'Savoye LET'
-},
-line: {
-  borderBottomWidth: 1,
-  borderColor: 'black',
-  marginVertical: 0,
-},
-
+  },
+  icons2: {
+    maxWidth: 40,
+    maxHeight: 25,
+  },
+  text_prim: {
+    fontStyle: "bold",
+    marginVertical: 1,
+    fontSize: 35,
+    marginRight: "20%",
+    //fontFamily:'Savoye LET'
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderColor: "black",
+    marginVertical: 0,
+  },
 });
 
 export { SocialMedia };

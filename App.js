@@ -22,7 +22,7 @@ import Chat from "./components/Chat";
 import SearchPage from "./screens/SearchPage";
 import SearchProfile from "./screens/SearchProfile";
 import CommentsForSocialPost from "./screens/CommentsForSocialPost";
-import { ProfileForumPosts } from "./screens/ProfileForumPosts";
+import ForumThreads from "./components/ForumThreads";import { ProfileForumPosts } from "./screens/ProfileForumPosts";
 import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 
 const Stack = createNativeStackNavigator();
@@ -56,11 +56,8 @@ export default function App() {
         <Stack.Screen name = "CommentsForSocialPost" component = {CommentsForSocialPost} />
         <Stack.Screen name = "Profile Forum" component = {ProfileForumPosts} />
         <Stack.Screen name = "Profile Social" component = {ProfileSocialPosts} />
-        <Stack.Screen 
-          options={{ headerShown: true }}
-          name="PostSocialMediaPage" 
-          component={PostSocialMediaPage} 
-        />
+        <Stack.Screen name = "ForumThreads" component = {ForumThreads} />
+        <Stack.Screen name="PostSocialMediaPage" component={PostSocialMediaPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

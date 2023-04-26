@@ -29,8 +29,10 @@ function SearchProfile(){
             const chatRoomRef = collection(db, "chatroom");
             const q = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
             const querySnapshot = await getDocs(q);
+
             if(querySnapshot.size !== 0) {
-                console.log("createRoom() called")
+                console.log(querySnapshot.docs[0].id)
+                navigation.navigate('Chat', {chatroom_id: querySnapshot.docs[0].id, current_user: current_user, user2: email});
                 return
             }
 
@@ -39,7 +41,6 @@ function SearchProfile(){
                 addDoc(collection(db, "chatroom"), {
                     user1email: email,
                     user2email: current_user,
-                    messages: [],
                 });
             }
             catch(e){
@@ -57,7 +58,7 @@ function SearchProfile(){
             });
 
             // Navigate to the chatroom
-            navigation.navigate('Chat', {chatroom_id: chatroom_id, current_user: current_user});
+            navigation.navigate('Chat', {chatroom_id: chatroom_id, current_user: current_user, user2: email});
         }
         else {
             console.log("No such user!");
@@ -67,7 +68,7 @@ function SearchProfile(){
 
     return (
        <><View style={styles.container}>
-            <Text> {userInfo.username} Proflile Page</Text>
+            <Text> {userInfo.username} Profile Page</Text>
         </View>
         
         <Pressable 
