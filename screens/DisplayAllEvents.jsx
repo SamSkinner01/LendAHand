@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable,Image,TouchableOpacity } from "react-
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { readFromDb} from "../auth/firebaseConfig";
+import { readFromDb } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 import food from "../assets/Food.webp"
 import edit from "../assets/Edit.png"
@@ -11,22 +11,22 @@ import clean from "../assets/cleaning.png"
 import home from "../assets/home.png"
 
 
-function DisplayAllEvents () {
+function DisplayAllEvents() {
   const [events, setEvents] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
     async function getAllEvents() {
       const allEvents = await readFromDb('Events')
       setEvents(allEvents);
     }
-    
-    const unsubscribe = navigation.addListener('focus', () => { // this was added because on naviagtion to this screen would not reload to show the updated database
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      // this was added because on naviagtion to this screen would not reload to show the updated database
       getAllEvents();
     });
     return unsubscribe;
-
   }, [navigation]);
-
 
   return (
     <>
@@ -56,9 +56,7 @@ function DisplayAllEvents () {
    
     
     <View style={styles.container}>
-     
         <RenderEvents allEvents={events} />
-     
       <View>
         <NavigationBar />
       </View>
@@ -91,9 +89,8 @@ const styles = StyleSheet.create({
     maxWidth: 25,
     maxHeight: 25,
 },
+);
+}
 
-
-
-})
 
 export { DisplayAllEvents };
