@@ -12,7 +12,6 @@ import {
 } from "../auth/firebaseConfig";
 import { RenderProfileEvents } from "../components/RenderProfileEvents";
 import { RenderProfile } from "../components/RenderProfile";
-import { ScrollView } from "react-native-web";
 
 function MyProfile() {
   const navigation = useNavigation();
@@ -70,6 +69,8 @@ function MyProfile() {
           title="Sign out"
           onPress={() => {
             setLoggedIn(false);
+            signUserOut();
+            navigation.navigate("Login");
           }}
         />
       </View>
