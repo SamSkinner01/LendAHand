@@ -61,7 +61,7 @@ function MyProfile() {
         <Pressable onPress={() => navigation.navigate("Profile Social")}>
           {/* {" "}
           Social Media Posts */}
-          <Text>Forum Posts</Text>
+          <Text>Social Posts</Text>
         </Pressable>
       </View>
 
