@@ -67,6 +67,7 @@ export async function search_by_id(id) {
   } else {
     console.log("No such document!");
   }
+  return docSnap.data();
 }
 
 export async function search_by_keyword(keyword) {
@@ -102,13 +103,28 @@ export async function deleteCollection(id, collectionName) {
 
 
 //Search for the currently logged in user's profile info using their UUID
-export async function getProfile() {
-  try {
-    const profileRef = collection(db, "user_profiles");
-    const q = query(profileRef, where("UUID", "==", user.uid));
+
+export async function getProfile(email) {
+  try{
+    const q = query(collection(db, "users"), where("email", "==", email)); // find a group using a keyword
     const querySnapshot = await getDocs(q);
-    //Should only be 1 doc in the search results
     const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+  }));
+  // console.log(data)
+  return data
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//Variable Names and structure will change depending on the structure of event database
+export async function getProfileEvents(userID) {
+  try {
+    const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains", userID), orderBy("date", "asc")); 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
     }));
@@ -118,38 +134,15 @@ export async function getProfile() {
   }
 }
 
-//Variable Names and structure will change depending on the structure of event database
-export async function getProfileEvents(uuid) {
+export async function getProfileForumPosts(email) {
   try {
-    const eventRef = collection(db, "events");
-    const q = query(eventRef, where("event_id", "==", profileInfo.events))   //WRONG!!! find way to say profileInfo.events.includes(event_id)
+    const q = query(collection(db, "forum_posts"), where("username", "==", email))   //In the forum posts database, the username of the poster is their email
     const querySnapshot = await getDocs(q);
-
-    const fetchedEvents = [];
-    querySnapshot.docs.map((doc) => ({
+    querySnapshot.forEach((doc) => ({
+      id: doc.id,
       data: doc.data(),
     }));
     return data;
-    setProfileEvetns(fetchedEvents);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function getProfilePosts() {
-  try {
-    const eventRef = collection(db, "socialMedia");
-    const q = query(eventRef, where("user_id", "==", profileInfo.user))   //WRONG!!! 
-    const querySnapshot = await getDocs(q);
-
-    const fetchedPosts = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      fetchedPosts.push({
-        //Set data based on how the event database works
-      });
-    });
-    setProfilePosts(fetchedPosts);
   } catch (error) {
     console.log(error);
   }
@@ -178,6 +171,23 @@ export async function isOrganization(user_id){
   } else {
     console.log("No such document!");
   }
+}
+
+export async function getProfileSocialPosts(email){
+  posts = []
+  try{
+    const q = query(collection(db, "social_media_posts"), where("user", "==", email)); 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const c = {data: doc.data(), id: doc.id}
+      posts.push(c)
+    })
+  }
+  catch(error){
+    console.log(error)
+    console.log("Error getting social media posts")
+  }
+  return posts
 }
 
 

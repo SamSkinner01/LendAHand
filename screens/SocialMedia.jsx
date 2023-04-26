@@ -99,6 +99,7 @@ function SocialMedia() {
               likes={post.likes}
               id={post.id}
               getAllPosts={getAllPosts}
+              canDelete={false}
             />
           ))}
         </ScrollView>
