@@ -173,5 +173,22 @@ export async function isOrganization(user_id){
   }
 }
 
+export async function getProfileSocialPosts(email){
+  posts = []
+  try{
+    const q = query(collection(db, "social_media_posts"), where("user", "==", email)); 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const c = {data: doc.data(), id: doc.id}
+      posts.push(c)
+    })
+  }
+  catch(error){
+    console.log(error)
+    console.log("Error getting social media posts")
+  }
+  return posts
+}
+
 
 export {auth, db};

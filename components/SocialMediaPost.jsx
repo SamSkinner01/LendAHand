@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "../auth/firebaseConfig";
+import { db, auth } from "../auth/firebaseConfig";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import messageicon from "../assets/messageicon.png";
 import { useNavigation } from "@react-navigation/native";
@@ -34,6 +34,7 @@ const SocialMediaPost = (props) => {
     /*
       Deletes a post from both the database and storage.
     */
+    console.log(props.id);
     try {
       const docRef = doc(db, "social_media_posts", props.id);
       await deleteDoc(docRef);
@@ -44,7 +45,6 @@ const SocialMediaPost = (props) => {
         .catch((error) => {
           console.log(error);
         });
-      props.getAllPosts();
     } catch (error) {
       console.log(error);
     }
@@ -97,6 +97,17 @@ const SocialMediaPost = (props) => {
 
   return (
     <View style={styles.container}>
+      {props.canDelete && (
+        <Pressable
+          style={styles.deleteButton}
+          onPress={() => {
+            deleteFromDB();
+          }}
+        >
+          <Text style={styles.deleteText}>Delete</Text>
+        </Pressable>
+      )}
+
       <Text style={styles.text_prim}>{props.user}</Text>
       <Image
         source={{ url: props.image }}
@@ -154,6 +165,17 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: "space-around",
     backgroundColor: "#cbc6c3",
+  },
+  deleteButton: {
+    backgroundColor: "#ff0000",
+    width: 100,
+    height: 30,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    marginHorizontal: "1%",
+    marginVertical: "1%",
   },
 });
 
