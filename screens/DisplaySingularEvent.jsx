@@ -63,12 +63,12 @@ const DisplaySingularEvent = ({ route }) => {
       <View style={styles.container}>
         <Text style={styles.org}>{item.data.event_host}</Text>
         <Text style={styles.desc}>Description: {item.data.description}</Text>
-        <Text style={styles.type}>Type: {item.data.event_type}</Text>
-        <Text style={styles.full_date}>Date: {item.data.full_date}</Text>
-        <Text style={styles.s_time}>Start Time: {item.data.start_time}</Text>
-        <Text style={styles.e_time}>End Time: {item.data.end_time}</Text>
-        <Text style={styles.address}>Address: {item.data.eventLocation}</Text>
-        <Text style={styles.slots}>
+        <Text style={styles.desc}>Type: {item.data.event_type}</Text>
+        <Text style={styles.desc}>Date: {item.data.full_date}</Text>
+        <Text style={styles.desc}>Start Time: {item.data.start_time}</Text>
+        <Text style={styles.desc}>End Time: {item.data.end_time}</Text>
+        <Text style={styles.desc}>Address: {item.data.eventLocation}</Text>
+        <Text style={styles.desc}>
           Volunteers Needed: {item.data.slots_remaining}
         </Text>
 
@@ -132,36 +132,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   desc: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  type: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  full_date: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  s_time: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  e_time: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  address: {
-    fontSize: 15,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  slots: {
     fontSize: 15,
     marginHorizontal: "5%",
     marginVertical: "2%",
