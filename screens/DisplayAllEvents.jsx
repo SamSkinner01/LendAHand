@@ -11,7 +11,7 @@ import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
 import { readFromDb } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
-import food from "../assets/Food.webp";
+import food from "../assets/Food.png";
 import edit from "../assets/Edit.png";
 import school from "../assets/school.png";
 import clean from "../assets/cleaning.png";
@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   icons: {
-    maxWidth: 25,
-    maxHeight: 25,
+    maxWidth: 30,
+    maxHeight: 30,
   },
 });
 

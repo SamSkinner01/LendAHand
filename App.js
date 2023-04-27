@@ -58,6 +58,7 @@ export default function App() {
         <Stack.Screen name = "Profile Social" component = {ProfileSocialPosts} />
         <Stack.Screen name = "ForumThreads" component = {ForumThreads} />
         <Stack.Screen name="PostSocialMediaPage" component={PostSocialMediaPage} />
+        <Stack.Screen name="DisplayAllEvents" component={DisplayAllEvents}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
