@@ -6,36 +6,46 @@ import { StyleSheet } from "react-native";
 const RenderEvents = ({ allEvents }) => {
   const navigation = useNavigation();
   return (
-      <ScrollView style = {styles.eventsContainer}>
+    <ScrollView style={styles.eventsContainer}>
       {allEvents.map((item, index) => (
-        <Pressable key={item.id} style = {styles.eventStyle} onPress={()=>navigation.navigate('Event Page', { item: item })}>  
-            <Text>{item.data.title}</Text> 
-            <Text>{item.data.description}</Text> 
-            <Text>{item.data.event_type}</Text>
-
-            {/* <Text>{item.data.date}</Text> */}
-
-            <Text>{item.data.full_date}</Text>
-
-            <Text>{item.data.start_time}</Text>
-            <Text>{item.data.eventLocation}</Text>
+        <Pressable
+          key={item.id}
+          style={styles.eventStyle}
+          onPress={() => navigation.navigate("Event Page", { item: item })}
+        >
+          <Text style={styles.title}>{item.data.title}</Text>
+          <Text style={styles.desc}>{item.data.description}</Text>
+          <Text style={styles.date}>{item.data.full_date}</Text>
+          <Text style={styles.location}>{item.data.eventLocation}</Text>
         </Pressable>
       ))}
-      </ScrollView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  eventStyle:{
+  eventStyle: {
     margin: 5,
-    borderWidth:1,
+    borderWidth: 1,
     padding: 10,
     borderRadius: 10,
   },
-  eventsContainer:{
-    marginTop: 30,
-    width: '80%'
-  }
+  eventsContainer: {
+    width: "95%",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  desc: {
+    fontSize: 15,
+  },
+  date: {
+    fontSize: 15,
+  },
+  location: {
+    fontSize: 15,
+  },
 });
 
 export { RenderEvents };
