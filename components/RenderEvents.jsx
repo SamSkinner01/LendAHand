@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   eventsContainer:{
-    marginTop: 40,
+    marginTop: 30,
+    width: '80%'
   }
 });
 

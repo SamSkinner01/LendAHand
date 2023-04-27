@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, TouchableOpacity,Image } from "react-native";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import React from "react";
+import back from '../assets/back.png'
 
 const DisplaySingularEvent = ({ route }) => {
   const current_user_email = auth.currentUser.email;
@@ -37,16 +38,27 @@ const DisplaySingularEvent = ({ route }) => {
     // navigation.navigate("Events")
   }
   return (
+    <>
+    <View style={styles.rowContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("DisplayAllEvents");
+          }}
+          color="#0F4D92"
+        >
+          <Image source={back} style={styles.icons} />
+        </TouchableOpacity>
+        <Text style={styles.text_prim}>{item.data.title}</Text>
+      </View>
     <View style={styles.container}>
-      <Text>{item.data.title}</Text>
-      <Text>{item.data.event_host}</Text>
-      <Text>{item.data.description}</Text>
-      <Text>{item.data.event_type}</Text>
-      <Text>{item.data.full_date}</Text>
-      <Text>{item.data.start_time}</Text>
-      <Text>{item.data.end_time}</Text>
-      <Text>{item.data.eventLocation}</Text>
-      <Text>{item.data.slots_remaining}</Text>
+      <Text>Organization: {item.data.event_host}</Text>
+      <Text>Description: {item.data.description}</Text>
+      <Text>Type: {item.data.event_type}</Text>
+      <Text>Date: {item.data.full_date}</Text>
+      <Text>Start Time: {item.data.start_time}</Text>
+      <Text>End Time: {item.data.end_time}</Text>
+      <Text>Address: {item.data.eventLocation}</Text>
+      <Text>Volunteers Needed: {item.data.slots_remaining}</Text>
       <View>
         <Pressable onPress={() => navigation.navigate("Post Event")}>
           <Text>Update Event</Text>
@@ -59,15 +71,36 @@ const DisplaySingularEvent = ({ route }) => {
         </Pressable>
       </View>
     </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
+    
+  },
+  icons: {
+    maxWidth: 25,
+    maxHeight: 25,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    height: "9%",
+    justifyContent: "flex-start",
+    paddingTop: "11%",
+    backgroundColor: "#00548e",
+    marginVertical: 0,
+    alignItems: "center",
+  },
+  text_prim: {
+    fontStyle: "bold",
+    fontSize: 25,
+    flex: 1,
+    marginHorizontal: "2%",
   },
 });
 
