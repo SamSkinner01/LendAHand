@@ -120,19 +120,19 @@ export async function getProfile(email) {
 }
 
 //Variable Names and structure will change depending on the structure of event database
-export async function getProfileEvents(userID) {
-  try {
-    const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains", userID), orderBy("date", "asc")); 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export async function getProfileEvents(userID) {
+//   try {
+//     const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains", userID), orderBy("date", "asc")); 
+//     const querySnapshot = await getDocs(q);
+//     querySnapshot.docs.map((doc) => ({
+//       id: doc.id,
+//       data: doc.data(),
+//     }));
+//     return data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export async function getProfileForumPosts(email) {
   try {
@@ -188,6 +188,38 @@ export async function getProfileSocialPosts(email){
     console.log("Error getting social media posts")
   }
   return posts
+}
+
+export async function getProfileEvents(email){
+  events = []
+  let uid;
+  try{
+    const q = query(collection(db, 'users'), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      uid = doc.id
+    })
+  }
+  catch(error){
+    console.log(error)
+    console.log("Error getting social media posts")
+  }
+
+  console.log(uid)
+
+  try{
+    const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains" , uid)); 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const c = {data: doc.data(), id: doc.id}
+      events.push(c)
+    })
+  }
+  catch(error){
+    console.log(error)
+    console.log("Error getting social media posts")
+  }
+  return events
 }
 
 
