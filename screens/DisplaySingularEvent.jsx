@@ -1,11 +1,18 @@
-import { StyleSheet, Text, View, Pressable, TouchableOpacity,Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import React from "react";
-import back from '../assets/back.png'
+import back from "../assets/back.png";
 
 const DisplaySingularEvent = ({ route }) => {
   const current_user_email = auth.currentUser.email;
@@ -39,7 +46,8 @@ const DisplaySingularEvent = ({ route }) => {
   }
   return (
     <>
-    <View style={styles.rowContainer}>
+      {/* Back Button*/}
+      <View style={styles.rowContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("DisplayAllEvents");
@@ -50,27 +58,42 @@ const DisplaySingularEvent = ({ route }) => {
         </TouchableOpacity>
         <Text style={styles.text_prim}>{item.data.title}</Text>
       </View>
-    <View style={styles.container}>
-      <Text>Organization: {item.data.event_host}</Text>
-      <Text>Description: {item.data.description}</Text>
-      <Text>Type: {item.data.event_type}</Text>
-      <Text>Date: {item.data.full_date}</Text>
-      <Text>Start Time: {item.data.start_time}</Text>
-      <Text>End Time: {item.data.end_time}</Text>
-      <Text>Address: {item.data.eventLocation}</Text>
-      <Text>Volunteers Needed: {item.data.slots_remaining}</Text>
-      <View>
-        <Pressable onPress={() => navigation.navigate("Post Event")}>
-          <Text>Update Event</Text>
-        </Pressable>
-        <Pressable onPress={() => deleteCollectionNavigation(item)}>
-          <Text>Delete Event</Text>
-        </Pressable>
-        <Pressable disabled={signedUp} onPress={() => event_sign_up(item)}>
-          {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
-        </Pressable>
+
+      {/* Event Details*/}
+      <View style={styles.container}>
+        <Text style={styles.org}>{item.data.event_host}</Text>
+        <Text style={styles.desc}>Description: {item.data.description}</Text>
+        <Text style={styles.type}>Type: {item.data.event_type}</Text>
+        <Text style={styles.full_date}>Date: {item.data.full_date}</Text>
+        <Text style={styles.s_time}>Start Time: {item.data.start_time}</Text>
+        <Text style={styles.e_time}>End Time: {item.data.end_time}</Text>
+        <Text style={styles.address}>Address: {item.data.eventLocation}</Text>
+        <Text style={styles.slots}>
+          Volunteers Needed: {item.data.slots_remaining}
+        </Text>
+
+        <View style={styles.buttons}>
+          <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("Post Event")}
+          >
+            <Text>Update Event</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            disabled={signedUp}
+            onPress={() => event_sign_up(item)}
+          >
+            {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
+          </Pressable>
+          <Pressable
+            style={styles.delete_button}
+            onPress={() => deleteCollectionNavigation(item)}
+          >
+            <Text>Delete Event</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
     </>
   );
 };
@@ -79,9 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#cbc6c3",
-    alignItems: "center",
-    justifyContent: "center",
-    
+    paddingTop: "5%",
   },
   icons: {
     maxWidth: 25,
@@ -101,6 +122,74 @@ const styles = StyleSheet.create({
     fontSize: 25,
     flex: 1,
     marginHorizontal: "2%",
+  },
+  org: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+    textDecorationLine: "underline",
+    textAlign: "center",
+  },
+  desc: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  type: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  full_date: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  s_time: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  e_time: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  address: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  slots: {
+    fontSize: 15,
+    marginHorizontal: "5%",
+    marginVertical: "2%",
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginVertical: "2%",
+  },
+  button: {
+    margin: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#00548e",
+    width: "30%",
+  },
+  delete_button: {
+    margin: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "red",
+    width: "30%",
   },
 });
 
