@@ -2,24 +2,24 @@ import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { getProfileSocialPosts } from "../auth/firebaseConfig";
+import { getProfileEvents } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 import ForumPost from "../components/ForumPost";
-import SocialMediaPost from "../components/SocialMediaPost";
 import { auth } from "../auth/firebaseConfig";
 import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import Refresh from "../assets/Refresh.png";
 
-function ProfileSocialPosts() {
-  const [profilePosts, setProfilePosts] = useState([]);
+function ProfileEvents() {
+  const [events, setEvents] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function getPosts() {
-      let posts = await getProfileSocialPosts(auth.currentUser.email);
-      setProfilePosts(posts);
+      let e = await getProfileEvents(auth.currentUser.email);
+      setEvents(e);
+      console.log(events);
     }
 
     getPosts();
@@ -29,34 +29,17 @@ function ProfileSocialPosts() {
     <>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.header_text}>Your Posts</Text>
+          <Text style={styles.header_text}>Your Events</Text>
           <TouchableOpacity onPress={() => setRefresh(!refresh)}>
             <Image source={Refresh} style={styles.icons} />
           </TouchableOpacity>
         </View>
 
         <ScrollView>
-          {profilePosts.map((post) => {
-            return (
-              <View key={post.id} style={styles.post}>
-                <SocialMediaPost
-                  title={post.data.title}
-                  description={post.data.description}
-                  image={post.data.image}
-                  user={post.data.user}
-                  comments={post.data.comments}
-                  likes={post.data.likes}
-                  id={post.id}
-                  canDelete={true}
-                />
-              </View>
-            );
-          })}
+          <View style={styles.post}>
+            <RenderEvents allEvents={events} />
+          </View>
         </ScrollView>
-
-        <View>
-          <NavigationBar />
-        </View>
       </View>
     </>
   );
@@ -87,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ProfileSocialPosts };
+export { ProfileEvents };
