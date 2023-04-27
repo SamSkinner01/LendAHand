@@ -108,6 +108,18 @@ const SocialMediaPost = (props) => {
         </Pressable>
       )}
 
+      {props.is_current_user && (
+        <Pressable
+          style={styles.message_me_button}
+          onPress={() => {
+            props.createRoom()
+            navigation.navigate("Chat", { chatroom_id: userInfo.id, current_user: current_user })
+          }}
+        >
+          <Text style={styles.message_me_text}>Message Me</Text>
+        </Pressable>
+      )}
+
       <Text style={styles.text_prim}>{props.user}</Text>
       <Image
         source={{ url: props.image }}

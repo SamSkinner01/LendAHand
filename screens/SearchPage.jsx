@@ -44,8 +44,9 @@ function SearchPage() {
     return unsubscribe;
   }, [searchContent]);
 
+  
   const renderItem = ({ item }) => {
-  return (
+    return (
     <DisplaySearchedUser item={item} />
   );
 };
