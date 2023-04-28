@@ -37,16 +37,37 @@ export async function readFromDb(collectionName) { // reads all data from databa
   return data
 }
 
+// this is a revamp of the readFromDb function that will only return events that are in the future
+// export async function readFromDb(collectionName) {
+//   const docRef = collection(db, collectionName);
+//   const q = query(docRef, orderBy("date", "asc"));
+//   const querySnapshot = await getDocs(q);
+//   const data = querySnapshot.docs.map((doc) => ({
+//     id: doc.id,
+//     data: doc.data(),
+//   }));
+//   // Add filter to only include dates that are from now and into the future
+//   const currentDate = new Date();
+//   const filteredData = data.filter((item) => {
+//     const itemDate = item.data.date.seconds; // Date object, no conversion needed
+//     console.log(itemDate);
+//     console.log(currentDate);
+//     return itemDate >= currentDate;
+//   });
+//   return filteredData;
+// }
+
+
 export async function deleteEvent(id, collectionName) { // removes a collection from a doc when giving the collection name and id of the collection
   const collection = database().collection(collectionName);
   try {
       await collection.doc(id).delete();
   } catch (error) {
-      console.error('Error deleting time:', error);
+      console.error('Error deleting collection:', error);
   }
 }
 
-//just updates an event if it needs to like cahnge a date and do not want to delete it
+//just updates an event if it needs to like change a date and do not want to delete it
 // data is an obect which holds the new value and the data field that is being changed
 export async function updateEvent(id, collectionName, data) {
   //You can update anything that is in the event except adding users to the signed_up_users field
@@ -72,25 +93,13 @@ export async function search_by_id(id) {
 
 export async function search_by_keyword(keyword) {
   //search for any event type using the keyword
-    const q = query(collection(db, "Events"), where("event_type", "==", keyword), orderBy("date", "asc")); // find a group using a keyword
-    const querySnapshot = await getDocs(q);
+    const q = query(collection(db, "Events"), where("event_type", "==", keyword), orderBy("date", "asc")); 
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
   }));
   return data
 }
-
-// export async function search_by_keyword(keyword) {
-//   //search for any event type using the keyword
-//     const q = query(collection(db, "Events"), where("event_type", "==", keyword)); // find a group using a keyword
-//     const querySnapshot = await getDocs(q);
-//     const data = querySnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       data: doc.data(),
-//   }));
-//   return data
-// }
 
 export async function deleteCollection(id, collectionName) {
   try {
@@ -103,7 +112,6 @@ export async function deleteCollection(id, collectionName) {
 
 
 //Search for the currently logged in user's profile info using their UUID
-
 export async function getProfile(email) {
   try{
     const q = query(collection(db, "users"), where("email", "==", email)); // find a group using a keyword
@@ -118,21 +126,6 @@ export async function getProfile(email) {
     console.log(error);
   }
 }
-
-//Variable Names and structure will change depending on the structure of event database
-// export async function getProfileEvents(userID) {
-//   try {
-//     const q = query(collection(db, 'Events'), where("signed_up_users", "array-contains", userID), orderBy("date", "asc")); 
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       data: doc.data(),
-//     }));
-//     return data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 export async function getProfileForumPosts(email) {
   try {
