@@ -53,7 +53,6 @@ function PostEvent() {
   };
 
   const EndTimePicker = (event, selectedDate) => {
-    console.log("calling endTimePicker");
     if (Platform.OS === "android") {
       setShowEndTimePicker(false);
     }
@@ -68,7 +67,6 @@ function PostEvent() {
   };
 
   const datePicker = (event, selectedDate) => {
-    console.log("calling datePicker");
     if (Platform.OS === "android") {
       setShowDatepicker(false);
     }
