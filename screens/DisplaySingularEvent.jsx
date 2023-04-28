@@ -6,26 +6,44 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
-import React from "react";
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 import back from "../assets/back.png";
 
 const DisplaySingularEvent = ({ route }) => {
   const current_user_email = auth.currentUser.email;
+  const [location, setLocation] = useState({latitude: 0, longitude: 0});
+  const [address, setAddress] = useState('');
   const [userID, setUserID] = useState("");
   const [signedUp, setSignedUp] = useState(false);
+  const [reload, setReload] = useState(false);
   const { item } = route.params;
   const navigation = useNavigation();
+
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let geo_location = await Location.geocodeAsync(item.data.eventLocation, {enableHighAccuracy: true});
+      setLocation(geo_location[0]);
+    })();
+  }, [item.data.eventLocation]);
+
 
   async function deleteCollectionNavigation(item) {
     const del = await deleteCollection(item.id, "Events");
     navigation.navigate("Events");
   }
-
+  
   async function getUserID(userEmail) {
     const q = query(collection(db, "users"), where("email", "==", userEmail)); // find a group using a keyword
     const querySnapshot = await getDocs(q);
@@ -42,7 +60,6 @@ const DisplaySingularEvent = ({ route }) => {
     if (success) {
       setSignedUp(true);
     }
-    // navigation.navigate("Events")
   }
   return (
     <>
@@ -75,7 +92,7 @@ const DisplaySingularEvent = ({ route }) => {
         <View style={styles.buttons}>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("Post Event")}
+            onPress={() => navigation.navigate("Update Event", { item: item })}
           >
             <Text>Update Event</Text>
           </Pressable>
@@ -93,7 +110,29 @@ const DisplaySingularEvent = ({ route }) => {
             <Text>Delete Event</Text>
           </Pressable>
         </View>
+        {/*reload &&*/ <MapView style={styles.map}
+          initialRegion={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0200,
+            longitudeDelta: 0.0100,
+          }} 
+          region={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0060,
+            longitudeDelta: 0.0025,
+          }}
+        >
+          <Marker
+            coordinate={{latitude: location.latitude, longitude: location.longitude}}
+            title={"Event Location"}
+            description={"Event Description"}
+            pinColor='blue'
+          />
+        </MapView>}
       </View>
+      
     </>
   );
 };
@@ -103,6 +142,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#cbc6c3",
     paddingTop: "5%",
+  },
+  map: {
+    width: '80%',
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingBottom: '10%',
+    
   },
   icons: {
     maxWidth: 25,
