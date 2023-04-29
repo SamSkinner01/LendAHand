@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db } from "../auth/firebaseConfig";
+import { auth, db, updateEvent} from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from 'react-native-maps';
@@ -55,6 +55,8 @@ const DisplaySingularEvent = ({ route }) => {
   }
 
   async function event_sign_up(item) {
+    const newData = {number_of_volunteers: item.data.slots_remaining -= 1};
+    const update = await updateEvent(item.id, 'Events', newData);
     const userID = await getUserID(current_user_email);
     const success = await add_to_array(item.id, userID);
     if (success) {
