@@ -65,7 +65,7 @@ function ProfileSocialPosts() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    marginTop: 40,
     backgroundColor: "#cbc6c3",
   },
   header: {
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginRight: 10,
+    backgroundColor: "#cbc6c3",
   },
 });
 

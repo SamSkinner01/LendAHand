@@ -23,6 +23,8 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import ForumPost from "../components/ForumPost";
+import refresh from "../assets/Refresh.png";
+import edit from "../assets/Edit.png";
 
 function ForumPage() {
   const [user, setUser] = useState([]);
@@ -70,30 +72,27 @@ function ForumPage() {
     <>
       <View style={styles.rowContainer}>
         <Text style={styles.text_prim}>Lend-A-Hand</Text>
+       
         <TouchableOpacity
           onPress={() => {
             getForumPosts();
           }}
           color="#0F4D92"
-          style={styles.refresh}
         >
-          <Button title="Refresh" color="#0F4D92" onPress={getForumPosts} />
+          <Image source={refresh} style={styles.icons} />
         </TouchableOpacity>
+
+
 
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Post To Forum");
           }}
-          style={styles.post}
+          color="#0F4D92"
         >
-          <Button
-            title="Post"
-            color="#0F4D92"
-            onPress={() => {
-              navigation.navigate("Post To Forum");
-            }}
-          />
+          <Image source={edit} style={styles.icons} />
         </TouchableOpacity>
+        
       </View>
       <View style={styles.line}></View>
 
@@ -174,6 +173,10 @@ const styles = StyleSheet.create({
     width: "20%",
     height: "100%",
     borderRadius: 10,
+  },
+  icons: {
+    maxWidth: 25,
+    maxHeight: 25,
   },
 });
 
