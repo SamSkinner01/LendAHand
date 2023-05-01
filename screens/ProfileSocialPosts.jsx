@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 40,
+    backgroundColor: "#cbc6c3",
   },
   header: {
     flexDirection: "row",
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginRight: 10,
+    backgroundColor: "#cbc6c3",
   },
 });
 
