@@ -25,14 +25,11 @@ function MyProfile() {
     //   console.log(profile);
     //   setProfileInfo(profile.id);
     //   console.log(profile[0].data.signed_up_for_events);
-
     //   const events = await getProfileEvents(profile[0].id);
     //   setProfileEvetns(events);
     //   console.log(events);
     // }
-
     // checkProfile();
-
     // setProfileEvents(search_by_id())
   }, []);
 
@@ -44,7 +41,6 @@ function MyProfile() {
       </View>
 
       <View style={styles.container}>
-
         {/* View Social Media Posts Button*/}
         <View style={styles.button}>
           <Pressable onPress={() => navigation.navigate("Profile Social")}>
@@ -52,10 +48,18 @@ function MyProfile() {
           </Pressable>
         </View>
 
+        <View style={styles.button}>
+          <Pressable onPress={() => navigation.navigate("Profile Events")}>
+            <Text style={styles.buttonText}>
+              View the events you have signed up for
+            </Text>
+          </Pressable>
+        </View>
+
         {/* Sign out button*/}
-        <View >
-          <Pressable 
-            style = {styles.button}
+        <View>
+          <Pressable
+            style={styles.button}
             onPress={() => {
               signUserOut();
               setLoggedIn(false);
@@ -64,7 +68,6 @@ function MyProfile() {
           >
             <Text style={styles.buttonText}>Sign Out</Text>
           </Pressable>
-
         </View>
       </View>
       <View>
@@ -100,7 +103,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-
 });
 
 export { MyProfile };
