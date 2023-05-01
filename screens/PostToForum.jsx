@@ -70,12 +70,14 @@ function PostToForum() {
             placeholder="Title"
             onChangeText={(text) => setTitle(text)}
             multiline={true}
+            blurOnSubmit={true}
           ></TextInput>
           <TextInput
             style={styles.input}
             placeholder="Description"
             onChangeText={(text) => setDescription(text)}
             multiline={true}
+            blurOnSubmit={true}
           ></TextInput>
         </View>
         <View style={styles.button}>
