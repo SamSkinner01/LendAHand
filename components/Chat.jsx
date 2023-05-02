@@ -79,6 +79,8 @@ function Chat() {
 
   async function displayAllMessages() {
     try {
+      // Get the chatroom that contains the two users
+      // Should be the ID but was not working initially.
       const chatroomRef = collection(db, "chatrooms")
       const q = query(chatroomRef, where("users", "in", [
         [currentUser, otherUser],
@@ -144,24 +146,6 @@ function Chat() {
         <View style={styles.container}>
           <ScrollView>
             <View style={styles.messages}>
-              {/* 
-              
-              
-              
-              OUTDATED BUT NEED CODE HERE 
-              
-              
-              
-              */}
-              {/* {displayMessages.map((message, index) => (
-                <View style={styles.message_container} key={index}>
-                  <Text style={styles.message_sender}>
-                    {senderOfMessage[index]}
-                  </Text>
-                  <Text style={styles.message_content}>{message.message}</Text>
-                </View>
-              ))} */}
-
               {messages.map((message, index) => (
                 <View style={styles.message_container} key={index}>
                   <Text style={styles.message_sender}>

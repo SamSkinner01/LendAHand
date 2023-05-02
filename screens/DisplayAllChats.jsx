@@ -29,17 +29,42 @@ import { useCallback } from "react";
 function DisplayAllChats() {
 
   const navigation = useNavigation();
-  
-  // Queries for all the chatrooms
+  const [chatrooms, setChatrooms] = useState([]);
+  const [currentUserUsername, setCurrentUserUsername] = useState("");
+  const [otherUsernameList, setOtherUsernameList] = useState([]);
+
   async function getAllChatrooms() {
-    /* 
-    
-      GET ALL CHATROOMS WITH THIS FUNCTION
-    
-    */
+    try{
+      const q = query(collection(db, "chatrooms"), where("users", "array-contains", currentUserUsername));
+      const querySnapshot = await getDocs(q);
+      const chatrooms = [];
+      const otherList = [];
+      querySnapshot.forEach((doc) => {
+        chatrooms.push({ id: doc.id, ...doc.data() });
+        if(doc.data().users[0] == currentUserUsername){
+          otherList.push(doc.data().users[1])
+        }else{
+          otherList.push(doc.data().users[0])
+        }
+      });
+      setChatrooms(chatrooms);
+      setOtherUsernameList(otherList);
+    }catch(e){
+      console.log(e)
+    }
   }
 
+  useEffect(() => {
+    async function handleGetProfileUsername() {
+      let user = await getProfile(auth.currentUser.email);
+      setCurrentUserUsername(user[0].data.username);
+    }
+    handleGetProfileUsername();
+  }, []);
 
+  useEffect(() => {
+    getAllChatrooms();
+  }, [currentUserUsername]);
 
   return (
     <>
@@ -57,7 +82,29 @@ function DisplayAllChats() {
         </View>
         <View style={styles.line}></View>
         <ScrollView>
-          
+          {chatrooms.map((chatroom, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={styles.chats}
+                onPress={() => {
+                  navigation.navigate("Chat", {
+                    userInfo: {
+                      otherUsername: otherUsernameList[index],
+                      currentUsername: currentUserUsername,
+                    }
+                  });
+                }}
+              >
+                <Text style={styles.text_sec}>
+                  {otherUsernameList[index]}
+                </Text>
+              </TouchableOpacity>
+            );
+
+          })
+          }
+
         </ScrollView>
       </View>
       <View>
