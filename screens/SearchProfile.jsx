@@ -24,72 +24,72 @@ function SearchProfile() {
     const navigation = useNavigation();
 
     const route = useRoute();
-    console.log(route.params.userInfo)
+    const otherUserUsername = route.params.userInfo.username;
     const email = route.params.userInfo.email;
 
-    const current_user = auth.currentUser.email;
+    const [currentUsersUsername, setCurrentUsersUsername] = useState("");
 
-    const [loggedIn, setLoggedIn] = useState(true);
-    const [profileInfo, setProfileInfo] = useState([]);
-    const [profileEvents, setProfileEvetns] = useState([]);
+
     const [profilePosts, setProfilePosts] = useState([]);
 
     async function createRoom() {
+        /*
+            This function checks to see if a chatroom contains the two users:
+                - Current User
+                - The user that was clicked on
+            If the chatroom does not exist, it create a new chatroom with the 
+            two users. If the chatroom does exist, it navigates to the Chat,
+            which will search the database for the chatroom that contains 
+            both users.
+        */
 
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.size)
-        if (querySnapshot.size === 1 && email !== current_user) {
+        // Guard clause to make sure the user does not message themselves
+        if(currentUsersUsername === otherUserUsername){
+            return;
+        }
 
-            // see if chatroom already exists
-            // if it does, navigate to it
-            const chatRoomRef = collection(db, "chatroom");
-            const q = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
+        try {
+            // Queries to see if the chatroom exists
+            const chatroomRef = collection(db, "chatrooms");
+            const q = query(
+                chatroomRef,
+                where("users", "in", [
+                    [currentUsersUsername, otherUserUsername],
+                    [otherUserUsername, currentUsersUsername],
+                ])
+            );
             const querySnapshot = await getDocs(q);
-
-            if (querySnapshot.size !== 0) {
-                console.log(querySnapshot.docs[0].id)
-                navigation.navigate('Chat', { chatroom_id: querySnapshot.docs[0].id, current_user: current_user, user2: email });
-                return
-            }
-
-            // Create a chatroom between the two users
-            try {
-                addDoc(collection(db, "chatroom"), {
-                    user1email: email,
-                    user2email: current_user,
+                
+            // If the size of the query is 0, that means it does not exist
+            if (querySnapshot.size === 0) {
+                const docRef = await addDoc(collection(db, "chatrooms"), {
+                    users: [currentUsersUsername, otherUserUsername],
+                    messages: []
                 });
             }
-            catch (e) {
-                console.log(e);
+            // Else the chatroom exists, so navigate to the chatroom
+            else{
+                querySnapshot.forEach((doc) => {
+                    navigation.navigate("Chat", {userInfo: { otherUsername: otherUserUsername, currentUsername: currentUsersUsername }});
+            })
             }
-
-            // Get the chatroom id
-            const crR = collection(db, "chatroom");
-            const qu = query(chatRoomRef, where("user1email", "==", email), where("user2email", "==", current_user));
-            const qS = await getDocs(qu);
-
-            let chatroom_id = "";
-            qS.forEach((doc) => {
-                chatroom_id = doc.id;
-            });
-
-            // Navigate to the chatroom
-            navigation.navigate('Chat', { chatroom_id: chatroom_id, current_user: current_user, user2: email });
+        } catch (e) {
+            console.log(e);
         }
-        else {
-            console.log("No such user!");
-        }
-
     }
 
+
     useEffect(() => {
+        async function handleGetUsername() {
+            const user = await getProfile(auth.currentUser.email);
+            setCurrentUsersUsername(user[0].data.username);
+        }
         async function getPosts() {
             let posts = await getProfileSocialPosts(email);
             setProfilePosts(posts);
         }
 
+        handleGetUsername();
         getPosts();
     }, []);
 
@@ -97,7 +97,7 @@ function SearchProfile() {
         <>
             {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.headerText}>{email}'s Profile</Text>
+                <Text style={styles.headerText}>{otherUserUsername}'s Profile</Text>
             </View>
 
             {/* Message User */}
@@ -105,7 +105,7 @@ function SearchProfile() {
                 style={styles.button}
                 onPress={() => {
                     createRoom()
-                    navigation.navigate("Chat", { chatroom_id: route.params.userInfo.id, current_user: current_user, user2: email })
+                    navigation.navigate("Chat", { userInfo: { otherUsername: otherUserUsername, currentUsername: currentUsersUsername  }})
                 }}
             >
                 <Text> Message me! </Text>

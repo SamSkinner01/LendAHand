@@ -14,8 +14,6 @@ function SearchPage() {
 
   const [searchContent, setSearchContent] = useState("");
   const [results, setResults] = useState([]);
-
-  const current_user = auth.currentUser.username
   
   useEffect(() => {
     console.log("Here")
