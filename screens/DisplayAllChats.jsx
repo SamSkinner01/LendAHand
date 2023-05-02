@@ -20,7 +20,7 @@ import {
   update,
 } from "firebase/firestore";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { auth, db } from "../auth/firebaseConfig";
+import { auth, db, getProfile } from "../auth/firebaseConfig";
 import { NavigationBar } from "../components/navigationBar";
 import Edit from "../assets/Edit.png";
 import { RefreshControl } from "react-native";
@@ -45,22 +45,28 @@ function DisplayAllChats() {
   // To display the chatrooms and pass their IDs to the specific chat
   const [chatrooms, setChatrooms] = useState([]);
   const [chatroom_ids, setChatroom_ids] = useState([]);
-  const [email, setEmail] = useState("");
+  const [otherUsername, setOtherUserName] = useState("");
 
   // Queries for all the chatrooms
-  function getAllChatrooms() {
+  async function getAllChatrooms() {
     const chatRoomRef = collection(db, "chatroom");
     getDocs(chatRoomRef).then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(async (doc) => {
         const user1email = doc.data().user1email;
         const user2email = doc.data().user2email;
-
+        let user1username = await getProfile(user1email);
+        let user2username = await getProfile(user2email);
+        user1username = user1username[0].data.username;
+        user2username = user2username[0].data.username;
+        
         if (user1email === current_user) {
-          setChatrooms((chatrooms) => [...chatrooms, user2email]);
+          setChatrooms((chatrooms) => [...chatrooms, user2username]);
           setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
+          setOtherUserName(user2username);
         } else if (user2email === current_user) {
-          setChatrooms((chatrooms) => [...chatrooms, user1email]);
+          setChatrooms((chatrooms) => [...chatrooms, user1username]);
           setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
+          setOtherUserName(user1username)
         }
       });
     });
@@ -71,6 +77,7 @@ function DisplayAllChats() {
     setChatroom_ids([]);
     getAllChatrooms();
   }, [refreshing]);
+
 
   return (
     <>
@@ -105,7 +112,7 @@ function DisplayAllChats() {
                   })
                 }
               >
-                <Text>{chatroom}</Text>
+                <Text>{otherUsername}</Text>
               </Pressable>
             );
           })}
