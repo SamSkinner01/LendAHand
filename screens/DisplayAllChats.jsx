@@ -32,7 +32,16 @@ function DisplayAllChats() {
   const [chatrooms, setChatrooms] = useState([]);
   const [currentUserUsername, setCurrentUserUsername] = useState("");
   const [otherUsernameList, setOtherUsernameList] = useState([]);
+  
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+  
   async function getAllChatrooms() {
     try{
       const q = query(collection(db, "chatrooms"), where("users", "array-contains", currentUserUsername));
@@ -64,6 +73,10 @@ function DisplayAllChats() {
 
   useEffect(() => {
     getAllChatrooms();
+  }, [refreshing]);
+
+  useEffect(() => {
+    getAllChatrooms();
   }, [currentUserUsername]);
 
   return (
@@ -81,7 +94,11 @@ function DisplayAllChats() {
           </TouchableOpacity>
         </View>
         <View style={styles.line}></View>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           {chatrooms.map((chatroom, index) => {
             return (
               <TouchableOpacity
