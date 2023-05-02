@@ -8,9 +8,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db, updateEvent} from "../auth/firebaseConfig";
-import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import { auth, db, readFromDb, updateEvent, deleteCollection, add_to_array, remove_from_array,} from "../auth/firebaseConfig";
+import { collection, getDocs, where, query, orderBy } from "firebase/firestore";
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import back from "../assets/back.png";
@@ -22,11 +21,31 @@ const DisplaySingularEvent = ({ route }) => {
   const [userID, setUserID] = useState("");
   const [signedUp, setSignedUp] = useState(false);
   const [reload, setReload] = useState(false);
+  const [numOfVol, setNumOfVol] = useState()
+  const [remVol, setRemVol] = useState()
+  const [spaceMessage, setSpaceMessage] = useState('')
   const { item } = route.params;
   const navigation = useNavigation();
 
 
   useEffect(() => {
+    async function getEvent(item) {
+      const data = await readFromDb('Events', item.id)
+      const num = data[0].data.number_of_volunteers
+      const num2 = data[0].data.signed_up_users.length
+      const res = num - num2
+      setNumOfVol(num)
+      setRemVol(res)
+      if (res === 0) {
+        setSpaceMessage('Sorry, this event is full.')
+      }
+      else {
+        setSpaceMessage('There is space available for this event.')
+      }
+    }
+
+    getEvent(item);
+
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -55,14 +74,46 @@ const DisplaySingularEvent = ({ route }) => {
   }
 
   async function event_sign_up(item) {
-    const newData = {number_of_volunteers: item.data.slots_remaining -= 1};
-    const update = await updateEvent(item.id, 'Events', newData);
+    console.log(item.id)
     const userID = await getUserID(current_user_email);
     const success = await add_to_array(item.id, userID);
+    const data = await readFromDb("Events", item.id);
+    const num1 = data[0].data.number_of_volunteers;
+    const num2 = data[0].data.signed_up_users.length;
+    const res = num1 - num2
+    setNumOfVol(num1)
+    setRemVol(res)
+    const newData = {slots_remaining: res};
+    const update = await updateEvent(item.id, 'Events', newData);
     if (success) {
       setSignedUp(true);
     }
   }
+
+  async function opt_out_event(item) {
+    const userID = await getUserID(current_user_email);
+    const success = await remove_from_array(item.id, userID);
+    const data = await readFromDb("Events", item.id);
+    const num1 = data[0].data.number_of_volunteers;
+    const num2 = data[0].data.signed_up_users.length;
+    const res = num1 - num2
+    setNumOfVol(num1)
+    setRemVol(res)
+    const newData = {slots_remaining: res};
+    const update = await updateEvent(item.id, 'Events', newData);
+    if (success) {
+      setSignedUp(false);
+    }
+  }
+
+  async function check_if_signed_up(item) {
+    const userID = await getUserID(current_user_email);
+    if (item.data.signed_up_users.includes(userID)) {
+      setSignedUp(true);
+    }
+  }
+
+
   return (
     <>
       {/* Back Button*/}
@@ -87,9 +138,8 @@ const DisplaySingularEvent = ({ route }) => {
         <Text style={styles.desc}>Start Time: {item.data.start_time}</Text>
         <Text style={styles.desc}>End Time: {item.data.end_time}</Text>
         <Text style={styles.desc}>Address: {item.data.eventLocation}</Text>
-        <Text style={styles.desc}>
-          Volunteers Needed: {item.data.slots_remaining}
-        </Text>
+        <Text style={styles.desc}> Volunteers Needed: {remVol}</Text>
+        <Text style={styles.desc}> {spaceMessage}</Text>
 
         <View style={styles.buttons}>
           <Pressable
@@ -110,6 +160,12 @@ const DisplaySingularEvent = ({ route }) => {
             onPress={() => deleteCollectionNavigation(item)}
           >
             <Text>Delete Event</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => opt_out_event(item)}
+          >
+            {signedUp ? <Text>Opt out</Text> : <Text>Opt out</Text>}
           </Pressable>
         </View>
         {/*reload &&*/ <MapView style={styles.map}

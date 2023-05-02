@@ -17,7 +17,7 @@ const DisplaySearched = ({ route }) => {
       setResults(result);
     }
     getSearched();
-  }, []);
+  }, [term]);
 
   return (
     <>

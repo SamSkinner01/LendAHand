@@ -8,6 +8,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { db } from "../auth/firebaseConfig";
+
+
 import {
   Pressable,
   StyleSheet,
@@ -38,7 +40,6 @@ function PostEvent() {
   const [endTime, setEndTime] = useState("Select end time");
 
   const startTimePicker = (event, selectedDate) => {
-    console.log("calling startTimePicker");
     if (Platform.OS === "android") {
       setShowStartTimePicker(false);
     }
