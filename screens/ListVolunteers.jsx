@@ -17,7 +17,7 @@ import back from "../assets/back.png";
 import { ScrollView } from "react-native-web";
 import RenderVolunteers from "../components/RenderVolunteers";
 
-const DisplaySingularEvent = ({ route }) => {
+const DisplaySingularEvent = ({ item }) => {
     volunteers = getVolunteers(item.id);
 
     <View style={styles.container}> 
@@ -28,4 +28,4 @@ const DisplaySingularEvent = ({ route }) => {
     </View>
 }
   
-;
+export default { DisplaySingularEvent };

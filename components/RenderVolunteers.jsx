@@ -28,4 +28,4 @@ const RenderVolunteers = ({ array }) => {
       );
 };
 
-export default RenderVolunteers;
+export default { RenderVolunteers };
