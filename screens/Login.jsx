@@ -6,8 +6,8 @@ import { auth } from "../auth/firebaseConfig";
 import logo from "../assets/logo.png"
 
 function Login({ navigation }) {
-  const [email, setEmail] = useState("ceast@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
   function isUserLoggedIn() {
@@ -61,7 +61,10 @@ function Login({ navigation }) {
           style={styles.button_prim}>
             <Text style={styles.text_prim}>Login</Text>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate("Signup")}
+        <Pressable onPress={() => {
+          clearFields();
+          navigation.navigate("Signup")
+        }}
           style={styles.button_sec}>
             <Text style={styles.text_sec}>Don't have an account? Sign Up</Text>
         </Pressable>
