@@ -214,5 +214,22 @@ export async function getProfileEvents(email){
   return events
 }
 
+export async function getVolunteers(event_id){
+  volunteers = []
+  try{
+    const q = query(collection(db, 'Events'), where("id", "==", event_id)); 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const c = {data: doc.data(), id: doc.id}
+      volunteers.push(c)
+    })
+  }
+  catch(error){
+    console.log(error)
+    console.log("Error getting social media posts")
+  }
+  return volunteers
+}
+
 
 export {auth, db};

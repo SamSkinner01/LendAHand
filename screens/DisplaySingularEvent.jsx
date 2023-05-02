@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db, updateEvent} from "../auth/firebaseConfig";
+import { auth, db, isOrganization, updateEvent} from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from 'react-native-maps';
@@ -105,6 +105,14 @@ const DisplaySingularEvent = ({ route }) => {
           >
             {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
           </Pressable>
+
+          <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("List Volunteers", { item: item })}
+          > 
+            </Pressable>
+
+
           <Pressable
             style={styles.delete_button}
             onPress={() => deleteCollectionNavigation(item)}
