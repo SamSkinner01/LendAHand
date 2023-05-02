@@ -21,6 +21,7 @@ import {
   orderBy,
   updateDoc,
   arrayUnion,
+  getDoc,
   doc,
 } from "firebase/firestore";
 import { db, auth } from "../auth/firebaseConfig";
@@ -50,7 +51,7 @@ function Chat() {
       The message will be sent to the other user. 
     */
 
-      setSendUserMessage("")
+    setSendUserMessage("");
 
     // Guard clause for sending an empty message
     if (sendUserMessage === "") {
@@ -64,18 +65,23 @@ function Chat() {
     };
 
     try {
-      // Update the doc (the object needs to be stringified and parsed)
-      console.log(chatroomID)
+      // Get the current messages array
       const chatroomRef = doc(db, "chatrooms", chatroomID);
-      await updateDoc(chatroomRef, {
-        messages: arrayUnion(JSON.parse(JSON.stringify(message))),
-      });
+      const chatroomDoc = await getDoc(chatroomRef);
+      const currentMessages = chatroomDoc.data().messages;
+
+      // Append the new message to the messages array
+      const updatedMessages = [...currentMessages, message];
+
+      // Update the doc with the updated messages array
+      await updateDoc(chatroomRef, { messages: updatedMessages });
     } catch (e) {
       console.log(e);
     }
 
     setUserSubmit(!userSubmit);
   }
+
 
 
   async function displayAllMessages() {
@@ -99,9 +105,6 @@ function Chat() {
   }
 
   async function getChatroomID(){
-    if (!chatroomID) {
-      return; // or display an error message
-    }
     try{
       const chatroomRef = collection(db, "chatrooms");
       const q = query(chatroomRef, where("users", "in", [
@@ -115,13 +118,9 @@ function Chat() {
         setChatroomID(doc.id);
       }
       )
+
+      console.log(chatroomID)
     
-      // Set up listener for chatroom document changes
-      onSnapshot(doc(db, "chatrooms", chatroomID), (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          setMessages(docSnapshot.data().messages);
-        }
-      });
     } catch (e) {
       console.log(e);
     }
@@ -136,6 +135,18 @@ function Chat() {
     displayAllMessages();
   }, [userSubmit])
 
+  useEffect(()=>{
+    const q = query(collection(db, "chatrooms"), where("users", "in", [
+      [currentUser, otherUser],
+      [otherUser, currentUser]
+    ]));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        setMessages(doc.data().messages);
+      })
+    });
+  }, [])
 
   return (
     <>
