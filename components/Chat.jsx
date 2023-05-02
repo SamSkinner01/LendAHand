@@ -29,6 +29,7 @@ import { KeyboardAvoidingView } from "react-native";
 
 
 
+
 function Chat() {
 
   const navigation = useNavigation();
@@ -98,6 +99,9 @@ function Chat() {
   }
 
   async function getChatroomID(){
+    if (!chatroomID) {
+      return; // or display an error message
+    }
     try{
       const chatroomRef = collection(db, "chatrooms");
       const q = query(chatroomRef, where("users", "in", [
@@ -111,8 +115,14 @@ function Chat() {
         setChatroomID(doc.id);
       }
       )
-    }
-    catch(e){
+    
+      // Set up listener for chatroom document changes
+      onSnapshot(doc(db, "chatrooms", chatroomID), (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setMessages(docSnapshot.data().messages);
+        }
+      });
+    } catch (e) {
       console.log(e);
     }
   }
@@ -125,7 +135,6 @@ function Chat() {
   useEffect(() => {
     displayAllMessages();
   }, [userSubmit])
-
 
 
   return (
