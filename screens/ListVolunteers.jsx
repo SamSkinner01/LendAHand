@@ -15,6 +15,7 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import back from "../assets/back.png";
 import { ScrollView } from "react-native-web";
+import RenderVolunteers from "../components/RenderVolunteers";
 
 const DisplaySingularEvent = ({ route }) => {
     volunteers = getVolunteers(item.id);
