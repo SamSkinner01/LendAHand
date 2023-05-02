@@ -48,6 +48,14 @@ function SearchProfile() {
             return;
         }
 
+        if(currentUsersUsername === ""){
+            return;
+        }
+
+        if(otherUserUsername === ""){
+            return;
+        }
+
         try {
             // Queries to see if the chatroom exists
             const chatroomRef = collection(db, "chatrooms");
@@ -66,6 +74,7 @@ function SearchProfile() {
                     users: [currentUsersUsername, otherUserUsername],
                     messages: []
                 });
+                navigation.navigate("Chat", {userInfo: { otherUsername: otherUserUsername, currentUsername: currentUsersUsername }});
             }
             // Else the chatroom exists, so navigate to the chatroom
             else{
@@ -105,7 +114,7 @@ function SearchProfile() {
                 style={styles.button}
                 onPress={() => {
                     createRoom()
-                    navigation.navigate("Chat", { userInfo: { otherUsername: otherUserUsername, currentUsername: currentUsersUsername  }})
+                    //navigation.navigate("Chat", { userInfo: { otherUsername: otherUserUsername, currentUsername: currentUsersUsername  }})
                 }}
             >
                 <Text> Message me! </Text>

@@ -102,8 +102,7 @@ function DisplayAllChats() {
               </TouchableOpacity>
             );
 
-          })
-          }
+          })}
 
         </ScrollView>
       </View>
