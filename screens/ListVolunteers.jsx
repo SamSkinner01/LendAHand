@@ -18,7 +18,7 @@ import { ScrollView } from "react-native-web";
 import RenderVolunteers from "../components/RenderVolunteers";
 
 const DisplaySingularEvent = ({ item }) => {
-    volunteers = getVolunteers(item.id);
+    volunteers = findVolunteers(item.id);
 
     <View style={styles.container}> 
         <Text>Volunteers</Text>

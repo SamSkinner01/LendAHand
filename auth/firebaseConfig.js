@@ -214,7 +214,7 @@ export async function getProfileEvents(email){
   return events
 }
 
-export async function getVolunteers(event_id){
+export async function findVolunteers(event_id){
   volunteers = []
   try{
     const q = query(collection(db, 'Events'), where("id", "==", event_id)); 
