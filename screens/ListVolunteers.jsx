@@ -13,7 +13,6 @@ import {
   db,
   findVolunteers,
   isOrganization,
-  readFromDb,
   updateEvent,
 } from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
@@ -21,9 +20,9 @@ import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import back from "../assets/back.png";
-import { ScrollView } from "react-native-web";
-import RenderVolunteers from "../components/RenderVolunteers";
+import { ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { doc, getDoc } from "firebase/firestore";
 
 /*
     1. We need to pass the information from that event to this screen.
@@ -36,30 +35,67 @@ import { useRoute } from "@react-navigation/native";
 */
 
 function ListVolunteers() {
+  const route = useRoute();
+  const signed_up_users = route.params.item.data.signed_up_users;
+
+  const [volunteerNames, setVolunteerNames] = useState([]);
+
   async function findVolunteers(signed_up_users) {
-    volunteers = []
+    const volunteerNames = [];
+
+    // Loop through each signed up user id
     try {
-      const q = query(collection(db, "Users"), where("id", "in", signed_up_users));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const names = doc.data().first_name + " " + doc.data().last_name;
-        volunteers.push(names);
-    });
-  }
-    catch (error) {
+      for (let i = 0; i < signed_up_users.length; i++) {
+        const userId = signed_up_users[i];
+        const docRef = doc(db, "users", userId);
+        const userDoc = await getDoc(docRef);
+        //console.log(userDoc.data());
+        if (userDoc.exists()) {
+          // Get the user's first and last name from their document
+          const firstName = userDoc.data().first_name;
+          const lastName = userDoc.data().last_name;
+          const fullName = `${firstName} ${lastName}`;
+          //console.log(fullName);
+          volunteerNames.push(fullName);
+        }
+      }
+      return volunteerNames;
+    } catch (error) {
       console.log(error);
+      return [];
     }
-    return volunteers;
   }
 
-  const route = useRoute();
-  signed_up_users = route.params.item.data.signed_up_users;
-  names = findVolunteers(signed_up_users);
-  console.log(names);
+  useEffect(() => {
+    async function getVolunteers() {
+      const volunteerNames = await findVolunteers(signed_up_users);
+      setVolunteerNames(volunteerNames);
+    }
+    getVolunteers();
+  }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <RenderVolunteers volunteers={names}/>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20%",
+      }}
+    >
+      <ScrollView>
+        {volunteerNames.length === 0 ? (
+          <Text>No volunteers have signed up for this event yet.</Text>
+        ) : (
+          <View>
+            {volunteerNames.map((item, index) => (
+              <View key={index}>
+                <Text>{item}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }

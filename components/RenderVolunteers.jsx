@@ -23,10 +23,10 @@ import * as Location from "expo-location";
 import back from "../assets/back.png";
 import { ScrollView } from "react-native-web";
 
-const RenderVolunteers = ({ volunteers }) => {
+const RenderVolunteers = (props) => {
   return (
     <View>
-      {volunteers.map((item, index) => (
+      {props.volunteers.map((item, index) => (
         <View key={index}>
           <Text>{item}</Text>
         </View>
