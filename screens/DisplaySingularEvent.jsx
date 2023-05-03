@@ -191,8 +191,8 @@ const DisplaySingularEvent = ({ route }) => {
         >
           <Marker
             coordinate={{latitude: location.latitude, longitude: location.longitude}}
-            title={"Event Location"}
-            description={"Event Description"}
+            title={item.data.title}
+            description={item.data.eventLocation}
             pinColor='blue'
           />
         </MapView>}
