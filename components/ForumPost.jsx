@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, Pressable,TouchableOpacity } from "react-native";
+import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../auth/firebaseConfig";
@@ -30,24 +30,28 @@ const ForumPost = (props) => {
     >
       <View style={styles.container}>
         <View style={styles.postcontainer}>
-
-        {/*<Pressable style={styles.delete} onPress={deleteFromDB}>
+          {/*<Pressable style={styles.delete} onPress={deleteFromDB}>
           <Text>x</Text>
     </Pressable> */}
 
-        <TouchableOpacity
+          {/* <TouchableOpacity
           onPress={deleteFromDB}
           color="#0F4D92"
         >
           <Image source={Delete} style={styles.icons} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+          {props.canDelete && (
+            <TouchableOpacity onPress={deleteFromDB} color="#0F4D92">
+              <Image source={Delete} style={styles.icons} />
+            </TouchableOpacity>
+          )}
 
-        <View style = {styles.post}>
-        <Text>{props.user}</Text>
-        <Text>{props.title}</Text>
-        <Text>{props.description}</Text>
-        <Text>{props.comments}</Text>
-        </View>
+          <View style={styles.post}>
+            <Text>{props.user}</Text>
+            <Text>{props.title}</Text>
+            <Text>{props.description}</Text>
+            <Text>{props.comments}</Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -60,29 +64,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10
+    paddingTop: 10,
   },
 
   delete: {
     //backgroundColor: "red",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
-  post:{
-    padding: 5
+  post: {
+    padding: 5,
   },
-  postcontainer:{
-    width: '100%',
-    height: '100%',
+  postcontainer: {
+    width: "100%",
+    height: "100%",
     borderRadius: 10,
-    alignItems: 'flex-start',
-    borderWidth:1,
-    marginHorizontal: '20%',
-    marginVertical: 2
+    alignItems: "flex-start",
+    borderWidth: 1,
+    marginHorizontal: "20%",
+    marginVertical: 2,
   },
   icons: {
     maxWidth: 15,
     maxHeight: 15,
-    margin: 2
+    margin: 2,
   },
 });
 
