@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert,Pressable,Image } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Image } from "react-native";
 import { useState, useEffect } from "react";
 import { signin } from "../auth/auth_signin_password";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../auth/firebaseConfig";
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.png";
 
 function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userSubmit, setUserSubmit] = useState(false);
 
   function isUserLoggedIn() {
     onAuthStateChanged(auth, (user) => {
@@ -26,52 +27,66 @@ function Login({ navigation }) {
   }
 
   function navigateToEvents() {
-    isUserLoggedIn();
     navigation.navigate("Events");
   }
 
   useEffect(() => {
-    if(loggedIn){
+    if (loggedIn && auth.currentUser.emailVerified === true) {
       navigateToEvents();
     }
+    if(loggedIn && auth.currentUser.emailVerified === false){
+      Alert.alert("Please verify your email before logging in.");
+      auth.signOut();
+    }
+
+    
   }, [loggedIn]);
 
   return (
-
-      <View style={styles.container}>
-        <Image source={logo} style={[styles.logo]}/>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-        />
-         <Pressable onPress={() => {
-            signin(email, password);
-            isUserLoggedIn();
-            clearFields();
-          }}
-          style={styles.button_prim}>
-            <Text style={styles.text_prim}>Login</Text>
-        </Pressable>
-        <Pressable onPress={() => {
-          clearFields();
-          navigation.navigate("Signup")
+    <View style={styles.container}>
+      <Image source={logo} style={[styles.logo]} />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        onChangeText={(text) => setPassword(text)}
+        value={password}
+        secureTextEntry={true}
+      />
+      <Pressable
+        onPress={() => {
+          signin(email, password)
+            .then(() => {
+              isUserLoggedIn();
+              setUserSubmit(!userSubmit);
+              clearFields();
+            })
+            .catch((error) => {
+              Alert.alert("Login failed", error.message);
+            });
         }}
-          style={styles.button_sec}>
-            <Text style={styles.text_sec}>Don't have an account? Sign Up</Text>
-        </Pressable>
-      </View>
-    
+        style={styles.button_prim}
+      >
+        <Text style={styles.text_prim}>Login</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          clearFields();
+          navigation.navigate("Signup");
+        }}
+        style={styles.button_sec}
+      >
+        <Text style={styles.text_sec}>Don't have an account? Sign Up</Text>
+      </Pressable>
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

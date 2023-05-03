@@ -51,6 +51,7 @@ function Signup({ navigation }) {
     try{
       const userCredentials = { username, firstname, lastname, email, password}
       signup(userCredentials);
+      navigation.navigate("Login");
     }
     catch(error){
       console.log(error);
@@ -83,6 +84,7 @@ function Signup({ navigation }) {
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}
         value={email}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
