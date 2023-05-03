@@ -1,8 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { collection, getDocs, getDoc, where, query, doc, deleteDoc, updateDoc, arrayUnion, orderBy, querySnapshot } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, addDoc, where, query, limit, doc, deleteDoc, updateDoc, arrayUnion, orderBy, querySnapshot, arrayRemove } from "firebase/firestore";
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,7 +26,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-export async function readFromDb(collectionName) { // reads all data from database when giving the collection name
+export async function readAllData(collectionName) { // reads all data from database when giving the collection name
   const docRef = collection(db, collectionName);
   const q = query(docRef, orderBy("date", "asc"));
   const querySnapshot = await getDocs(q);
@@ -36,25 +37,17 @@ export async function readFromDb(collectionName) { // reads all data from databa
   return data
 }
 
-// this is a revamp of the readFromDb function that will only return events that are in the future
-// export async function readFromDb(collectionName) {
-//   const docRef = collection(db, collectionName);
-//   const q = query(docRef, orderBy("date", "asc"));
-//   const querySnapshot = await getDocs(q);
-//   const data = querySnapshot.docs.map((doc) => ({
-//     id: doc.id,
-//     data: doc.data(),
-//   }));
-//   // Add filter to only include dates that are from now and into the future
-//   const currentDate = new Date();
-//   const filteredData = data.filter((item) => {
-//     const itemDate = item.data.date.seconds; // Date object, no conversion needed
-//     console.log(itemDate);
-//     console.log(currentDate);
-//     return itemDate >= currentDate;
-//   });
-//   return filteredData;
-// }
+export async function readSingleData(collectionName, id) { 
+  const docRef = doc(db, collectionName, id);
+  const docSnap = await getDoc(docRef);
+  const data = docSnap.data();
+
+  return data;
+}
+
+
+
+
 
 
 export async function deleteEvent(id, collectionName) { // removes a collection from a doc when giving the collection name and id of the collection
@@ -93,6 +86,7 @@ export async function search_by_id(id) {
 export async function search_by_keyword(keyword) {
   //search for any event type using the keyword
     const q = query(collection(db, "Events"), where("event_type", "==", keyword), orderBy("date", "asc")); 
+    const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
@@ -113,13 +107,12 @@ export async function deleteCollection(id, collectionName) {
 //Search for the currently logged in user's profile info using their UUID
 export async function getProfile(email) {
   try{
-    const q = query(collection(db, "users"), where("email", "==", email)); // find a group using a keyword
+    const q = query(collection(db, "users"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
   }));
-  // console.log(data)
   return data
   } catch (error) {
     console.log(error);
@@ -144,13 +137,24 @@ export async function add_to_array(event_id, user_id) {
   const eventRef = doc(db, 'Events', event_id)
   const userRef = doc(db, 'users', user_id)
   try {
-    await updateDoc(eventRef, 
-      {signed_up_users: arrayUnion(user_id)});
-      await updateDoc(userRef, 
-        {signed_up_for_events: arrayUnion(event_id)});
+    await updateDoc(eventRef, {signed_up_users: arrayUnion(user_id)});
+    await updateDoc(userRef, {signed_up_for_events: arrayUnion(event_id)});
     return 'success';
   } catch (error) {
     console.log("Error updating")
+  }
+}
+
+export async function remove_from_array(event_id, user_id) {
+  const eventRef = doc(db, 'Events', event_id)
+  const userRef = doc(db, 'users', user_id)
+  try {
+    await updateDoc(eventRef, {signed_up_users: arrayRemove(user_id)});
+    await updateDoc(userRef, {signed_up_for_events: arrayRemove(event_id)});
+    return 'success';
+  } catch (error) {
+    console.log(`Error updating documents: ${error}`);
+    throw error;
   }
 }
 

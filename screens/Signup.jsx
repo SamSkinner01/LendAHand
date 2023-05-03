@@ -22,35 +22,11 @@ function Signup({ navigation }) {
     setUsername("")
   }
 
-  // const create_user = async () => {   
-  //   try{
-  //   const docRef = await addDoc(collection(db, "users"), {
-  //     email: email,
-  //     first_name: firstname,
-  //     last_name: lastname,
-  //     username: username,
-  //     total_hours: 0,
-  //     is_organization: false,
-  //     social_media_posts : [],
-  //     forum_posts : [],
-  //     events_volunteered : [],
-  //     signed_up_for_events: [],
-  //     created_events: [],
-  //     chat_rooms: [],
-  //     friends: [],
-  //     friend_requests: [],
-  //     friend_requests_sent: [],
-  //   });
-  //   console.log("Document written with ID: ", docRef.id);
-  //   } catch (e) {
-  //     console.error("Error adding document: ", e);
-  //   }
-  // }
-
   const handleSignup = async () => {
     try{
       const userCredentials = { username, firstname, lastname, email, password}
       signup(userCredentials);
+      navigation.navigate("Login");
     }
     catch(error){
       console.log(error);
@@ -83,6 +59,7 @@ function Signup({ navigation }) {
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}
         value={email}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}

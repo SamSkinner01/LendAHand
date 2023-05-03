@@ -9,21 +9,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { readFromDb } from "../auth/firebaseConfig";
+import { readAllData } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 import food from "../assets/Food.png";
 import edit from "../assets/Edit.png";
 import school from "../assets/school.png";
 import clean from "../assets/cleaning.png";
 import home from "../assets/home.png";
-
+import other from "../assets/other.png"
 function DisplayAllEvents() {
   const [events, setEvents] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
     async function getAllEvents() {
-      const allEvents = await readFromDb("Events");
+      const allEvents = await readAllData("Events");
       setEvents(allEvents);
     }
 
@@ -72,6 +72,15 @@ function DisplayAllEvents() {
         >
           <Image source={home} style={styles.icons} />
         </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Search Results", { term: "Other" })
+          }
+        >
+          <Image source={other} style={styles.icons} />
+        </TouchableOpacity>
+
       </View>
       <View style={styles.line}></View>
 

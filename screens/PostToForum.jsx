@@ -4,6 +4,7 @@ import { db, auth } from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
 import { addDoc, collection, getDoc, query, orderBy } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { getProfile } from "../auth/firebaseConfig";
 
 import {
   getStorage,
@@ -47,7 +48,8 @@ function PostToForum() {
       await addDoc(collection(db, "forum_posts"), {
         title: title,
         description: description,
-        username: auth.currentUser.email,
+        username: username,
+        email: auth.currentUser.email,
         comments: [],
         time: new Date(),
       });
@@ -57,8 +59,11 @@ function PostToForum() {
   }
 
   useEffect(() => {
-    // Gets the current authenticated user and email on page load.
-    //getAuthUser();
+    const handleGetUsername = async () => {
+      const user = await getProfile(auth.currentUser.email);
+      setUsername(user[0].data.username);
+    };
+    handleGetUsername();
   }, []);
 
   return (
@@ -66,14 +71,14 @@ function PostToForum() {
       <View style={styles.container}>
         <View style={styles.textbox}>
           <TextInput
-            style={styles.input}
+            style={styles.titleinput}
             placeholder="Title"
             onChangeText={(text) => setTitle(text)}
             multiline={true}
             blurOnSubmit={true}
           ></TextInput>
           <TextInput
-            style={styles.input}
+            style={styles.Descriptioninput}
             placeholder="Description"
             onChangeText={(text) => setDescription(text)}
             multiline={true}
@@ -103,34 +108,47 @@ function PostToForum() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
   },
   textbox: {
     flex: 7,
-    backgroundColor: "#fff",
+    backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
     width: 300,
     height: 300,
   },
-  input: {
-    height: 100,
-    width: 300,
+  titleinput: {
+    height: 50,
+    width: 350,
+    margin: 10,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    paddingTop: "5%",
+  },
+  Descriptioninput: {
+    height: 300,
+    width: 350,
     margin: 12,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+    paddingTop: "5%",
   },
+
   button: {
-    flex: 1,
+    //flex: 1,
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#00548e",
     padding: 10,
     borderRadius: 10,
     marginBottom: 20,
     justifyContent: "center",
+    width: "60%",
+    height: "10%",
   },
 });
 

@@ -27,13 +27,13 @@ function ProfileSocialPosts() {
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.header}>
+    <View style={styles.header}>
           <Text style={styles.header_text}>Your Posts</Text>
           <TouchableOpacity onPress={() => setRefresh(!refresh)}>
             <Image source={Refresh} style={styles.icons} />
           </TouchableOpacity>
         </View>
+      <View style={styles.container}>
 
         <ScrollView>
           {profilePosts.map((post) => {
@@ -65,16 +65,17 @@ function ProfileSocialPosts() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
     backgroundColor: "#cbc6c3",
   },
   header: {
+    backgroundColor: "#00548e",
+    padding: 10,
+    alignItems: "center",
+    height: 100,
+    justifyContent: "center",
+    paddingTop: 50,
     flexDirection: "row",
-    marginRight: 20,
-    marginLeft: 20,
-    marginBottom: 20,
     justifyContent: "space-between",
-    backgroundColor: "#cbc6c3",
   },
   icons: {
     width: 25,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginRight: 10,
-    backgroundColor: "#cbc6c3",
+    backgroundColor: "#00548e",
   },
 });
 

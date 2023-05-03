@@ -6,8 +6,9 @@
 
 // create a new event
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { db } from "../auth/firebaseConfig";
+import { useState, useEffect, useCallback } from "react";
+import { db, auth } from "../auth/firebaseConfig";
+import DropDownPicker from "react-native-dropdown-picker";
 import {
   Pressable,
   StyleSheet,
@@ -17,10 +18,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  where,
+  query,
+} from "firebase/firestore";
 
 function PostEvent() {
   const navigation = useNavigation();
+  const current_user_email = auth.currentUser.email;
   const [title, setTitle] = useState("");
   const [event_host, setEventHost] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -37,8 +46,18 @@ function PostEvent() {
   const [startTime, setStartTime] = useState("Select start time");
   const [endTime, setEndTime] = useState("Select end time");
 
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
+  const [type, setTypes] = useState([
+    { label: "Food", value: "Food" },
+    { label: "Education", value: "Education" },
+    { label: "Sanitation", value: "Sanitation" },
+    { label: "Shelter", value: "Shelter" },
+    { label: "Other", value: "Other" },
+  ]);
+
   const startTimePicker = (event, selectedDate) => {
-    console.log("calling startTimePicker");
     if (Platform.OS === "android") {
       setShowStartTimePicker(false);
     }
@@ -85,8 +104,19 @@ function PostEvent() {
     setShowDatepicker(false);
   };
 
+  async function getUserID(userEmail) {
+    const q = query(collection(db, "users"), where("email", "==", userEmail)); // find a group using a keyword
+    const querySnapshot = await getDocs(q);
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    return data[0].id;
+  }
+
   async function create_event() {
     //Save the data to Firebase database:
+    const userID = await getUserID(current_user_email);
     try {
       const event = {
         event_host: event_host,
@@ -101,6 +131,7 @@ function PostEvent() {
         number_of_volunteers: number_of_volunteers,
         slots_remaining: number_of_volunteers,
         signed_up_users: signed_up_users,
+        created_by: userID,
       };
       console.log("This is the event", event);
       const docRef = await addDoc(collection(db, "Events"), event);
@@ -154,11 +185,23 @@ function PostEvent() {
           onChangeText={(text) => setNumber_of_volunteers(parseInt(text))}
         />
 
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Enter Event Type"
           value={event_type}
           onChangeText={(text) => setEventType(text)}
+        /> */}
+
+        <DropDownPicker
+          open={open}
+          value={event_type}
+          items={type}
+          setOpen={setOpen}
+          setValue={setEventType}
+          setItems={setTypes}
+          placeholder="Select Event Type"
+          placeholderStyle={styles.placeholder}
+          style={styles.dropdown}
         />
 
         <View style={styles.buttons}>
@@ -245,6 +288,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+  },
+  dropdown: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    width: "95%",
+    backgroundColor: "#cbc6c3",
+  },
+  placeholder: {
+    color: "grey",
   },
   buttons: {
     flexDirection: "row",

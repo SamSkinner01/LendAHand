@@ -44,7 +44,13 @@ function MyProfile() {
         {/* View Social Media Posts Button*/}
         <View style={styles.button}>
           <Pressable onPress={() => navigation.navigate("Profile Social")}>
-            <Text style={styles.buttonText}>View your posts</Text>
+            <Text style={styles.buttonText}>View your social posts</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.button}>
+          <Pressable onPress={() => navigation.navigate("Profile Forum")}>
+            <Text style={styles.buttonText}>View your forum posts</Text>
           </Pressable>
         </View>
 
@@ -80,6 +86,7 @@ function MyProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#cbc6c3",
   },
   header: {
     backgroundColor: "#00548e",
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   button: {
-    backgroundColor: "#cbc6c3",
+    backgroundColor: "#00548e",
     padding: 10,
     borderRadius: 10,
     margin: 10,
