@@ -16,6 +16,7 @@ import {
   deleteCollection,
   add_to_array,
   remove_from_array,
+  getProfile,
 } from "../auth/firebaseConfig";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from "react-native-maps";
@@ -35,6 +36,8 @@ const DisplaySingularEvent = ({ route }) => {
   const [eventFull, setEventFull] = useState(false);
   const { item } = route.params;
   const navigation = useNavigation();
+
+  const [loggedInUserData, setLoggedInUserData] = useState([]);
 
   async function getEvent(item) {
     const data = await readSingleData("Events", item.id);
@@ -131,6 +134,14 @@ const DisplaySingularEvent = ({ route }) => {
     getEvent(item);
   }
 
+  useEffect(() => {
+    async function getLoggedInUserData() {
+      let user = await getProfile(auth.currentUser.email);
+      setLoggedInUserData(user[0]);
+    }
+    getLoggedInUserData();
+  }, []);
+
   return (
     <>
       {/* Back Button*/}
@@ -159,12 +170,23 @@ const DisplaySingularEvent = ({ route }) => {
         <Text style={styles.desc}> {spaceMessage}</Text>
 
         <View style={styles.buttons}>
-          <Pressable
+          {/* <Pressable
             style={styles.button}
             onPress={() => navigation.navigate("Update Event", { item: item })}
           >
             <Text>Update Event</Text>
-          </Pressable>
+          </Pressable> */}
+          {loggedInUserData.id === item.data.created_by && (
+            <Pressable
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate("Update Event", { item: item })
+              }
+            >
+              <Text>Update Event</Text>
+            </Pressable>
+          )}
+
           <Pressable
             style={styles.button}
             disabled={signedUp || eventFull}
@@ -173,12 +195,21 @@ const DisplaySingularEvent = ({ route }) => {
             {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
           </Pressable>
 
-          <Pressable
+          {/* <Pressable
             style={styles.delete_button}
             onPress={() => deleteCollectionNavigation(item)}
           >
             <Text>Delete Event</Text>
-          </Pressable>
+          </Pressable> */}
+          {loggedInUserData.id === item.data.created_by && (
+            <Pressable
+              style={styles.delete_button}
+              onPress={() => deleteCollectionNavigation(item)}
+            >
+              <Text>Delete Event</Text>
+            </Pressable>
+          )}
+
           <Pressable style={styles.button} onPress={() => opt_out_event(item)}>
             {signedUp ? <Text>Opt out</Text> : <Text>Opt out</Text>}
           </Pressable>
@@ -211,14 +242,25 @@ const DisplaySingularEvent = ({ route }) => {
           </MapView>
         }
 
-        <Pressable
+        {/* <Pressable
           style={styles.button}
           onPress={() => {
             navigation.navigate("List Volunteers", { item: item });
           }}
         >
           <Text>List Volunteers</Text>
-        </Pressable>
+        </Pressable> */}
+
+        {loggedInUserData.id === item.data.created_by && (
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate("List Volunteers", { item: item });
+            }}
+          >
+            <Text>List Volunteers</Text>
+          </Pressable>
+        )}
       </View>
     </>
   );
