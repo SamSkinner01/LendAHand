@@ -6,8 +6,8 @@
 
 // create a new event
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect,useCallback } from "react";
-import { db } from "../auth/firebaseConfig";
+import { useState, useEffect, useCallback } from "react";
+import { db, auth } from "../auth/firebaseConfig";
 import DropDownPicker from "react-native-dropdown-picker";
 import {
   Pressable,
@@ -18,7 +18,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { collection, getDocs, getDoc, addDoc, where, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  where,
+  query,
+} from "firebase/firestore";
 
 function PostEvent() {
   const navigation = useNavigation();
@@ -43,13 +50,12 @@ function PostEvent() {
   const [value, setValue] = useState(null);
 
   const [type, setTypes] = useState([
-    {label: 'Food', value: 'Food'},
-    {label: 'Education', value: 'Education'},
-    {label:"Sanitation",value:"Sanitation"},
-    {label:"Shelter",value:"Shelter"},
-    {label:"Other",value:"Other"}
+    { label: "Food", value: "Food" },
+    { label: "Education", value: "Education" },
+    { label: "Sanitation", value: "Sanitation" },
+    { label: "Shelter", value: "Shelter" },
+    { label: "Other", value: "Other" },
   ]);
-
 
   const startTimePicker = (event, selectedDate) => {
     if (Platform.OS === "android") {
@@ -186,17 +192,17 @@ function PostEvent() {
           onChangeText={(text) => setEventType(text)}
         /> */}
 
-      <DropDownPicker
+        <DropDownPicker
           open={open}
-          value={value}
+          value={event_type}
           items={type}
           setOpen={setOpen}
-          setValue={setValue}
+          setValue={setEventType}
           setItems={setTypes}
           placeholder="Select Event Type"
           placeholderStyle={styles.placeholder}
           style={styles.dropdown}
-      />
+        />
 
         <View style={styles.buttons}>
           <Pressable
@@ -283,17 +289,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-  dropdown:{
+  dropdown: {
     height: 40,
-    margin:12,
-    borderWidth:1,
-    borderRadius:10,
+    margin: 12,
+    borderWidth: 1,
+    borderRadius: 10,
     padding: 10,
     width: "95%",
-    backgroundColor: "#cbc6c3"
+    backgroundColor: "#cbc6c3",
   },
-  placeholder:{
-    color: "grey"
+  placeholder: {
+    color: "grey",
   },
   buttons: {
     flexDirection: "row",

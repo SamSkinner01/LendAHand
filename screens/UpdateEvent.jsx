@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DropDownPicker from "react-native-dropdown-picker";
 
-const UpdateEvent = ({ route }) =>{
+const UpdateEvent = ({ route }) => {
+  const [open, setOpen] = useState(false);
   const { item } = route.params;
   const navigation = useNavigation();
   const [title, setTitle] = useState(item.data.title);
@@ -21,15 +23,27 @@ const UpdateEvent = ({ route }) =>{
   const [slots_remaining, setSlots] = useState();
   const [description, setDescription] = useState(item.data.description);
   const [event_type, setEventType] = useState(item.data.event_type);
-  const [number_of_volunteers, setNumber_of_volunteers] = useState(item.data.number_of_volunteers);
-  const [signed_up_users, setSigned_up_users] = useState(item.data.signed_up_users);
+  const [number_of_volunteers, setNumber_of_volunteers] = useState(
+    item.data.number_of_volunteers
+  );
+  const [signed_up_users, setSigned_up_users] = useState(
+    item.data.signed_up_users
+  );
   const [date, setDate] = useState(new Date());
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [showDatepicker, setShowDatepicker] = useState(false);
-  const [fullDate, setFullDate] = useState('Select Date');
-  const [startTime, setStartTime] = useState('Select Start Time');
+  const [fullDate, setFullDate] = useState("Select Date");
+  const [startTime, setStartTime] = useState("Select Start Time");
   const [endTime, setEndTime] = useState("Select End Time");
+
+  const [type, setTypes] = useState([
+    { label: "Food", value: "Food" },
+    { label: "Education", value: "Education" },
+    { label: "Sanitation", value: "Sanitation" },
+    { label: "Shelter", value: "Shelter" },
+    { label: "Other", value: "Other" },
+  ]);
 
   const startTimePicker = (event, selectedDate) => {
     if (Platform.OS === "android") {
@@ -140,10 +154,21 @@ const UpdateEvent = ({ route }) =>{
           onChangeText={(text) => setNumber_of_volunteers(parseInt(text))}
         />
 
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           value={event_type}
           onChangeText={(text) => setEventType(text)}
+        /> */}
+        <DropDownPicker
+          open={open}
+          value={event_type}
+          items={type}
+          setOpen={setOpen}
+          setValue={setEventType}
+          setItems={setTypes}
+          placeholder="Select Event Type"
+          placeholderStyle={styles.placeholder}
+          style={styles.dropdown}
         />
 
         <View style={styles.buttons}>
@@ -205,7 +230,7 @@ const UpdateEvent = ({ route }) =>{
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -249,6 +274,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+  },
+  dropdown: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    width: "95%",
+    backgroundColor: "#cbc6c3",
   },
 });
 
