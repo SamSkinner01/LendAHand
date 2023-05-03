@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: "row",
-    height: "9%",
     justifyContent: "space-evenly",
     paddingTop: "11%",
     backgroundColor: "#00548e",
     marginVertical: 0,
+    height: "12%",
   },
   icons: {
     maxWidth: 25,

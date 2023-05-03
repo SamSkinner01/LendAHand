@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "flex-start",
     borderWidth: 1,
-    marginHorizontal: "20%",
+    //marginHorizontal: "20%",
     marginVertical: 2,
   },
   icons: {

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     paddingTop: "11%",
     backgroundColor: "#00548e",
-    marginVertical: 0,
+    paddingVertical: "10%",
   },
   line: {
     borderBottomWidth: 1,
