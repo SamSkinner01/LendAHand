@@ -183,6 +183,7 @@ function PostSocialMediaPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#cbc6c3"
   },
   title:{
     fontSize: 40,
@@ -212,24 +213,24 @@ const styles = StyleSheet.create({
     height: "80%",
   },
   upload_image:{
-    flex: 2,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 5,
     margin: 10,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#00548e",
   },
   post:{
-    flex: 2,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 5,
     margin: 10,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#00548e",
 
   },
   is_image_selected:{

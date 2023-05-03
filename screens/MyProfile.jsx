@@ -80,6 +80,7 @@ function MyProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#cbc6c3"
   },
   header: {
     backgroundColor: "#00548e",
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   button: {
-    backgroundColor: "#cbc6c3",
+    backgroundColor: "#00548e",
     padding: 10,
     borderRadius: 10,
     margin: 10,
