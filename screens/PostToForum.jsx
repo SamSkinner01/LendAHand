@@ -4,6 +4,7 @@ import { db, auth } from "../auth/firebaseConfig";
 import { useEffect, useState } from "react";
 import { addDoc, collection, getDoc, query, orderBy } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { getProfile } from "../auth/firebaseConfig";
 
 import {
   getStorage,
@@ -47,7 +48,8 @@ function PostToForum() {
       await addDoc(collection(db, "forum_posts"), {
         title: title,
         description: description,
-        username: auth.currentUser.email,
+        username: username,
+        email: auth.currentUser.email,
         comments: [],
         time: new Date(),
       });
@@ -57,8 +59,11 @@ function PostToForum() {
   }
 
   useEffect(() => {
-    // Gets the current authenticated user and email on page load.
-    //getAuthUser();
+    const handleGetUsername = async () => {
+      const user = await getProfile(auth.currentUser.email);
+      setUsername(user[0].data.username);
+    };
+    handleGetUsername();
   }, []);
 
   return (
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    paddingTop: "5%"
+    paddingTop: "5%",
   },
   Descriptioninput: {
     height: 300,
@@ -131,10 +136,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    paddingTop: "5%"
+    paddingTop: "5%",
   },
-  
-  
+
   button: {
     //flex: 1,
     alignItems: "center",
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "center",
     width: "60%",
-    height:"10%"
+    height: "10%",
   },
 });
 

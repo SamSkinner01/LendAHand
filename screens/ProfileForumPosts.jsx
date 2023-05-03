@@ -41,7 +41,7 @@ function ProfileForumPosts() {
         const forumRef = collection(db, "forum_posts");
         const q = query(
           forumRef,
-          where("username", "==", auth.currentUser.email),
+          where("email", "==", auth.currentUser.email),
           orderBy("time", "desc")
         );
         const querySnapshot = await getDocs(q);
