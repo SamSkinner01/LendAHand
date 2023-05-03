@@ -36,9 +36,30 @@ import { useRoute } from "@react-navigation/native";
 */
 
 function ListVolunteers() {
+  async function findVolunteers(signed_up_users) {
+    volunteers = []
+    try {
+      const q = query(collection(db, "Users"), where("id", "in", signed_up_users));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const names = doc.data().first_name + " " + doc.data().last_name;
+        volunteers.push(names);
+    });
+  }
+    catch (error) {
+      console.log(error);
+    }
+    return volunteers;
+  }
+
+  const route = useRoute();
+  signed_up_users = route.params.item.data.signed_up_users;
+  names = findVolunteers(signed_up_users);
+  console.log(names);
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Volunteers</Text>
+      <RenderVolunteers volunteers={names}/>
     </View>
   );
 }
