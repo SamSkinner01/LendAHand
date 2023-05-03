@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     marginVertical: 1,
     fontSize: 35,
     marginRight: "20%",
+    marginLeft: "3.5%",
     //fontFamily:'Savoye LET'
   },
   line: {

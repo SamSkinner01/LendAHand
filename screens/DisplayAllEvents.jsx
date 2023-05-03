@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: "9%",
     justifyContent: "space-evenly",
-    paddingTop: "11%",
+    paddingTop: "15%",
+    paddingBottom: "11%",
     backgroundColor: "#00548e",
-    paddingVertical: "10%",
   },
   line: {
     borderBottomWidth: 1,
