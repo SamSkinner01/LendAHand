@@ -231,5 +231,10 @@ export async function getVolunteers(event_id){
   return volunteers
 }
 
+export async function isEventCreator(){
+  
+
+}
+
 
 export {auth, db};

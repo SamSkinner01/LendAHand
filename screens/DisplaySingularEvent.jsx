@@ -110,6 +110,7 @@ const DisplaySingularEvent = ({ route }) => {
             style={styles.button}
             onPress={() => navigation.navigate("List Volunteers", { item: item })}
           > 
+            {}
             </Pressable>
 
 
