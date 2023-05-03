@@ -72,7 +72,7 @@ function ForumPage() {
     <>
       <View style={styles.rowContainer}>
         <Text style={styles.text_prim}>Lend-A-Hand</Text>
-       
+
         <TouchableOpacity
           onPress={() => {
             getForumPosts();
@@ -82,8 +82,6 @@ function ForumPage() {
           <Image source={refresh} style={styles.icons} />
         </TouchableOpacity>
 
-
-
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Post To Forum");
@@ -92,7 +90,6 @@ function ForumPage() {
         >
           <Image source={edit} style={styles.icons} />
         </TouchableOpacity>
-        
       </View>
       <View style={styles.line}></View>
 
@@ -109,6 +106,7 @@ function ForumPage() {
               description={description[index]}
               comments={comments[index]}
               id={id[index]}
+              canDelete={false}
             />
           ))}
         </ScrollView>
