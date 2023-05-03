@@ -20,17 +20,11 @@ function MyProfile() {
   const [profileEvents, setProfileEvetns] = useState([]);
 
   useEffect(() => {
-    // async function checkProfile() {
-    //   const profile = await getProfile(auth.currentUser.email);
-    //   console.log(profile);
-    //   setProfileInfo(profile.id);
-    //   console.log(profile[0].data.signed_up_for_events);
-    //   const events = await getProfileEvents(profile[0].id);
-    //   setProfileEvetns(events);
-    //   console.log(events);
-    // }
-    // checkProfile();
-    // setProfileEvents(search_by_id())
+    async function getProfileInfo() {
+      const user = await getProfile(auth.currentUser.email);
+      setProfileInfo(user[0].data);
+    }
+    getProfileInfo();
   }, []);
 
   return (
@@ -61,6 +55,16 @@ function MyProfile() {
             </Text>
           </Pressable>
         </View>
+
+        {profileInfo.is_organization ? (
+          <View style={styles.button}>
+            <Pressable onPress={() => navigation.navigate("Events Created")}>
+              <Text style={styles.buttonText}>
+                View the events you have created
+              </Text>
+            </Pressable>
+          </View>
+        ) : null}
 
         {/* Sign out button*/}
         <View>

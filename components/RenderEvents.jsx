@@ -9,7 +9,7 @@ const RenderEvents = ({ allEvents }) => {
     <ScrollView style={styles.eventsContainer}>
       {allEvents.map((item, index) => (
         <Pressable
-          key={item.id}
+          key={index}
           style={styles.eventStyle}
           onPress={() => navigation.navigate("Event Page", { item: item })}
         >

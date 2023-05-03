@@ -26,6 +26,7 @@ import ForumThreads from "./components/ForumThreads";import { ProfileForumPosts 
 import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 import { ProfileEvents } from "./screens/ProfileEvents";
 import ListVolunteers from "./screens/ListVolunteers";
+import EventsOrgCreated from "./screens/ProfileEventsOrgCreated";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,7 @@ export default function App() {
         <Stack.Screen name="DisplayAllEvents" component={DisplayAllEvents}/>
         <Stack.Screen name="Profile Events" component={ProfileEvents}/>
         <Stack.Screen name="List Volunteers" component={ListVolunteers}/>
+        <Stack.Screen name="Events Created" component={EventsOrgCreated}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
