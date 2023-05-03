@@ -174,14 +174,6 @@ const DisplaySingularEvent = ({ route }) => {
           </Pressable>
 
           <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate("List Volunteers", { item: item })}
-          > 
-            {}
-            </Pressable>
-
-
-          <Pressable
             style={styles.delete_button}
             onPress={() => deleteCollectionNavigation(item)}
           >
@@ -218,6 +210,15 @@ const DisplaySingularEvent = ({ route }) => {
             />
           </MapView>
         }
+
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("List Volunteers");
+          }}
+        >
+          <Text>Text</Text>
+        </Pressable>
       </View>
     </>
   );

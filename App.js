@@ -25,7 +25,7 @@ import CommentsForSocialPost from "./screens/CommentsForSocialPost";
 import ForumThreads from "./components/ForumThreads";import { ProfileForumPosts } from "./screens/ProfileForumPosts";
 import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 import { ProfileEvents } from "./screens/ProfileEvents";
-import { ListVolunteers } from "./screens/ListVolunteers";
+import ListVolunteers from "./screens/ListVolunteers";
 
 const Stack = createNativeStackNavigator();
 
