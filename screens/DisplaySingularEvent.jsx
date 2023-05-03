@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db, readFromDb, updateEvent, deleteCollection, add_to_array, remove_from_array,} from "../auth/firebaseConfig";
-import { collection, getDocs, where, query, orderBy } from "firebase/firestore";
+import { auth, db, readSingleData, updateEvent, deleteCollection, add_to_array, remove_from_array,} from "../auth/firebaseConfig";
+import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import back from "../assets/back.png";
@@ -24,17 +24,18 @@ const DisplaySingularEvent = ({ route }) => {
   const [numOfVol, setNumOfVol] = useState()
   const [remVol, setRemVol] = useState()
   const [spaceMessage, setSpaceMessage] = useState('')
+  const [eventFull, setEventFull] = useState(false)
   const { item } = route.params;
   const navigation = useNavigation();
 
   async function getEvent(item) {
-    const data = await readFromDb('Events', item.id)
-    const num = data[0].data.number_of_volunteers
-    const num2 = data[0].data.signed_up_users.length
+    const data = await readSingleData('Events', item.id)
+    const num = data.number_of_volunteers
+    const num2 = data.signed_up_users.length
     const res = num - num2
-    setNumOfVol(num)
     setRemVol(res)
     if (res === 0) {
+      setEventFull(true)
       setSpaceMessage('Sorry, this event is full.')
     }
     else {
@@ -50,6 +51,8 @@ const DisplaySingularEvent = ({ route }) => {
   }
 
   useEffect(() => {
+    setSignedUp(false);
+    setEventFull(false)
 
     check_if_signed_up(item)
 
@@ -64,7 +67,7 @@ const DisplaySingularEvent = ({ route }) => {
       let geo_location = await Location.geocodeAsync(item.data.eventLocation, {enableHighAccuracy: true});
       setLocation(geo_location[0]);
     })();
-  }, [item.data.eventLocation]);
+  }, [item.data.eventLocation, item.id]);
 
 
   async function deleteCollectionNavigation(item) {
@@ -83,17 +86,17 @@ const DisplaySingularEvent = ({ route }) => {
   }
 
   async function event_sign_up(item) {
-    console.log(item.id)
     const userID = await getUserID(current_user_email);
     const success = await add_to_array(item.id, userID);
-    const data = await readFromDb("Events", item.id);
-    const num1 = data[0].data.number_of_volunteers;
-    const num2 = data[0].data.signed_up_users.length;
+    const data = await readSingleData("Events", item.id);
+    check_if_signed_up(item)
+    const num1 = data.number_of_volunteers;
+    const num2 = data.signed_up_users.length;
     const res = num1 - num2
-    setNumOfVol(num1)
-    setRemVol(res)
     const newData = {slots_remaining: res};
     const update = await updateEvent(item.id, 'Events', newData);
+    setNumOfVol(num1)
+    setRemVol(res)
     if (success) {
       setSignedUp(true);
     }
@@ -102,9 +105,10 @@ const DisplaySingularEvent = ({ route }) => {
   async function opt_out_event(item) {
     const userID = await getUserID(current_user_email);
     const success = await remove_from_array(item.id, userID);
-    const data = await readFromDb("Events", item.id);
-    const num1 = data[0].data.number_of_volunteers;
-    const num2 = data[0].data.signed_up_users.length;
+    const data = await readSingleData("Events", item.id);
+
+    const num1 = data.number_of_volunteers;
+    const num2 = data.signed_up_users.length;
     const res = num1 - num2
     setNumOfVol(num1)
     setRemVol(res)
@@ -153,7 +157,7 @@ const DisplaySingularEvent = ({ route }) => {
           </Pressable>
           <Pressable
             style={styles.button}
-            disabled={signedUp}
+            disabled={signedUp || eventFull}
             onPress={() => event_sign_up(item)}
           >
             {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}

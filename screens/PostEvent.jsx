@@ -7,8 +7,7 @@
 // create a new event
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
-import { db } from "../auth/firebaseConfig";
-
+import { db, auth } from "../auth/firebaseConfig";
 
 import {
   Pressable,
@@ -19,10 +18,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, addDoc, where, query } from "firebase/firestore";
 
 function PostEvent() {
   const navigation = useNavigation();
+  const current_user_email = auth.currentUser.email;
   const [title, setTitle] = useState("");
   const [event_host, setEventHost] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -86,8 +86,19 @@ function PostEvent() {
     setShowDatepicker(false);
   };
 
+  async function getUserID(userEmail) {
+    const q = query(collection(db, "users"), where("email", "==", userEmail)); // find a group using a keyword
+    const querySnapshot = await getDocs(q);
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    return data[0].id;
+  }
+
   async function create_event() {
     //Save the data to Firebase database:
+    const userID = await getUserID(current_user_email);
     try {
       const event = {
         event_host: event_host,
@@ -102,6 +113,7 @@ function PostEvent() {
         number_of_volunteers: number_of_volunteers,
         slots_remaining: number_of_volunteers,
         signed_up_users: signed_up_users,
+        created_by: userID,
       };
       console.log("This is the event", event);
       const docRef = await addDoc(collection(db, "Events"), event);
