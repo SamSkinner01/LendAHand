@@ -6,8 +6,9 @@
 
 // create a new event
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import { db } from "../auth/firebaseConfig";
+import DropDownPicker from "react-native-dropdown-picker";
 import {
   Pressable,
   StyleSheet,
@@ -36,6 +37,18 @@ function PostEvent() {
   const [fullDate, setFullDate] = useState("Select date");
   const [startTime, setStartTime] = useState("Select start time");
   const [endTime, setEndTime] = useState("Select end time");
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
+  const [type, setTypes] = useState([
+    {label: 'Food', value: 'Food'},
+    {label: 'Education', value: 'Education'},
+    {label:"Sanitation",value:"Sanitation"},
+    {label:"Shelter",value:"Shelter"},
+    {label:"Other",value:"Other"}
+  ]);
+
 
   const startTimePicker = (event, selectedDate) => {
     console.log("calling startTimePicker");
@@ -154,12 +167,24 @@ function PostEvent() {
           onChangeText={(text) => setNumber_of_volunteers(parseInt(text))}
         />
 
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Enter Event Type"
           value={event_type}
           onChangeText={(text) => setEventType(text)}
-        />
+        /> */}
+
+      <DropDownPicker
+          open={open}
+          value={value}
+          items={type}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setTypes}
+          placeholder="Select Event Type"
+          placeholderStyle={styles.placeholder}
+          style={styles.dropdown}
+      />
 
         <View style={styles.buttons}>
           <Pressable
@@ -245,6 +270,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+  },
+  dropdown:{
+    height: 40,
+    margin:12,
+    borderWidth:1,
+    borderRadius:10,
+    padding: 10,
+    width: "95%",
+    backgroundColor: "#cbc6c3"
+  },
+  placeholder:{
+    color: "grey"
   },
   buttons: {
     flexDirection: "row",
