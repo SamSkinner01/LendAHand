@@ -25,6 +25,7 @@ import CommentsForSocialPost from "./screens/CommentsForSocialPost";
 import ForumThreads from "./components/ForumThreads";import { ProfileForumPosts } from "./screens/ProfileForumPosts";
 import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 import { ProfileEvents } from "./screens/ProfileEvents";
+import { ListVolunteers } from "./screens/ListVolunteers";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ export default function App() {
         <Stack.Screen name="PostSocialMediaPage" component={PostSocialMediaPage} />
         <Stack.Screen name="DisplayAllEvents" component={DisplayAllEvents}/>
         <Stack.Screen name="Profile Events" component={ProfileEvents}/>
+        <Stack.Screen name="List Volunteers" component={ListVolunteers}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
