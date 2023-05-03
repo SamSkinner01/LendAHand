@@ -9,7 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { readFromDb } from "../auth/firebaseConfig";
+import { readAllData } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 import food from "../assets/Food.png";
 import edit from "../assets/Edit.png";
@@ -23,7 +23,7 @@ function DisplayAllEvents() {
   const navigation = useNavigation();
   useEffect(() => {
     async function getAllEvents() {
-      const allEvents = await readFromDb("Events");
+      const allEvents = await readAllData("Events");
       setEvents(allEvents);
     }
 
