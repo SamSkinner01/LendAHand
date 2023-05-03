@@ -20,63 +20,70 @@ import {
   update,
 } from "firebase/firestore";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { auth, db } from "../auth/firebaseConfig";
+import { auth, db, getProfile } from "../auth/firebaseConfig";
 import { NavigationBar } from "../components/navigationBar";
 import Edit from "../assets/Edit.png";
 import { RefreshControl } from "react-native";
 import { useCallback } from "react";
 
 function DisplayAllChats() {
-  const navigation = useNavigation();
 
+  const navigation = useNavigation();
+  const [chatrooms, setChatrooms] = useState([]);
+  const [currentUserUsername, setCurrentUserUsername] = useState("");
+  const [otherUsernameList, setOtherUsernameList] = useState([]);
+  
   const [refreshing, setRefreshing] = useState(false);
 
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 1000);
-    }, []);
-
-
-  // recieve the current user's email
-  const current_user = auth.currentUser.email;
-
-  // To display the chatrooms and pass their IDs to the specific chat
-  const [chatrooms, setChatrooms] = useState([]);
-  const [chatroom_ids, setChatroom_ids] = useState([]);
-  const [email, setEmail] = useState("");
-
-  // Queries for all the chatrooms
-  function getAllChatrooms() {
-    const chatRoomRef = collection(db, "chatroom");
-    getDocs(chatRoomRef).then((querySnapshot) => {
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+  
+  async function getAllChatrooms() {
+    try{
+      const q = query(collection(db, "chatrooms"), where("users", "array-contains", currentUserUsername));
+      const querySnapshot = await getDocs(q);
+      const chatrooms = [];
+      const otherList = [];
       querySnapshot.forEach((doc) => {
-        const user1email = doc.data().user1email;
-        const user2email = doc.data().user2email;
-
-        if (user1email === current_user) {
-          setChatrooms((chatrooms) => [...chatrooms, user2email]);
-          setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
-        } else if (user2email === current_user) {
-          setChatrooms((chatrooms) => [...chatrooms, user1email]);
-          setChatroom_ids((chatroom_ids) => [...chatroom_ids, doc.id]);
+        chatrooms.push({ id: doc.id, ...doc.data() });
+        if(doc.data().users[0] == currentUserUsername){
+          otherList.push(doc.data().users[1])
+        }else{
+          otherList.push(doc.data().users[0])
         }
       });
-    });
+      setChatrooms(chatrooms);
+      setOtherUsernameList(otherList);
+    }catch(e){
+      console.log(e)
+    }
   }
 
   useEffect(() => {
-    setChatrooms([]);
-    setChatroom_ids([]);
+    async function handleGetProfileUsername() {
+      let user = await getProfile(auth.currentUser.email);
+      setCurrentUserUsername(user[0].data.username);
+    }
+    handleGetProfileUsername();
+  }, []);
+
+  useEffect(() => {
     getAllChatrooms();
   }, [refreshing]);
+
+  useEffect(() => {
+    getAllChatrooms();
+  }, [currentUserUsername]);
 
   return (
     <>
       <View style={styles.container}>
         <View style={styles.rowContainer}>
-          <Text style={styles.text_prim}>Messages</Text>
+          <Text style={styles.text_prim}>Your Messages</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Search Page");
@@ -88,27 +95,32 @@ function DisplayAllChats() {
         </View>
         <View style={styles.line}></View>
         <ScrollView
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           {chatrooms.map((chatroom, index) => {
             return (
-              <Pressable
+              <TouchableOpacity
                 key={index}
                 style={styles.chats}
-                onPress={() =>
+                onPress={() => {
                   navigation.navigate("Chat", {
-                    chatroom_id: chatroom_ids[index],
-                    current_user: current_user,
-                    user2: chatrooms[index],
-                  })
-                }
+                    userInfo: {
+                      otherUsername: otherUsernameList[index],
+                      currentUsername: currentUserUsername,
+                    }
+                  });
+                }}
               >
-                <Text>{chatroom}</Text>
-              </Pressable>
+                <Text style={styles.text_sec}>
+                  {otherUsernameList[index]}
+                </Text>
+              </TouchableOpacity>
             );
+
           })}
+
         </ScrollView>
       </View>
       <View>

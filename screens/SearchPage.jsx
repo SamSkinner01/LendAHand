@@ -14,12 +14,8 @@ function SearchPage() {
 
   const [searchContent, setSearchContent] = useState("");
   const [results, setResults] = useState([]);
-
-  const current_user = auth.currentUser.username
   
   useEffect(() => {
-    console.log("Here")
-    console.log(results)
     const queryRef = collection(db, "users");
     let q = query(queryRef, orderBy("email"), limit(15));
 

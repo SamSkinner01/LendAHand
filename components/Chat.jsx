@@ -19,6 +19,10 @@ import {
   where,
   onSnapshot,
   orderBy,
+  updateDoc,
+  arrayUnion,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { db, auth } from "../auth/firebaseConfig";
 import back from "../assets/back.png";
@@ -26,100 +30,123 @@ import { KeyboardAvoidingView } from "react-native";
 
 
 
+
 function Chat() {
-  const route = useRoute();
-  const chatroom_id = route.params.chatroom_id;
-  const current_user = route.params.current_user;
-  const user2 = route.params.user2;
+
   const navigation = useNavigation();
+  const route = useRoute();
+  const otherUser = route.params.userInfo.otherUsername;
+  const currentUser = route.params.userInfo.currentUsername;
+  const [ chatroomID , setChatroomID ] = useState("");
+  const [ sendUserMessage, setSendUserMessage ] = useState("");
+  const [ userSubmit , setUserSubmit ] = useState(false);
 
-  const [displayMessages, setDisplayMessages] = useState([]);
-  const [senderOfMessage, setSenderOfMessage] = useState([]);
-
-  const [sendUserMessage, setSendUserMessage] = useState("");
-  const [userSubmit , setUserSubmit] = useState(false);
+  const [ messages, setMessages ] = useState([]);
 
 
-  /* 
-    Currently does not render when the chatroom is navigated to 
-    from the SearchProfile screen.
-  */
+  async function sendMessage() {
+    /*
+      This function will send a message to the chatroom given some chatroomID
+      that was found earlier. The message will be sent from the current user.
+      The message will be sent to the other user. 
+    */
 
-  function sendMessage() {
-    setUserSubmit(true);
+    setSendUserMessage("");
 
-    if(sendUserMessage === ""){
+    // Guard clause for sending an empty message
+    if (sendUserMessage === "") {
       return;
     }
 
+    // Create a message object
+    const message = {
+      message: sendUserMessage,
+      sender: currentUser,
+    };
+
     try {
-      addDoc(collection(db, "messages"), {
-        chatroom_id: chatroom_id,
-        message: sendUserMessage,
-        sender: current_user,
-        timestamp: new Date(),
-      });
+      // Get the current messages array
+      const chatroomRef = doc(db, "chatrooms", chatroomID);
+      const chatroomDoc = await getDoc(chatroomRef);
+      const currentMessages = chatroomDoc.data().messages;
+
+      // Append the new message to the messages array
+      const updatedMessages = [...currentMessages, message];
+
+      // Update the doc with the updated messages array
+      await updateDoc(chatroomRef, { messages: updatedMessages });
     } catch (e) {
       console.log(e);
     }
 
-    setSendUserMessage("");
+    setUserSubmit(!userSubmit);
   }
+
+
 
   async function displayAllMessages() {
-    const messagesRef = collection(db, "messages");
-    const q = query(
-      messagesRef,
-      where("chatroom_id", "==", chatroom_id),
-      orderBy("timestamp")
-    );
-    const querySnapshot = await getDocs(q);
+    try {
+      // Get the chatroom that contains the two users
+      // Should be the ID but was not working initially.
+      const chatroomRef = collection(db, "chatrooms")
+      const q = query(chatroomRef, where("users", "in", [
+        [currentUser, otherUser],
+        [otherUser, currentUser]
+      ]));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setMessages(doc.data().messages);
+      })
+    }
+    catch (e) {
+      console.log(e);
+    }
 
-    let messages = [];
-    let senders = [];
-    querySnapshot.forEach((doc) => {
-      messages.push(doc.data());
-      senders.push(doc.data().sender);
-    });
-    setSenderOfMessage(senders);
-    setDisplayMessages(messages);
+  }
+
+  async function getChatroomID(){
+    try{
+      const chatroomRef = collection(db, "chatrooms");
+      const q = query(chatroomRef, where("users", "in", [
+        [currentUser, otherUser],
+        [otherUser, currentUser]
+      ]))
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        setChatroomID(doc.id);
+      }
+      )
+
+      console.log(chatroomID)
+    
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
+    getChatroomID();
     displayAllMessages();
-
-    const unsubscribe = onSnapshot(
-      query(
-        collection(db, "messages"),
-        where("chatroom_id", "==", chatroom_id),
-        orderBy("timestamp")
-      ),
-      (querySnapshot) => {
-        let messages = [];
-        let senders = [];
-        querySnapshot.forEach((doc) => {
-          messages.push(doc.data());
-          senders.push(doc.data().sender);
-        });
-        setSenderOfMessage(senders);
-        setDisplayMessages(messages);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-      displayAllMessages();
-  }, [userSubmit]);
+  }, [])
 
   useEffect(() => {
     displayAllMessages();
-  }, [chatroom_id]);
+  }, [userSubmit])
 
+  useEffect(()=>{
+    const q = query(collection(db, "chatrooms"), where("users", "in", [
+      [currentUser, otherUser],
+      [otherUser, currentUser]
+    ]));
 
-
-
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        setMessages(doc.data().messages);
+      })
+    });
+  }, [])
 
   return (
     <>
@@ -132,21 +159,22 @@ function Chat() {
         >
           <Image source={back} style={styles.icons} />
         </TouchableOpacity>
-        <Text style={styles.text_prim}>{user2}</Text>
+        <Text style={styles.text_prim}>{otherUser}</Text>
       </View>
       <View style={styles.line}></View>
       <KeyboardAvoidingView behavior="padding" style={styles.KAVContainer}>
         <View style={styles.container}>
           <ScrollView>
             <View style={styles.messages}>
-              {displayMessages.map((message, index) => (
+              {messages.map((message, index) => (
                 <View style={styles.message_container} key={index}>
                   <Text style={styles.message_sender}>
-                    {senderOfMessage[index]}
+                    {message.sender}
                   </Text>
                   <Text style={styles.message_content}>{message.message}</Text>
                 </View>
               ))}
+
             </View>
           </ScrollView>
 

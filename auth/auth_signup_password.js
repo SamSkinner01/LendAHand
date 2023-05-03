@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig.js";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig.js";
+import { sendEmailVerification } from "firebase/auth";
 
 export const signup = (userDetails) => {
     //deconstruct the users details we will need these later
@@ -12,6 +13,17 @@ export const signup = (userDetails) => {
         //user firebase using the appropriate firebase method
         createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
+           sendEmailVerification(auth.currentUser,{
+                handleCodeInApp: true,
+                url: "http://lend-a-hand-aafde.firebaseapp.com"
+            })
+            .then(() => {
+                console.log("Email sent")
+            })
+            .catch((error) => {
+                console.log("Error sending email: ", error)
+            })
+
             try{
                 addDoc(collection(db, "users"), {
                     email: email,
