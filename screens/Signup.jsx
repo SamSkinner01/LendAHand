@@ -84,6 +84,7 @@ function Signup({ navigation }) {
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}
         value={email}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
