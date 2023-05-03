@@ -9,18 +9,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NavigationBar } from "../components/navigationBar";
 import { useState, useEffect } from "react";
-import { readAllData } from "../auth/firebaseConfig";
+import { auth, getProfile, readAllData } from "../auth/firebaseConfig";
 import { RenderEvents } from "../components/RenderEvents";
 import food from "../assets/Food.png";
 import edit from "../assets/Edit.png";
 import school from "../assets/school.png";
 import clean from "../assets/cleaning.png";
 import home from "../assets/home.png";
-import other from "../assets/other.png"
+import other from "../assets/other.png";
+
 function DisplayAllEvents() {
   const [events, setEvents] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const navigation = useNavigation();
+  const [is_org, set_org] = useState([]);
+
   useEffect(() => {
     async function getAllEvents() {
       const allEvents = await readAllData("Events");
@@ -34,12 +37,25 @@ function DisplayAllEvents() {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    async function getUser() {
+      const user = await getProfile(auth.currentUser.email);
+      set_org(user[0].data.is_organization);
+    }
+    getUser();
+  }, []);
+
   return (
     <>
       <View style={styles.rowContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate("Post Event")}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate("Post Event")}>
           <Image source={edit} style={styles.icons} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        {is_org ? (
+          <TouchableOpacity onPress={() => navigation.navigate("Post Event")}>
+            <Image source={edit} style={styles.icons} />
+          </TouchableOpacity>
+        ) : null}
 
         <TouchableOpacity
           onPress={() =>
@@ -80,7 +96,6 @@ function DisplayAllEvents() {
         >
           <Image source={other} style={styles.icons} />
         </TouchableOpacity>
-
       </View>
       <View style={styles.line}></View>
 
