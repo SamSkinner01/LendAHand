@@ -13,7 +13,6 @@ import {
   db,
   findVolunteers,
   isOrganization,
-  readFromDb,
   updateEvent,
 } from "../auth/firebaseConfig";
 import { deleteCollection, add_to_array } from "../auth/firebaseConfig";
@@ -21,9 +20,9 @@ import { collection, getDocs, where, query } from "firebase/firestore";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import back from "../assets/back.png";
-import { ScrollView } from "react-native-web";
-import RenderVolunteers from "../components/RenderVolunteers";
+import { ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { doc, getDoc } from "firebase/firestore";
 
 /*
     1. We need to pass the information from that event to this screen.
@@ -36,9 +35,67 @@ import { useRoute } from "@react-navigation/native";
 */
 
 function ListVolunteers() {
+  const route = useRoute();
+  const signed_up_users = route.params.item.data.signed_up_users;
+
+  const [volunteerNames, setVolunteerNames] = useState([]);
+
+  async function findVolunteers(signed_up_users) {
+    const volunteerNames = [];
+
+    // Loop through each signed up user id
+    try {
+      for (let i = 0; i < signed_up_users.length; i++) {
+        const userId = signed_up_users[i];
+        const docRef = doc(db, "users", userId);
+        const userDoc = await getDoc(docRef);
+        //console.log(userDoc.data());
+        if (userDoc.exists()) {
+          // Get the user's first and last name from their document
+          const firstName = userDoc.data().first_name;
+          const lastName = userDoc.data().last_name;
+          const fullName = `${firstName} ${lastName}`;
+          //console.log(fullName);
+          volunteerNames.push(fullName);
+        }
+      }
+      return volunteerNames;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    async function getVolunteers() {
+      const volunteerNames = await findVolunteers(signed_up_users);
+      setVolunteerNames(volunteerNames);
+    }
+    getVolunteers();
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Volunteers</Text>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20%",
+      }}
+    >
+      <ScrollView>
+        {volunteerNames.length === 0 ? (
+          <Text>No volunteers have signed up for this event yet.</Text>
+        ) : (
+          <View>
+            {volunteerNames.map((item, index) => (
+              <View key={index}>
+                <Text>{item}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }
