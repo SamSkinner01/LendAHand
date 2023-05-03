@@ -27,22 +27,31 @@ const DisplaySingularEvent = ({ route }) => {
   const { item } = route.params;
   const navigation = useNavigation();
 
+  async function getEvent(item) {
+    const data = await readFromDb('Events', item.id)
+    const num = data[0].data.number_of_volunteers
+    const num2 = data[0].data.signed_up_users.length
+    const res = num - num2
+    setNumOfVol(num)
+    setRemVol(res)
+    if (res === 0) {
+      setSpaceMessage('Sorry, this event is full.')
+    }
+    else {
+      setSpaceMessage('There is space available for this event.')
+    }
+}
+
+  async function check_if_signed_up(item) {
+    const userID = await getUserID(current_user_email);
+    if (item.data.signed_up_users.includes(userID)) {
+      setSignedUp(true);
+    }
+  }
 
   useEffect(() => {
-    async function getEvent(item) {
-      const data = await readFromDb('Events', item.id)
-      const num = data[0].data.number_of_volunteers
-      const num2 = data[0].data.signed_up_users.length
-      const res = num - num2
-      setNumOfVol(num)
-      setRemVol(res)
-      if (res === 0) {
-        setSpaceMessage('Sorry, this event is full.')
-      }
-      else {
-        setSpaceMessage('There is space available for this event.')
-      }
-    }
+
+    check_if_signed_up(item)
 
     getEvent(item);
 
@@ -106,12 +115,6 @@ const DisplaySingularEvent = ({ route }) => {
     }
   }
 
-  async function check_if_signed_up(item) {
-    const userID = await getUserID(current_user_email);
-    if (item.data.signed_up_users.includes(userID)) {
-      setSignedUp(true);
-    }
-  }
 
 
   return (
@@ -168,7 +171,7 @@ const DisplaySingularEvent = ({ route }) => {
             {signedUp ? <Text>Opt out</Text> : <Text>Opt out</Text>}
           </Pressable>
         </View>
-        {/*reload &&*/ <MapView style={styles.map}
+        {<MapView style={styles.map}
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
