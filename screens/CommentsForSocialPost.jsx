@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#cbc6c3"
     },
     commentsContainer:{
         flex: 20,

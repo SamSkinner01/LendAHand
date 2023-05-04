@@ -2,9 +2,12 @@ import { View, Text, StyleSheet } from "react-native";
 
 function Comments(props){
     return(
+        <>
         <View style={styles.comment}>
-            <Text>{props.email}: {props.comment}</Text>
+            <Text style={styles.words}>{props.email}: {props.comment}</Text>
         </View>
+        <View style={styles.line}></View>
+        </>
     );
 }
 
@@ -15,8 +18,16 @@ const styles = StyleSheet.create({
         width: "100%",
         margin: 5,
         padding: 5,
-        backgroundColor: "#cbc6c3",
+        backgroundColor: "#cbc6c3"
     },
+    words:{
+        fontSize: "20%"
+    },
+    line: {
+        borderBottomWidth: 1,
+        borderColor: "black",
+        marginVertical: 0,
+      },
 });
 
 export default Comments;
