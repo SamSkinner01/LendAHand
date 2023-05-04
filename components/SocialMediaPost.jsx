@@ -112,8 +112,11 @@ const SocialMediaPost = (props) => {
         <Pressable
           style={styles.message_me_button}
           onPress={() => {
-            props.createRoom()
-            navigation.navigate("Chat", { chatroom_id: userInfo.id, current_user: current_user })
+            props.createRoom();
+            navigation.navigate("Chat", {
+              chatroom_id: userInfo.id,
+              current_user: current_user,
+            });
           }}
         >
           <Text style={styles.message_me_text}>Message Me</Text>
@@ -142,9 +145,14 @@ const SocialMediaPost = (props) => {
         </TouchableOpacity>
       </View>
       <Text style={styles.text_sec}>Liked by {numberOfLikes} others</Text>
-      <Text style={styles.text_sec}>
+      {/* <Text style={styles.text_sec}>
         {props.user}: {props.description}
-      </Text>
+      </Text> */}
+      {props.description && (
+        <Text style={styles.text_sec}>
+          {props.user}: {props.description}
+        </Text>
+      )}
       <Text>{props.comments}</Text>
     </View>
   );
