@@ -15,7 +15,7 @@ const ForumPost = (props) => {
     try {
       const docRef = doc(db, "forum_posts", props.id);
       await deleteDoc(docRef);
-      props.getForumPosts();
+      //props.getForumPosts();
     } catch (error) {
       console.log(error);
     }
@@ -41,16 +41,22 @@ const ForumPost = (props) => {
           <Image source={Delete} style={styles.icons} />
         </TouchableOpacity> */}
           {props.canDelete && (
-            <TouchableOpacity onPress={deleteFromDB} color="#0F4D92">
+            <TouchableOpacity
+              onPress={() => {
+                deleteFromDB();
+                navigation.navigate("Forum Page");
+              }}
+              color="#0F4D92"
+            >
               <Image source={Delete} style={styles.icons} />
             </TouchableOpacity>
           )}
 
           <View style={styles.post}>
-            <Text>{props.user}</Text>
-            <Text>{props.title}</Text>
-            <Text>{props.description}</Text>
-            <Text>{props.comments}</Text>
+            <Text style={styles.user}>{props.user}</Text>
+            <Text style={styles.title}>{props.title}</Text>
+            {/* <Text>{props.description}</Text>
+            <Text>{props.comments}</Text> */}
           </View>
         </View>
       </View>
@@ -69,24 +75,33 @@ const styles = StyleSheet.create({
 
   delete: {
     //backgroundColor: "red",
-    paddingHorizontal: 5,
   },
   post: {
-    padding: 5,
+    padding: 8,
   },
   postcontainer: {
-    width: "100%",
+    width: "90%",
     height: "100%",
     borderRadius: 10,
     alignItems: "flex-start",
     borderWidth: 1,
     //marginHorizontal: "20%",
-    marginVertical: 2,
+    //marginVertical: 2,
   },
   icons: {
     maxWidth: 15,
     maxHeight: 15,
     margin: 2,
+  },
+  user: {
+    fontSize: 15,
+    //fontWeight: "bold",
+    marginVertical: 1,
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginVertical: 10,
   },
 });
 
