@@ -28,6 +28,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import back from "../assets/back.png";
+import { ScrollView } from "react-native";
 
 const DisplaySingularEvent = ({ route }) => {
   const current_user_email = auth.currentUser.email;
@@ -213,7 +214,7 @@ const DisplaySingularEvent = ({ route }) => {
       </View>
 
       {/* Event Details*/}
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.org}>{item.data.event_host}</Text>
 
         {
@@ -322,7 +323,7 @@ const DisplaySingularEvent = ({ route }) => {
             </Pressable>
           )}
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
