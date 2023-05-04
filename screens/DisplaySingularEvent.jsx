@@ -145,6 +145,7 @@ const DisplaySingularEvent = ({ route }) => {
   return (
     <>
       {/* Back Button*/}
+
       <View style={styles.rowContainer}>
         <TouchableOpacity
           onPress={() => {
@@ -160,60 +161,7 @@ const DisplaySingularEvent = ({ route }) => {
       {/* Event Details*/}
       <View style={styles.container}>
         <Text style={styles.org}>{item.data.event_host}</Text>
-        <Text style={styles.desc}>Description: {item.data.description}</Text>
-        <Text style={styles.desc}>Type: {item.data.event_type}</Text>
-        <Text style={styles.desc}>Date: {item.data.full_date}</Text>
-        <Text style={styles.desc}>Start Time: {item.data.start_time}</Text>
-        <Text style={styles.desc}>End Time: {item.data.end_time}</Text>
-        <Text style={styles.desc}>Address: {item.data.eventLocation}</Text>
-        <Text style={styles.desc}> Volunteers Needed: {numOfVol}</Text>
-        <Text style={styles.desc}> {spaceMessage}</Text>
 
-        <View style={styles.buttons}>
-          {/* <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate("Update Event", { item: item })}
-          >
-            <Text>Update Event</Text>
-          </Pressable> */}
-          {loggedInUserData.id === item.data.created_by && (
-            <Pressable
-              style={styles.button}
-              onPress={() =>
-                navigation.navigate("Update Event", { item: item })
-              }
-            >
-              <Text>Update Event</Text>
-            </Pressable>
-          )}
-
-          <Pressable
-            style={styles.button}
-            disabled={signedUp || eventFull}
-            onPress={() => event_sign_up(item)}
-          >
-            {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
-          </Pressable>
-
-          {/* <Pressable
-            style={styles.delete_button}
-            onPress={() => deleteCollectionNavigation(item)}
-          >
-            <Text>Delete Event</Text>
-          </Pressable> */}
-          {loggedInUserData.id === item.data.created_by && (
-            <Pressable
-              style={styles.delete_button}
-              onPress={() => deleteCollectionNavigation(item)}
-            >
-              <Text>Delete Event</Text>
-            </Pressable>
-          )}
-
-          <Pressable style={styles.button} onPress={() => opt_out_event(item)}>
-            {signedUp ? <Text>Opt out</Text> : <Text>Opt out</Text>}
-          </Pressable>
-        </View>
         {
           <MapView
             style={styles.map}
@@ -242,6 +190,43 @@ const DisplaySingularEvent = ({ route }) => {
           </MapView>
         }
 
+        <Text style={styles.desc}>Description: {item.data.description}</Text>
+        <Text style={styles.desc}>Type: {item.data.event_type}</Text>
+        <Text style={styles.desc}>Date: {item.data.full_date}</Text>
+        <Text style={styles.desc}>Start Time: {item.data.start_time}</Text>
+        <Text style={styles.desc}>End Time: {item.data.end_time}</Text>
+        <Text style={styles.desc}>Address: {item.data.eventLocation}</Text>
+        <Text style={styles.desc}> Volunteers Needed: {numOfVol}</Text>
+        <Text style={styles.desc}> {spaceMessage}</Text>
+
+        <View style={styles.buttons}>
+          {/* <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("Update Event", { item: item })}
+          >
+            <Text>Update Event</Text>
+          </Pressable> */}
+
+          <Pressable
+            style={styles.button}
+            disabled={signedUp || eventFull}
+            onPress={() => event_sign_up(item)}
+          >
+            {signedUp ? <Text>Signed up</Text> : <Text>Sign up</Text>}
+          </Pressable>
+
+          {/* <Pressable
+            style={styles.delete_button}
+            onPress={() => deleteCollectionNavigation(item)}
+          >
+            <Text>Delete Event</Text>
+          </Pressable> */}
+
+          <Pressable style={styles.button} onPress={() => opt_out_event(item)}>
+            {signedUp ? <Text>Opt out</Text> : <Text>Opt out</Text>}
+          </Pressable>
+        </View>
+
         {/* <Pressable
           style={styles.button}
           onPress={() => {
@@ -251,16 +236,38 @@ const DisplaySingularEvent = ({ route }) => {
           <Text>List Volunteers</Text>
         </Pressable> */}
 
-        {loggedInUserData.id === item.data.created_by && (
-          <Pressable
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate("List Volunteers", { item: item });
-            }}
-          >
-            <Text>List Volunteers</Text>
-          </Pressable>
-        )}
+        <View style={styles.alignBottonButtonsInRow}>
+          {loggedInUserData.id === item.data.created_by && (
+            <Pressable
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("List Volunteers", { item: item });
+              }}
+            >
+              <Text>List Volunteers</Text>
+            </Pressable>
+          )}
+
+          {loggedInUserData.id === item.data.created_by && (
+            <Pressable
+              style={styles.delete_button}
+              onPress={() => deleteCollectionNavigation(item)}
+            >
+              <Text>Delete Event</Text>
+            </Pressable>
+          )}
+
+          {loggedInUserData.id === item.data.created_by && (
+            <Pressable
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate("Update Event", { item: item })
+              }
+            >
+              <Text>Update Event</Text>
+            </Pressable>
+          )}
+        </View>
       </View>
     </>
   );
@@ -273,7 +280,7 @@ const styles = StyleSheet.create({
     paddingTop: "5%",
   },
   map: {
-    width: "80%",
+    width: "100%",
     height: 250,
     justifyContent: "center",
     alignItems: "center",
@@ -308,14 +315,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   desc: {
-    fontSize: 15,
+    fontSize: 18,
     marginHorizontal: "5%",
     marginVertical: "2%",
   },
   buttons: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginVertical: "2%",
+    marginVertical: "0%",
+    paddingVertical: "2%",
   },
   button: {
     margin: 20,
@@ -325,17 +333,22 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: "#00548e",
-    width: "30%",
+    width: "20%",
   },
   delete_button: {
     margin: 20,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 4,
     elevation: 3,
     backgroundColor: "red",
-    width: "30%",
+    width: "20%",
+  },
+  alignBottonButtonsInRow: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginVertical: "2%",
   },
 });
 
