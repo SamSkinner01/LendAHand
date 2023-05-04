@@ -95,8 +95,8 @@ function ForumPage() {
 
       <View style={styles.container}>
         <ScrollView
+          style={{ width: "90%" }}
           showsVerticalScrollIndicator={false}
-          style={{ marginHorizontal: 0 }}
         >
           {user.map((user, index) => (
             <ForumPost
@@ -128,10 +128,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#cbc6c3",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   rowContainer: {
     flexDirection: "row",
-    height: "9%",
+    height: "12%",
     justifyContent: "space-evenly",
     paddingTop: "11%",
     backgroundColor: "#00548e",

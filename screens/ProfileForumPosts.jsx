@@ -19,6 +19,7 @@ import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import Refresh from "../assets/Refresh.png";
+import { getForegroundPermissionsAsync } from "expo-location";
 
 function ProfileForumPosts() {
   const [refresh, setRefresh] = useState(false);
@@ -26,7 +27,7 @@ function ProfileForumPosts() {
   const [user, setUser] = useState([]);
   const [title, setTitle] = useState([]);
   const [description, setDescription] = useState([]);
-  const [comments, setComments] = useState([[]]);
+  //const [comments, setComments] = useState([[]]);
   const [id, setID] = useState([]);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function ProfileForumPosts() {
       setUser([]);
       setTitle([]);
       setDescription([]);
-      setComments([]);
+      // setComments([]);
       setID([]);
 
       try {
@@ -52,7 +53,7 @@ function ProfileForumPosts() {
           setUser((user) => [...user, data.username]);
           setTitle((title) => [...title, data.title]);
           setDescription((description) => [...description, data.description]);
-          setComments((comments) => [...comments, data.comments]);
+          //setComments((comments) => [...comments, data.comments]);
           setID((id) => [...id, doc.id]);
         });
       } catch (error) {
@@ -89,10 +90,11 @@ function ProfileForumPosts() {
                   title={title[index]}
                   description={description[index]}
                   user={user}
-                  comments={comments[index]}
+                  //comments={comments[index]}
                   id={id[index]}
                   canDelete={true}
                   handleDelete={handleDelete}
+                  //getForumPosts={getProfileForumPosts}
                 />
               </View>
             );

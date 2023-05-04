@@ -75,29 +75,59 @@ function ListVolunteers() {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: "20%",
-      }}
-    >
+    <>
+    <View style={styles.header}>
+          <Text style={styles.header_text}>Volunteers</Text>
+        </View>
+    <View style={styles.container}>
       <ScrollView>
         {volunteerNames.length === 0 ? (
           <Text>No volunteers have signed up for this event yet.</Text>
         ) : (
-          <View>
+          <View style={styles.namesContainer}>
             {volunteerNames.map((item, index) => (
               <View key={index}>
-                <Text>{item}</Text>
+                <Text style={styles.nameStyle}>{index+1}) {item}</Text>
               </View>
             ))}
           </View>
         )}
       </ScrollView>
     </View>
+    </>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#cbc6c3",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  nameStyle: {
+    margin: 5,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+  },
+  namesContainer: {
+    width: 400,
+  },
+  header: {
+    backgroundColor: "#00548e",
+    padding: 10,
+    alignItems: "center",
+    height: 100,
+    justifyContent: "center",
+    paddingTop: 50,
+    flexDirection: "row",
+  },
+  header_text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginRight: 10,
+    backgroundColor: "#00548e",
+  },
+});
 
 export default ListVolunteers;

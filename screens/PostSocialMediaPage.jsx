@@ -12,7 +12,12 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 function PostSocialMediaPage() {
   const navigation = useNavigation();
@@ -21,7 +26,10 @@ function PostSocialMediaPage() {
   const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [displayIsImageSelected, setDisplayIsImageSelected] = useState("No image selected yet.");
+  const [displayIsImageSelected, setDisplayIsImageSelected] = useState(
+    "No image selected yet."
+  );
+  const [percentage, setPercentange] = useState("");
 
   async function getAuthUser() {
     // try{
@@ -39,7 +47,7 @@ function PostSocialMediaPage() {
     // }catch(error){
     //   console.log("Error getting username: ", error);
     // }
-    setUsername(auth.currentUser.email)
+    setUsername(auth.currentUser.email);
   }
 
   async function postToDatabase(downloadURL) {
@@ -47,9 +55,9 @@ function PostSocialMediaPage() {
     Makes a social media post in the database.
     */
     try {
-      console.log("Description: ", description)
-      console.log("Image: ", downloadURL)
-      
+      console.log("Description: ", description);
+      console.log("Image: ", downloadURL);
+
       await addDoc(collection(db, "social_media_posts"), {
         description: description,
         image: downloadURL,
@@ -83,10 +91,10 @@ function PostSocialMediaPage() {
       console.log("No image selected");
       return;
     }
-  
+
     const response = await fetch(image);
     const blob = await response.blob();
-  
+
     const storageRef = ref(storage, `images/${Date.now()}`);
     const metadata = {
       contentType: "image/jpeg",
@@ -94,7 +102,7 @@ function PostSocialMediaPage() {
         poster: username,
       },
     };
-  
+
     const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
     return new Promise((resolve, reject) => {
       uploadTask.on(
@@ -102,6 +110,7 @@ function PostSocialMediaPage() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setPercentange(`Upload is ${progress.toFixed(0)}% done`);
           console.log(`Upload is ${progress}% done`);
         },
         (error) => {
@@ -115,11 +124,11 @@ function PostSocialMediaPage() {
       );
     });
   }
-  
-  async function onClickPostPictureToDB(){
+
+  async function onClickPostPictureToDB() {
     const downloadURL = await uploadImageToStorage(image);
-    postToDatabase(downloadURL);
-    navigation.navigate("Social Media");
+    await postToDatabase(downloadURL);
+    navigation.navigate("Events");
   }
 
   useEffect(() => {
@@ -136,14 +145,15 @@ function PostSocialMediaPage() {
     }
   }, [image]);
 
-
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.title}>Make A Post</Text>
-        
+
         <View style={styles.description_containter}>
-          <Text style={styles.description_title}>Give your post a description: </Text>
+          <Text style={styles.description_title}>
+            Give your post a description:{" "}
+          </Text>
           <TextInput
             multiline={true}
             blurOnSubmit={true} // dismisses keyboard when done is pressed
@@ -153,13 +163,13 @@ function PostSocialMediaPage() {
           />
         </View>
 
-
         <Text style={styles.is_image_selected}>{displayIsImageSelected}</Text>
-        <Pressable 
-        onPress={() => {
-          pickImage();
-        }} 
-        style={styles.upload_image}>
+        <Pressable
+          onPress={() => {
+            pickImage();
+          }}
+          style={styles.upload_image}
+        >
           <Text>Click me to select your image!</Text>
         </Pressable>
 
@@ -173,6 +183,10 @@ function PostSocialMediaPage() {
         </Pressable>
       </View>
 
+      <View style={styles.container}>
+        <Text>{percentage}</Text>
+      </View>
+
       <View>
         <NavigationBar />
       </View>
@@ -183,9 +197,9 @@ function PostSocialMediaPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#cbc6c3"
+    backgroundColor: "#cbc6c3",
   },
-  title:{
+  title: {
     fontSize: 40,
     fontWeight: "bold",
     textAlign: "center",
@@ -212,7 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: "80%",
   },
-  upload_image:{
+  upload_image: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -222,7 +236,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#00548e",
   },
-  post:{
+  post: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -231,9 +245,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 10,
     backgroundColor: "#00548e",
-
   },
-  is_image_selected:{
+  is_image_selected: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

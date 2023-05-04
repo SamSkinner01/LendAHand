@@ -55,19 +55,21 @@ function EventsOrgCreated() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#cbc6c3",
     alignItems: "center",
-    paddingTop: 50,
   },
   header: {
-    backgroundColor: "#1E90FF",
-    width: "100%",
-    height: 50,
+    backgroundColor: "#00548e",
+    padding: 10,
     alignItems: "center",
+    height: 100,
     justifyContent: "center",
+    paddingTop: 50,
+    flexDirection: "row",
+    width: "100%"
   },
   headerText: {
-    color: "#fff",
+    color: "black",
     fontSize: 20,
   },
   events: {
