@@ -1,3 +1,6 @@
+// ignore all warnings
+import { LogBox } from "react-native";
+LogBox.ignoreAllLogs(true);
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -27,6 +30,8 @@ import { ProfileSocialPosts } from "./screens/ProfileSocialPosts";
 import { ProfileEvents } from "./screens/ProfileEvents";
 import ListVolunteers from "./screens/ListVolunteers";
 import EventsOrgCreated from "./screens/ProfileEventsOrgCreated";
+
+
 
 const Stack = createNativeStackNavigator();
 
