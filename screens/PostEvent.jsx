@@ -38,13 +38,12 @@ function PostEvent() {
   const [event_type, setEventType] = useState("");
   const [number_of_volunteers, setNumber_of_volunteers] = useState(0);
   const [signed_up_users, setSigned_up_users] = useState([]);
-  const [date, setDate] = useState(new Date());
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [showDatepicker, setShowDatepicker] = useState(false);
-  const [fullDate, setFullDate] = useState("Select date");
-  const [startTime, setStartTime] = useState("Select start time");
-  const [endTime, setEndTime] = useState("Select end time");
+  const [fullDate, setFullDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -57,32 +56,35 @@ function PostEvent() {
     { label: "Other", value: "Other" },
   ]);
 
-  const startTimePicker = (event, selectedDate) => {
+  const startTimePicker = (event, selectedTime) => {
     if (Platform.OS === "android") {
       setShowStartTimePicker(false);
     }
     if (Platform.OS === "ios") {
       setShowStartTimePicker(true);
     }
-    const minutes =
-      (selectedDate.getMinutes() < 10 ? "0" : "") + selectedDate.getMinutes();
-    setStartTime(selectedDate.getHours() + ":" + minutes);
-
-    setShowStartTimePicker(false);
+    const minutes = selectedTime.getMinutes();
+    const hours = selectedTime.getHours();
+    const time = hours + ":" + minutes;
+    // make a string that can pass into a date object with this time and the date
+    let a = new Date(0, 0, 0, hours, minutes, 0, 0);
+    setStartTime(a);
   };
 
-  const EndTimePicker = (event, selectedDate) => {
+  const EndTimePicker = (event, selectedTime) => {
     if (Platform.OS === "android") {
       setShowEndTimePicker(false);
     }
     if (Platform.OS === "ios") {
       setShowEndTimePicker(true);
     }
-    const minutes =
-      (selectedDate.getMinutes() < 10 ? "0" : "") + selectedDate.getMinutes();
-    setEndTime(selectedDate.getHours() + ":" + minutes);
 
-    setShowEndTimePicker(false);
+    const minutes = selectedTime.getMinutes();
+    const hours = selectedTime.getHours();
+    const time = hours + ":" + minutes;
+    // make a string that can pass into a date object with this time and the date
+    let a = new Date(0, 0, 0, hours, minutes, 0, 0);
+    setEndTime(a);
   };
 
   const datePicker = (event, selectedDate) => {
@@ -92,16 +94,10 @@ function PostEvent() {
     if (Platform.OS === "ios") {
       setShowDatepicker(true);
     }
-    setFullDate(
-      selectedDate.getDate() +
-        "/" +
-        (selectedDate.getMonth() + 1) +
-        "/" +
-        selectedDate.getFullYear()
-    );
-    setDate(selectedDate);
+    let a = new Date(selectedDate);
+    setFullDate(a);
 
-    setShowDatepicker(false);
+    //setShowDatepicker(false);
   };
 
   async function getUserID(userEmail) {
@@ -125,7 +121,7 @@ function PostEvent() {
         start_time: startTime,
         end_time: endTime,
         event_type: event_type,
-        date: date,
+        date: new Date(),
         full_date: fullDate,
         eventLocation: eventLocation,
         number_of_volunteers: number_of_volunteers,
@@ -209,47 +205,47 @@ function PostEvent() {
             style={styles.button}
             onPress={() => setShowStartTimePicker(true)}
           >
-            <Text>{startTime}</Text>
+            <Text>Set Start Time</Text>
           </Pressable>
 
           <Pressable
             style={styles.button}
             onPress={() => setShowEndTimePicker(true)}
           >
-            <Text>{endTime}</Text>
+            <Text>Select End Time</Text>
           </Pressable>
 
           <Pressable
             style={styles.button}
             onPress={() => setShowDatepicker(true)}
           >
-            <Text>{fullDate}</Text>
+            <Text>Set Date</Text>
           </Pressable>
         </View>
 
         {showStartTimePicker && (
           <DateTimePicker
-            value={date}
+            value={startTime}
             mode={"time"}
             is24Hour={true}
-            minimumDate={new Date()}
+            //minimumDate={new Date()}
             onChange={startTimePicker}
           />
         )}
 
         {showEndTimePicker && (
           <DateTimePicker
-            value={date}
+            value={endTime}
             mode={"time"}
             is24Hour={true}
-            minimumDate={new Date()}
+            //minimumDate={new Date()}
             onChange={EndTimePicker}
           />
         )}
 
         {showDatepicker && (
           <DateTimePicker
-            value={date}
+            value={fullDate}
             mode={"date"}
             is24Hour={true}
             minimumDate={new Date()}
