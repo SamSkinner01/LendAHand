@@ -71,38 +71,38 @@ export default function ForumThreads() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.description}>{data.description}</Text>
-        <Text style={styles.started_by}>
-          Thread started by: {data.username}
-        </Text>
-      </View>
-
       <View style={styles.middle}>
         <ScrollView>
+          <View style={styles.top}>
+            <Text style={styles.title}>{data.title}</Text>
+            <Text style={styles.started_by}>
+              Thread started by: {data.username}
+            </Text>
+            <Text style={styles.description}>{data.description}</Text>
+          </View>
+
           {data.comments &&
             data.comments.map((comment, index) => (
               <View style={styles.comments} key={index}>
-                <Text>
-                  {comment.username}: {comment.textInput}
-                </Text>
+                <Text style={styles.username}>{comment.username}</Text>
+                <Text style={styles.textInput}>{comment.textInput}</Text>
               </View>
             ))}
         </ScrollView>
       </View>
 
       <KeyboardAvoidingView style={styles.bottom} behavior="padding">
-        <View style={styles.bottom_bar}>
+        <View style={styles.inputContainer}>
           <TextInput
-            //multiline={true}
-            style={styles.keyboard}
-            placeholder="Add a comment"
-            onChangeText={(text) => setTextInput(text)}
+            style={styles.input}
+            placeholder="Enter message"
             value={textInput}
-          />
-          <Pressable style={styles.submit_button} onPress={handleSubmit}>
-            <Text>Submit</Text>
+            onChangeText={setTextInput}
+            multiline={true}
+            blurOnSubmit={true}
+          ></TextInput>
+          <Pressable style={styles.submit} onPress={handleSubmit}>
+            <Text>Send</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -118,20 +118,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#00548e",
     justifyContent: "left",
-    paddingTop: 70,
-    paddingLeft: 30,
+    paddingTop: "15%",
+    paddingBottom: "5%",
+    paddingLeft: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: "bold",
   },
   description: {
     fontSize: 20,
-    paddingTop: 10,
+    paddingTop: 20,
   },
   started_by: {
     fontSize: 15,
-    paddingTop: 30,
+    //paddingTop: 30,
   },
   middle: {
     flex: 4,
@@ -172,5 +173,46 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 30,
     paddingTop: 15,
+    paddingBottom: 15,
+    marginBottom: 20,
+    width: "100%",
+    borderBottomColor: "#00548e",
+    borderBottomWidth: 1,
+    height: "20%",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    width: "90%",
+    height: 40,
+    margin: 12,
+    padding: 10,
+    //marginBottom: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  input: {
+    width: "80%",
+    height: 40,
+    margin: 12,
+    padding: 10,
+    marginBottom: 30,
+    borderWidth: 1,
+  },
+  submit: {
+    width: "20%",
+    height: 40,
+    margin: 12,
+    marginBottom: 30,
+    backgroundColor: "#00548e",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  username: {
+    fontSize: 15,
+    fontWeight: "bold",
+    paddingBottom: 10,
+  },
+  textInput: {
+    fontSize: 15,
   },
 });
