@@ -127,8 +127,8 @@ function PostSocialMediaPage() {
 
   async function onClickPostPictureToDB() {
     const downloadURL = await uploadImageToStorage(image);
-    postToDatabase(downloadURL);
-    navigation.navigate("Social Media");
+    await postToDatabase(downloadURL);
+    navigation.navigate("Events");
   }
 
   useEffect(() => {
